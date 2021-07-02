@@ -1,8 +1,0 @@
-git checkout shashikant - to change the branch
-
-git pull origin dev
-
-
-def code():
-    print("Hello world")
-    print("Hello Jadoo")
