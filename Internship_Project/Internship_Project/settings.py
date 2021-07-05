@@ -58,7 +58,7 @@ ROOT_URLCONF = 'Internship_Project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'admin_dashboard/templates'],# Adding template in template dir
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -122,6 +122,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# <====For serving static file in template====>
+STATICFILES_DIRS = [
+BASE_DIR / 'admin_dashboard/templates'
+]
+STATIC_ROOT   = BASE_DIR / 'static'
+#<== end of code=====>
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

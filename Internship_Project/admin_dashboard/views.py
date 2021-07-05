@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
-# Create your views here.
+# Login function in django
+def Login(request):
+    # return template to dom using render function
+    return render(request,"accounts/login.html")
+
+
