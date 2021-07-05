@@ -5,44 +5,60 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resgistration Page</title>
-    <link rel = "stylesheet" href = "Register.css">
+    <link rel = "stylesheet" href = "../../static/css/Register.css">
+    <!-- CSS only -->
 </head>
 <body>
+
+    </div>
+    
     <div class = "container">
         <div class="title">Registration</div>
-        <form action = "#">
+        <form action = "{%url 'Register'%}" method = 'POST'>{% csrf_token %}
             <div class = "user-details">
                 <div class = "input-box">
                     <span class = "details">First Name</span>
-                    <input type = "text" placeholder="Enter your First Name" required>
+                    <input type = "text" name = "first_name" placeholder="Enter your First Name" required>
                 </div>
                 <div class = "input-box">
                     <span class = "details">Last Name</span>
-                    <input type = "text" placeholder="Enter your Last Name" required>
+                    <input type = "text" placeholder="Enter your Last Name" name  = "last_name" required>
                 </div>
                 <div class = "input-box">
                     <span class = "details">User Name</span>
-                    <input type = "text" placeholder="Enter your Usertname" required>
+                    <input type = "text" placeholder="Enter your Usertname" name = "user_name" required>
                 </div>
                 <div class = "input-box">
                     <span class = "details">Email</span>
-                    <input type = "text" placeholder="Enter your Email" required>
+                    <input type = "text" placeholder="Enter your Email" name = "email_address" required>
                 </div>
                 <div class = "input-box">
                     <span class = "details">Password</span>
-                    <input type = "password" class = "pass-key" placeholder="Enter your Password" required> <br>             
+                    <input type = "password" class = "pass-key" name = "password" placeholder="Enter your Password" required> <br>             
                 </div>
                 <div class = "input-box">
                     <span class = "details">Confirm Password</span>
-                    <input type = "password" class = "pass-key" placeholder="Enter your Confirm Password" required>
+                    <input type = "password" class = "pass-key"   name = "confirm_password" placeholder="Enter your Confirm Password" required>
                 </div> 
                 <span class="show" style="cursor: pointer; color: yellow;">Show Password</span>              
             </div>
             <div class = "button" style="text-align:center">
                 <input type = "submit" value = "Register">
+                
             </div>
+            {% for msg in messages %}
+
+<div class="alert alert-danger" style="color: rgb(255, 61, 13); font-size: 25px; font-weight: 600;" role="alert">
+  {{msg}}
+</div>
+{%endfor%}
         </form>
-    </div>
+                <div class="register"><a href="{% url 'Login'%}">Now Go Back to Login</a></div>
+
+                
+
+
+
     <script>
         const pass_field = document.querySelector('.pass-key');
         const showBtn = document.querySelector('.show');
@@ -58,6 +74,10 @@
            showBtn.style.color = "Yellow";
          }
         });
+
+
+
+
      </script>
 </body>
 </html>

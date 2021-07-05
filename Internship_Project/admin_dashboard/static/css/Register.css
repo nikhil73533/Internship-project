@@ -12,7 +12,7 @@ body{
   align-items: center;
   justify-content: center;
   padding: 30px;
-  background-image: url("../Images/pr.jpg");
+  background-image: url("../images/bg_2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -95,4 +95,18 @@ form .button input:hover{
     margin-bottom: 15px;
     width: 100%;
   }
+}
+
+
+.register{
+  text-align:left;
+  font-size: 16px;
+  color: #666666;
+}
+.register a{
+  color: #2691d9;
+  text-decoration: none;
+}
+.register a:hover{
+  text-decoration: underline;
 }
