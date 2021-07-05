@@ -18,10 +18,10 @@ urlpatterns = [
 
     #<=========Password Reset Urls============>
 
-    path('reset_password/',PasswordResetView.as_view(template_name = "reset_password/forgot_pass.html"),name = 'reset_password'),
-    path('reset_password_sent/',PasswordResetDoneView.as_view(template_name = ""), name = "password_reset_done"),
+    path('reset_password/', PasswordResetView.as_view(template_name = "reset_password/forgot_pass.html"), name = 'reset_password'),
+    path('reset_password_sent/', PasswordResetDoneView.as_view(template_name = ""), name = "password_reset_done"),
     path('reset/<uidb64>/<token>', PasswordResetConfirmView.as_view(template_name = ""), name = "password_reset_confirm"),
-    path('reset_password_complete/',PasswordResetCompleteView.as_view(template_name = ""), name = "password_reset_complete"),
+    path('reset_password_complete/', PasswordResetCompleteView.as_view(template_name = ""), name = "password_reset_complete"),
 
    # <============ END OF CODE===============================>
 
