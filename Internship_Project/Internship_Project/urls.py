@@ -26,6 +26,6 @@ urlpatterns = [
     # <==== end of code =====>
 
      # <=== url for login page ====>
-    path('account',include('admin_dashboard.urls')),
+    path('user/',include('admin_dashboard.urls')),
     # <==== end of code =====>
 ]

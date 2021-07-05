@@ -13,30 +13,23 @@
     <div class="center">
       <h3>Reset Password</h3>
       <form method="post">
+      {%csrf_token%}
+      {%for field in form %}
         <div class="form-group">
-          <label for="pwd">New Password:</label>
-          <input
-            type="password"
-            class="form-control"
-            id="pwd"
-            placeholder="Enter password"
-            name="pwd"
-            required
-          />
+        {{field.label}}
+        <br>
+         {{field}}
         </div>
-        <div class="form-group">
-          <label for="cpwd">Confirm Password:</label>
-          <input
-            type="password"
-            class="form-control"
-            id="cpwd"
-            placeholder="Enter Confirm password"
-            name="cpwd"
-            required
-          />
-        </div>
+         {%endfor%}
+              
+{%if field.errors%}
+<div class="alert alert-danger">
+    {{field.errors}}
+</div>
+{%endif%}
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+
     </div>
     <script>
       var password = document.getElementById("pwd");
