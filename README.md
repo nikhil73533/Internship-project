@@ -6,7 +6,7 @@
 ```
 git clone https://github.com/nikhil73533/Internship-project.git
 ```
-
+***
 ### Activate Virtual Environment
 #### Go to Internship-project Directory
 ```
@@ -16,5 +16,15 @@ git clone https://github.com/nikhil73533/Internship-project.git
 ### Run Project
 #### Go to Intership_Project Directory
 ```
-python manage.py
+python manage.py runserver
+```
+***
+### Enter Admin ID and Password
+#### Admin ID
+```
+nikhil73533@
+```
+#### Admin Password
+```
+Kalikal@1729
 ```
