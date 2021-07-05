@@ -1,4 +1,3 @@
-from os import name
 from django.contrib import admin
 from django.urls import path
 #<==== Importing function from views of admin dashboard =======>
@@ -23,3 +22,4 @@ urlpatterns = [
    # <============ END OF CODE===============================>
 
 ]
+
