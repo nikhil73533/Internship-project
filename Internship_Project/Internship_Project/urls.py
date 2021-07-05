@@ -24,4 +24,8 @@ urlpatterns = [
     # <=== url for login page ====>
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
+
+     # <=== url for login page ====>
+    path('account',include('admin_dashboard.urls')),
+    # <==== end of code =====>
 ]

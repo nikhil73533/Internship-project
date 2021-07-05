@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
             </div>
             <br>
             <div class="signin">
-                <a href="../accounts/login.html">You remember password? Sign In</a>
+                <a href="{%url 'Login'%}">You remember password? Sign In</a>
             </div>
             <br>
         </form>
