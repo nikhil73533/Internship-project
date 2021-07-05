@@ -1,0 +1,43 @@
+.alert {
+    padding: 20px;
+    color: white;
+    font-size: x-large;
+    text-align: center;
+  }
+ 
+  body{
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/bg_2.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+  }
+  
+p{
+  font-size: large;
+  text-align: right;
+  color: #f44336;
+}
+
+h2{
+  text-align: center;
+  font-size: xx-large;
+  text-decoration: underline;
+  color: coral;
+}
+
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .closebtn:hover {
+    color: black;
+  }
