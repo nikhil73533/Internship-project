@@ -61,4 +61,5 @@ def Register(request):
     return render(request,"accounts/Register.html")
 
 
-
+def Register(request):
+    return render(request,"accounts/Register.html")
