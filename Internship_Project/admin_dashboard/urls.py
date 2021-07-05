@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 #<==== Importing function from views of admin dashboard =======>
-from .views import Login
+from admin_dashboard import views
 #<-======= end of code===>
 #<===== Reset Password========>
 from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
@@ -9,7 +9,11 @@ from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,Pa
 
 urlpatterns = [
     #<=========login page Urls============>
-    path('',Login,name = "Login"),
+    path('', views.Login, name = "Login"),
+    #<=======end of code ==============>
+
+    #<=========Register page Urls============>
+    path('Register', views.Register, name = "Register"),
     #<=======end of code ==============>
 
     #<=========Password Reset Urls============>
