@@ -1,9 +1,9 @@
-#<============= For reset password ===== >
+# Reset password code
 from django.contrib import admin
 from django.contrib import auth 
 from django.urls import path
-from django.contrib.auth import views as auth_views  
-#======== end of code======================
+from django.contrib.auth import views as auth_views
+# end of reset password code
 
 urlpatterns = [
     path('admin/', admin.site.urls()),
