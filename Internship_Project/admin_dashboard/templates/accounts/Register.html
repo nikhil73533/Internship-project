@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resgistration Page</title>
+    <link rel = "stylesheet" href = "Register.css">
+</head>
+<body>
+    <div class = "container">
+        <div class="title">Registration</div>
+        <form action = "#">
+            <div class = "user-details">
+                <div class = "input-box">
+                    <span class = "details">First Name</span>
+                    <input type = "text" placeholder="Enter your First Name" required>
+                </div>
+                <div class = "input-box">
+                    <span class = "details">Last Name</span>
+                    <input type = "text" placeholder="Enter your Last Name" required>
+                </div>
+                <div class = "input-box">
+                    <span class = "details">User Name</span>
+                    <input type = "text" placeholder="Enter your Usertname" required>
+                </div>
+                <div class = "input-box">
+                    <span class = "details">Email</span>
+                    <input type = "text" placeholder="Enter your Email" required>
+                </div>
+                <div class = "input-box">
+                    <span class = "details">Password</span>
+                    <input type = "password" class = "pass-key" placeholder="Enter your Password" required> <br>             
+                </div>
+                <div class = "input-box">
+                    <span class = "details">Confirm Password</span>
+                    <input type = "password" class = "pass-key" placeholder="Enter your Confirm Password" required>
+                </div> 
+                <span class="show" style="cursor: pointer; color: yellow;">Show Password</span>              
+            </div>
+            <div class = "button" style="text-align:center">
+                <input type = "submit" value = "Register">
+            </div>
+        </form>
+    </div>
+    <script>
+        const pass_field = document.querySelector('.pass-key');
+        const showBtn = document.querySelector('.show');
+        showBtn.addEventListener('click', function(){
+         if(pass_field.type === "password"){
+           pass_field.type = "text";
+           showBtn.textContent = "Hide Password";
+           showBtn.style.color = "#3498db";
+         }
+         else{
+           pass_field.type = "password";
+           showBtn.textContent = "Show Password";
+           showBtn.style.color = "Yellow";
+         }
+        });
+     </script>
+</body>
+</html>
