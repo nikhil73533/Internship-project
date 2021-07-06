@@ -64,17 +64,17 @@ def Register(request):
         return render(request,"accounts/Register.html")
 
 
-@staticmethod
-def strongpass(password):
-    if(len(password)<8):
-        return messages.info("Length of password should be grater then or equal to 8")
-    else:
-        flag = False
-        for i in password:
-            if(i.isupper()):
-                flag = True
-        if(flag):
-            if():
+# @staticmethod
+# def strongpass(password):
+#     if(len(password)<8):
+#         return messages.info("Length of password should be grater then or equal to 8")
+#     else:
+#         flag = False
+#         for i in password:
+#             if(i.isupper()):
+#                 flag = True
+#         if(flag):
+#             if():
 
 
 
