@@ -1,3 +1,4 @@
+from django.http import request
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
@@ -64,17 +65,25 @@ def Register(request):
         return render(request,"accounts/Register.html")
 
 
-# @staticmethod
-# def strongpass(password):
-#     if(len(password)<8):
-#         return messages.info("Length of password should be grater then or equal to 8")
-#     else:
-#         flag = False
-#         for i in password:
-#             if(i.isupper()):
-#                 flag = True
-#         if(flag):
-#             if():
+@staticmethod
+def strongpass(request,password):
+    if(len(password)<8):
+        return messages.info(request,"Length of password should be grater then or equal to 8")
+    else:
+        flag = False
+        for i in password:
+            if(i.isupper()):
+                if(["@","#","$","%","^","&","!","*"] in password):
+                    if([1,2,3,4,5,6,7,8,9,0] in password):
+                        pass
+                    else:
+                        return messages.info(request,"password should have numeric charactors")
+                else:
+                    return messages.info(request,"password should have spacial charactors")
+            else:
+                return messages.info(request,"Password should have upper case letter")
+
+       
 
 
 
