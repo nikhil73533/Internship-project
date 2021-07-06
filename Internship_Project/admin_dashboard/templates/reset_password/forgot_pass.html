@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="../../static/css/forgot_pass.css" />
+</head>
+<body>
+    <h1>Admin4</h1>
+    <div class="center">
+        <h3>Forgot Password</h3>
+        <form method="post">
+                {%csrf_token%}
+            {%for field in form%}
+
+            <div class="txt_field">
+                {{field}}
+                <span></span>
+                <label>Email Address</label>
+            </div>
+             {%endfor%}
+
+            <div class="submit">
+                <input type="submit" value="Submit" />
+            </div>
+            <br>
+            <div class="signin">
+
+                <a href="{%url 'Login'%}">You remember password? Sign In</a>
+
+            </div>
+            <br>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animated Login Form</title>
+    <link rel="stylesheet" href="../../static/css/login.css" />
+  </head>
+  <body>
+  <h1>Login</h1>
+    <div class="center">
+      <h3>Sign in to start you session</h3>
+      <form method="post" action = "{% url 'Login' %}">{% csrf_token %}
+        <div class="txt_field">
+          <input type="text" name = "username" required />
+          <span></span>
+          <label>Username</label>
+        </div>
+        <div class="txt_field">
+          <input type="password" name = "password" required />
+          <span></span>
+          <label>Password</label>
+        </div>
+        <div class="check_box">
+          <input type="checkbox" id="checkbox_1" />
+          <span></span>
+          <label for="checkbox_1" ><b>Remember me</b></label>
+          <input type="submit"  value="Sign In"  />
+        </div>
+
+        <br>
+        <br>
+
+        <div class="forgot_password"><a href="{%url 'reset_password'%}">I Forgot My Password</a></div>
+
+        <div class="register"><a href="{% url 'Register'%}">Register a new memebership</a></div>
+
+        <br>
+        <div class="signup_link"></div>
+          {% for msg in messages %}
+        <div class="alert alert-danger" style="color: rgb(255, 61, 13); font-size: 25px; font-weight: 600;" role="alert">
+  {{msg}}
+</div>
+{%endfor%}
+      </form>
+    </div>
+  </body>
+</html>
