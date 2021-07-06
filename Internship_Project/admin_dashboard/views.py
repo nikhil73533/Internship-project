@@ -61,22 +61,37 @@ def Register(request):
 
 # static function for password validitation
 @staticmethod
-def strongpass(request,password):
-    if(len(password)<8):
-        return messages.info(request,"Length of password should be grater then or equal to 8")
-    else:
-        flag = False
-        for i in password:
-            if(i.isupper()):
-                if(["@","#","$","%","^","&","!","*"] in password):
-                    if([1,2,3,4,5,6,7,8,9,0] in password):
-                        pass
-                    else:
-                        return messages.info(request,"password should have numeric charactors")
-                else:
-                    return messages.info(request,"password should have spacial charactors")
-            else:
-                return messages.info(request,"Password should have upper case letter")
+def password_validate(request,password):
+    SpecialSymbol =['$', '@', '#', '%'] 
+    val = True
+      
+    if len(password) < 8:
+        val = False 
+        return messages.info(request,"lenght should be at least 8")
+       
+        
+          
+    if len(password) > 20: 
+        val = False 
+        return messages.info(request,"lenght should  not be greater than 20")
+          
+    if not any(char.isdigit() for char in password): 
+        val = False 
+        return messages.info(request,"Password should have at least one numeral")
+          
+    if not any(char.isupper() for char in password): 
+        val = False 
+        return messages.info(request,"Password should have at least one uppercase letter")
+          
+    if not any(char.islower() for char in password): 
+        val = False 
+        return messages.info(request,"Password should have at least one lowercase letter")
+          
+    if not any(char in SpecialSymbol for char in password): 
+        val = False 
+        return messages.info(request,"Password should have at least one lowercase letter")
+    if val: 
+        return val
 
        
 
