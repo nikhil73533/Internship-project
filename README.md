@@ -1,14 +1,30 @@
 # Internship Project
-### BUILD AN APPLICATION BASED ON PYTHON DJANGO USING ADMIN LITE
+## BUILD AN APPLICATION BASED ON PYTHON DJANGO USING ADMIN LITE
 
-#### Git Commands to clone Repository
-
+### Git Commands to clone Repository
+#### Clone GitHub Repository
 ```
 git clone https://github.com/nikhil73533/Internship-project.git
-<<<<<<< HEAD
-
-git remote -v
-=======
+```
+***
+### Activate Virtual Environment
+#### Go to Internship-project Directory
+```
+.\venv\Script\activate
 ```
 
->>>>>>> ed9d9f3018c4c81647a437ebb7e8b15af45ac443
+### Run Project
+#### Go to Intership_Project Directory
+```
+python manage.py runserver
+```
+***
+### Enter Admin ID and Password
+#### Admin ID
+```
+nikhil73533@
+```
+#### Admin Password
+```
+Kalikal@1729
+```
