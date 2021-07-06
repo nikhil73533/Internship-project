@@ -16,10 +16,10 @@ def Login(request):
         user = auth.authenticate(request, username=uname, password=password)
         if(user is not None):
             auth.login(request,user)
-            messages.info(request,'Login Successfully....')
+            messages.success(request,'Login Successfully....')
             return redirect('/')
         else:
-            messages.info(request,'Login Faild....')
+            messages.error(request,'Login Faild....')
             return redirect('/')
 
     else:
@@ -37,34 +37,29 @@ def Register(request):
         email = request.POST['email_address']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-        print("ok1")
+     
         
         if(password==confirm_password):
-            print("in conform password")
             if(User.objects.filter(email=email).exists()):
-                print("ok12.1")
-                messages.info(request,'Email Taken')
+                messages.error(request,'Email Taken')
                 return render(request,'accounts/Register.html')
 
             elif(User.objects.filter(username=Username).exists()):
-                print("ok12.2")
-                messages.info(request,'Username Taken')
+                messages.error(request,'Username Taken')
                 return render(request,'accounts/Register.html')
             else:
                 user  = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
                 user.save()
-                print("ok2")
-                messages.add_message(request,messages.SUCCESS,'You have registered successfully')
+                messages.success(request,'You have registered successfully')
                 return render(request,'accounts/login.html')
         else:
-            print("ok3")
-            messages.info(request,'Password Does Not Match')
+            messages.error(request,'Password Does Not Match')
             return redirect('Register')
     else:
         # return templage to dom using render function
         return render(request,"accounts/Register.html")
 
-
+# static function for password validitation
 @staticmethod
 def strongpass(request,password):
     if(len(password)<8):
