@@ -39,12 +39,13 @@
 
         <br>
         <div class="signup_link"></div>
-          {% for msg in messages %}
-        <div class="alert alert-danger" style="color: rgb(255, 61, 13); font-size: 25px; font-weight: 600;" role="alert">
-  {{msg}}
-</div>
-{%endfor%}
       </form>
+       {% for msg in messages %}  
+            <div class="alert-{{msg.tags}}">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                {{msg}}
+              </div>
+                        {%endfor%}
     </div>
   </body>
 </html>

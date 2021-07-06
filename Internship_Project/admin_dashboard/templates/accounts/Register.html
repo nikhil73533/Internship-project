@@ -1,3 +1,4 @@
+{%load templogic %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,12 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resgistration Page</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="../../static/css/Register.css">
 
 </head>
 
 <body>
-
+    
     </div>
 
     <div class="container">
@@ -50,15 +52,15 @@
                 <input type="submit" value="Register">
 
             </div>
-            {% for msg in messages %}
-           
-            <div class="alert alert-danger" style="color: rgb(255, 61, 13); font-size: 25px; font-weight: 600;"
-                role="alert">
-                {{msg}}
-            </div>
-            {%endfor%}
+            <br>
+            {% for msg in messages %}  
+            <div class="alert-{{msg.tags}}">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+             {{msg}}
+              </div>
+                        {%endfor%}
         </form>
-       
+       <br>
         <div class="register"><a href="{% url 'Login'%}">Now Go Back to Login</a></div>
 
 
@@ -81,7 +83,7 @@
                 }
             });
 
-
+           
 
 
         </script>
