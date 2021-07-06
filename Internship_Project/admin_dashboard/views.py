@@ -6,6 +6,7 @@ from django.contrib import messages
 # Home view for home page
 def Home(request):
     return render(request,'')
+
 # Login view for login page
 def Login(request):
     if(request.method =="POST"):
@@ -26,7 +27,9 @@ def Login(request):
 
 # Register view  for register page
 def Register(request):
+    print("helloo hhiiihiih")
     if(request.method == 'POST'):
+        print("ok hello")
         First_Name = request.POST['first_name']
         Last_Name = request.POST['last_name']
         Username = request.POST['user_name']
@@ -51,15 +54,29 @@ def Register(request):
                 user.save()
                 print("ok2")
                 messages.add_message(request,messages.SUCCESS,'You have registered successfully')
-                return render(request,'accounts/Register.html')
+                return render(request,'accounts/login.html')
         else:
             print("ok3")
             messages.info(request,'Password Does Not Match')
             return redirect('Register')
+    else:
+        # return templage to dom using render function
+        return render(request,"accounts/Register.html")
 
-    # return templage to dom using render function
-    return render(request,"accounts/Register.html")
+
+@staticmethod
+def strongpass(password):
+    if(len(password)<8):
+        return messages.info("Length of password should be grater then or equal to 8")
+    else:
+        flag = False
+        for i in password:
+            if(i.isupper()):
+                flag = True
+        if(flag):
+            if():
 
 
-def Register(request):
-    return render(request,"accounts/Register.html")
+
+
+
