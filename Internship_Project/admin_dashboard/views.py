@@ -48,10 +48,14 @@ def Register(request):
                 messages.error(request,'Username Taken')
                 return render(request,'accounts/Register.html')
             else:
-                user  = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
-                user.save()
-                messages.success(request,'You have registered successfully')
-                return render(request,'accounts/login.html')
+                if(password_validate(request,password)):
+                    user  = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
+                    user.save()
+                    messages.success(request,'You have registered successfully')
+                    return render(request,'accounts/login.html')
+                else:
+                     # return templage to dom using render function
+                    return render(request,"accounts/Register.html")
         else:
             messages.error(request,'Password Does Not Match')
             return redirect('Register')
@@ -60,36 +64,40 @@ def Register(request):
         return render(request,"accounts/Register.html")
 
 # static function for password validitation
-@staticmethod
 def password_validate(request,password):
     SpecialSymbol =['$', '@', '#', '%'] 
     val = True
       
     if len(password) < 8:
         val = False 
-        return messages.info(request,"lenght should be at least 8")
+        return messages.error(request,"lenght should be at least 8")
        
         
           
     if len(password) > 20: 
+        messages.error(request,"lenght should  not be greater than 20")
         val = False 
-        return messages.info(request,"lenght should  not be greater than 20")
+        return  val  
           
     if not any(char.isdigit() for char in password): 
         val = False 
-        return messages.info(request,"Password should have at least one numeral")
+        messages.error(request,"Password should have at least one numeral")
+        return val
           
     if not any(char.isupper() for char in password): 
         val = False 
-        return messages.info(request,"Password should have at least one uppercase letter")
+        messages.error(request,"Password should have at least one uppercase letter")
+        return val
           
     if not any(char.islower() for char in password): 
         val = False 
-        return messages.info(request,"Password should have at least one lowercase letter")
+        messages.error(request,"Password should have at least one lowercase letter")
+        return val
           
     if not any(char in SpecialSymbol for char in password): 
         val = False 
-        return messages.info(request,"Password should have at least one lowercase letter")
+        messages.error(request,"Password should have at least one lowercase letter")
+        return val
     if val: 
         return val
 
