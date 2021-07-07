@@ -2,7 +2,13 @@ from django.http import request
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
-
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from django.views import View
+from .utils import token_generator
 
 # Home view for home page
 def Home(request):
@@ -16,10 +22,10 @@ def Login(request):
         user = auth.authenticate(request, username=uname, password=password)
         if(user is not None):
             auth.login(request,user)
-            messages.success(request,'Login Successfully....')
+            messages.success(request,'Login Successful....')
             return redirect('/')
         else:
-            messages.error(request,'Login Faild....')
+            messages.error(request,'Login Failed....')
             return redirect('/')
 
     else:
@@ -28,9 +34,7 @@ def Login(request):
 
 # Register view  for register page
 def Register(request):
-    print("helloo hhiiihiih")
     if(request.method == 'POST'):
-        print("ok hello")
         First_Name = request.POST['first_name']
         Last_Name = request.POST['last_name']
         Username = request.POST['user_name']
@@ -50,9 +54,24 @@ def Register(request):
             else:
                 if(password_validate(request,password)):
                     user  = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
+                    user.is_active = False
                     user.save()
-                    messages.success(request,'You have registered successfully')
-                    return render(request,'accounts/login.html')
+                    
+                    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                    domain = get_current_site(request).domain
+                    link = reverse('activate', kwargs = {'uidb64' : uidb64, 'token' : token_generator.make_token(user)})
+                    activate_url = 'http://' + domain + link
+
+                    email = EmailMessage(
+                        'Account Activation',
+                        'Hello ' + Username + ' you can use the following link to activate your account.\n\n' + activate_url,
+                        'from@example.com',
+                        [email],
+                    )
+                    email.send(fail_silently = False)
+
+                    messages.success(request,'Account activation mail has been sent')
+                    return render(request,"accounts/Register.html")
                 else:
                      # return templage to dom using render function
                     return render(request,"accounts/Register.html")
@@ -70,12 +89,10 @@ def password_validate(request,password):
       
     if len(password) < 8:
         val = False 
-        return messages.error(request,"lenght should be at least 8")
+        return messages.error(request,"length should be at least 8")
        
-        
-          
     if len(password) > 20: 
-        messages.error(request,"lenght should  not be greater than 20")
+        messages.error(request,"length should  not be greater than 20")
         val = False 
         return  val  
           
@@ -101,9 +118,33 @@ def password_validate(request,password):
     if val: 
         return val
 
-       
+class Verification(View):
+    def get(self, request, uidb64, token):
 
+        try :
+            id = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk = id)
 
+            if not Token_Generator.check_token(user, token):
+                return redirect('Login' + '?message=' + 'User already has an active account')
+
+            if user.is_active:
+                return redirect('Login')
+
+            user.is_active = True
+            user.save()
+
+            messages.success(request, 'Account activated successfully')
+            return render(request, 'accounts/login.html')
+
+        except Exception as e:
+            pass
+
+        return redirect('Login')
+
+class Login_View(View):
+    def get(self, request):
+        return render(request, 'accounts/login.html')
 
 
 
