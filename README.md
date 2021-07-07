@@ -22,7 +22,7 @@ python manage.py runserver
 ### Enter Admin ID and Password
 #### Admin ID
 ```
-nikhil73533@
+nik@123
 ```
 #### Admin Password
 ```
