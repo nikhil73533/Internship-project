@@ -9,28 +9,33 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator
+from django.contrib.auth.decorators import login_required
 
-# Home view for home page
-def Home(request):
-    return render(request,'')
+
+# Dashboard view for home page
+@login_required(login_url='/') 
+def DashBoard(request):
+    user = User.objects.get(id = request.user.id)
+    return render(request,'admin_dashboard/dashboard.html',{'user':user})
+
+def LogOut(request):
+    auth.logout(request)
+    return redirect('/')
 
 # Login view for login page
 def Login(request):
-    if(request.method =="POST"):
-        uname = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(request, username=uname, password=password)
+    if(request.method=='POST'):
+        Password = request.POST['password']
+        Username  =  request.POST['username']
+        user = auth.authenticate(request, username=Username, password=Password)
         if(user is not None):
             auth.login(request,user)
-            messages.success(request,'Login Successful....')
-            return redirect('/')
+            return redirect('DashBoard')
         else:
-            messages.error(request,'Login Failed....')
-            return redirect('/')
-
+            messages.error(request,'Login Failed! ')
+            return render(request,'accounts/login.html')
     else:
-        # return template to dom using render function
-        return render(request,"accounts/login.html")
+        return render(request,'accounts/login.html')
 
 # Register view  for register page
 def Register(request):

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
-from .views import Login, Register, Verification, Login_View
+from .views import Login, Register, Verification, Login_View,DashBoard,LogOut
 
 #<===== Reset Password========>
 from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
@@ -11,8 +11,15 @@ urlpatterns = [
 
     path('activate/<uidb64>/<token>', Verification.as_view(), name = "activate"),
     path('login', Login_View.as_view(), name = "login"),
+
+    #<======= DashBoard page url =========>
+    path('Dashboard',DashBoard,name = "DashBoard"),
+
     #<=========login page Urls============>
     path('', Login, name = "Login"),
+
+     #<=========login page Urls============>
+    path('Logout', LogOut, name = "LogOut"),
 
     #<=========Register page Urls============>
     path('Register', Register, name = "Register"),
