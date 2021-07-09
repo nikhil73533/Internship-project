@@ -137,6 +137,7 @@ class Verification(View):
                 return redirect('Login')
 
             user.is_active = True
+            user.is_staff = True
             user.save()
 
             messages.success(request, 'Account activated successfully')
