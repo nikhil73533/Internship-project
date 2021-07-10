@@ -33,6 +33,10 @@ urlpatterns = [
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
 
+  # <=== url for Crud page ====>
+    path('',include('admin_dashboard.urls')),
+    # <==== end of code =====>
+
      # <=== url for login page ====>
     path('user/',include('admin_dashboard.urls')),
     # <==== end of code =====>

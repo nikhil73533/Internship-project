@@ -59,17 +59,7 @@
               </button>
             </div>
           </form>
-
-            &ensp; &ensp; 
-          <span class="navbar-text">
-          
-               User Name
-          </span>
-          &ensp; 
           <ul class="navbar-nav">
-            <div class="logo-image">
-                <img src="https://pbs.twimg.com/profile_images/1210618202457292802/lt9KD2lt.jpg" class="img-fluid">
-            </div>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle ms-2"
@@ -78,6 +68,8 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
+                <i class="bi bi-person-fill"></i>
+
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">{{user.username}} </a></li>
@@ -88,7 +80,6 @@
                 </li>
               </ul>
             </li>
-          
           </ul>
         </div>
       </div>
@@ -112,13 +103,8 @@
               <a href="#" class="nav-link px-3 active">
                 <span class="me-2"><i class="bi bi-speedometer2"></i></span>
                 <span>Dashboard</span>
-                <br><br>
               </a>
             </li>
-            <div class="text-muted medium fw-bold text-uppercase px-3 mb-3">
-              <img src="https://pbs.twimg.com/profile_images/1210618202457292802/lt9KD2lt.jpg" alt="Avatar" class="avatar">
-              &ensp;&ensp;User Name
-            </div>
             <li class="my-4"><hr class="dropdown-divider bg-light" /></li>
             <li>
               <div class="text-muted small fw-bold text-uppercase px-3 mb-3">
@@ -182,138 +168,8 @@
     </div>
     <!-- offcanvas -->
     {% block body %}     {% endblock %}
-    <main class="mt-5 pt-3">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <h4>Dashboard</h4>
-          </div>
-        </div>
-        
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="card h-100">
-              <div class="card-header">
-                <span class="me-2"><i class="fas fa-chart-line"></i></span>
-                Online Store Visitors
-              </div>
-              <div id='myDiv' style="width: 780px; height: 500px; position: relative; left: 0px;"></div>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <div class="card h-100">
-              <div class="card-header">
-                <span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
-                Sales
-              </div>
-              <div id='myDiv1' style="width: 780px; height: 500px; position: relative; left: 0px;">
-              
-              </div>
-              
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 mb-3" style="width:50%; float:left">
-            <div class="card">
-              <div class="card-header">
-                <span><i class="bi bi-table me-2"></i></span> Products
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    id="example"
-                    class="table table-striped data-table"
-                    style="width: 100%"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Some Product 1</td>
-                        <td>$13 USD</td>
-                        <td>12,000 sold</td>
-                        <td><i class="fas fa-search"></i></td>
-                      </tr>
-                      <tr>
-                        <td>Some Product 2</td>
-                        <td>$10 USD</td>
-                        <td>15,000 sold</td>
-                        <td><i class="fas fa-search"></i></td>
-                      </tr>
-                      
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12 mb-3" style="width:50%; float:left">
-            <div class="card">
-              <div class="card-header">
-                <span><i class="bi bi-table me-2"></i></span> Online Stores Overview
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    id="example"
-                    class="table table-striped data-table"
-                    style="width: 100%"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Some Product 1</td>
-                        <td>$13 USD</td>
-                        <td>12,000 sold</td>
-                        <td><i class="fas fa-search"></i></td>
-                      </tr>
-                      <tr>
-                        <td>Some Product 2</td>
-                        <td>$10 USD</td>
-                        <td>15,000 sold</td>
-                        <td><i class="fas fa-search"></i></td>
-                      </tr>
-                      
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-    <script src="../../static/js/admin_dashboard/bootstrap.bundle.min.js"></script>
+
+     <script src="../../static/js/admin_dashboard/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
     <script src="../../static/js/admin_dashboard/jquery-3.5.1.js"></script>
     <script src="../../static/js/admin_dashboard/jquery.dataTables.min.js"></script>
