@@ -26,11 +26,13 @@ def LogOut(request):
 def Login(request):
     if(request.method=='POST'):
         Password = request.POST['password']
-        Username  =  request.POST['username']
-        user = auth.authenticate(request, username=Username, password=Password)
-        if(user is not None):
-            auth.login(request,user)
+        Username =  request.POST['username']
+        user = auth.authenticate(username=Username, password=Password)
+        
+        if(user is not None and user.is_active):
+            auth.login(request, user)
             return redirect('DashBoard')
+
         else:
             messages.error(request,'Login Failed! ')
             return render(request,'accounts/login.html')
@@ -58,7 +60,7 @@ def Register(request):
                 return render(request,'accounts/Register.html')
             else:
                 if(password_validate(request,password)):
-                    user  = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
+                    user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
                     user.is_active = False
                     user.save()
                     
@@ -130,15 +132,14 @@ class Verification(View):
             id = force_text(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk = id)
 
+            user.is_active = True
+            user.save()
+
             if not Token_Generator.check_token(user, token):
                 return redirect('Login' + '?message=' + 'User already has an active account')
 
             if user.is_active:
                 return redirect('Login')
-
-            user.is_active = True
-            user.is_staff = True
-            user.save()
 
             messages.success(request, 'Account activated successfully')
             return render(request, 'accounts/login.html')
@@ -153,4 +154,7 @@ class Login_View(View):
         return render(request, 'accounts/login.html')
 
 
+# Crud function 
+def Crud(request):
+    return render(request, "admin_dashboard/crud_part_3.html")
 
