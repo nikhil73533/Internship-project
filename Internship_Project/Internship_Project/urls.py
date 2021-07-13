@@ -25,7 +25,16 @@ urlpatterns = [
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
 
-     # <=== url for dashboard page ====>
+     # <=== url for dashboard one page ====>
+    path('',include('admin_dashboard.urls')),
+    # <==== end of code =====>
+
+     # <=== url for dashboard two page ====>
+    path('',include('admin_dashboard.urls')),
+    # <==== end of code =====>
+
+    
+     # <=== url for dashboard three page ====>
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
 

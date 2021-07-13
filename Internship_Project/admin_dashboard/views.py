@@ -12,11 +12,29 @@ from .utils import token_generator
 from django.contrib.auth.decorators import login_required
 
 
-# Dashboard view for home page
+# <----------------------------------- Dash Board Area for creating views --------------->
+# Dashboard 1 view for home page
 @login_required(login_url='/') 
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user})
+    count =  User.objects.all().count()
+    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user,"count":count})
+
+# DashBoard 2 view in  home page
+@login_required(login_url='/') 
+def DashBoardTwo(request):
+    user = User.objects.get(id = request.user.id)
+    return render(request,'admin_dashboard/DashBoard_2.html',{'user':user})
+
+# DashBoard 3 view in  home page
+@login_required(login_url='/') 
+def DashBoardThree(request):
+    user = User.objects.get(id = request.user.id)
+    return render(request,'admin_dashboard/DashBoard_3.html',{'user':user})
+
+
+# <------------------------------------ End of Area------------------------------>
+
 
 def LogOut(request):
     auth.logout(request)
@@ -156,5 +174,5 @@ class Login_View(View):
 
 # Crud function 
 def Crud(request):
-    return render(request, "admin_dashboard/crud_part_3.html")
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html")
 
