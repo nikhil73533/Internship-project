@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='/') 
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/dashboard.html',{'user':user})
+    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user})
 
 def LogOut(request):
     auth.logout(request)
