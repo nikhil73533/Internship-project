@@ -141,16 +141,6 @@ class Verification(View):
             if user.is_active:
                 return redirect('Login')
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            user.is_active = True
-            user.is_staff = True
-            user.save()
-
-=======
->>>>>>> eb653cb5f763c6a1d659fc392dfc18a6bb0258e7
-=======
->>>>>>> dev
             messages.success(request, 'Account activated successfully')
             return render(request, 'accounts/login.html')
 
