@@ -1,3 +1,6 @@
+{% extends 'admin_dashboard/base.html' %}
+    {% block body %}
+  {%  load static %} 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,24 +8,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generate CRUD</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link rel = "stylesheet" href="../../../static/css/admin_dashboard/crud2.css">
 </head>
 <body>
-    <div class="title" style="font-size: 25px;"><i class="fa fa-plus" aria-hidden="true"></i>&ensp;Generate CRUD</div>
-    <hr style="height:2px;border-width:0;color:rgb(14, 12, 12);background-color:rgb(8, 8, 8)">
-    <div class = "mcontainer">
+    <div class="title" style="font-size: 25px;position:absolute; left: 265px;"><i class="fa fa-plus" aria-hidden="true"></i>&ensp;Generate CRUD</div><br>
+    <hr style="height:3px;width: 1100px;color:rgb(14, 12, 12);margin-left:234px;background-color:rgb(8, 8, 8)">
+    <div class = "mcontainer" style = "position:absolute; right:40px;">
         <form action = "#">
             <div class = "user-details">
                 <div class = "input-box">
-                    &emsp;&emsp;&emsp;<span class = "details" style="font-size: 17px;">Module Name</span> &emsp;&emsp;&emsp;&emsp;
+                    &emsp;&emsp;&emsp;<span class = "details" style="font-size: 17px;">Module Name</span> &emsp;&emsp;
                     &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;
                     &emsp; &emsp;<span class = "details" style="font-size: 17px;">Database Table Name</span><br>
-                    <input type = "text" style="font-size: 15px;" placeholder="Enter your Module Name" required> &emsp;  &emsp;
+                    <input type = "text" style="font-size: 15px;" placeholder="Enter your Module Name" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
                     <input type = "text" style="font-size: 15px;" placeholder="Enter your Database Table Name" required> <br> <br> <br>
                 </div>  
             </div>
@@ -65,6 +68,7 @@
                 </div>
         </form>        
     </div>
-    </div>        
+    </div> 
+    {% endblock %}    
 </body>
 </html>

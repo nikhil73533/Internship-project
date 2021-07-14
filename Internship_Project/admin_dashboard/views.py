@@ -171,8 +171,19 @@ class Login_View(View):
     def get(self, request):
         return render(request, 'accounts/login.html')
 
+# Crud function 
+def CrudList(request):
+    return render(request, "admin_dashboard/CRUD/crud1.html")
 
 # Crud function 
-def Crud(request):
+def CrudGenerator(request):
+    return render(request, "admin_dashboard/CRUD/crud2.html")
+
+# Crud function 
+def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+
+
+
+
 
