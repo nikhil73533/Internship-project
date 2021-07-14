@@ -427,6 +427,52 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Admin
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'Addadmin'%}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Admin</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'Adminlist'%}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Admin List</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Profile
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'view_profile'%}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View Profile</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'change_password'%}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Change Password</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-header">EXAMPLES</li>
           <li class="nav-item">
             <a href="pages/calendar.html" class="nav-link">
@@ -616,7 +662,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-header">MISCELLANEOUS</li>
+          <li class="nav-header">CRUD</li>
           <li class="nav-item">
             <a href="{% url 'Crud'%}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>

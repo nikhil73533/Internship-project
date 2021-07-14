@@ -176,3 +176,16 @@ class Login_View(View):
 def Crud(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
 
+
+def Addadmin(request):
+    return render(request, "admin/add_admin.html")
+
+def Adminlist(request):
+    return render(request, "admin/admin_list.html")
+
+def view_profile(request):
+    return render(request, "profile/view_profile.html")
+
+def change_password(request):
+    return render(request, "profile/change_password.html")
+

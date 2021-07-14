@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,Crud,DashBoardTwo,DashBoardThree
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,Crud,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password
 
 #<===== Reset Password========>
 from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
@@ -24,6 +24,18 @@ urlpatterns = [
 
      #<======= Crud part 3 page url =========>
     path('Crud',Crud,name = "Crud"),
+
+     #<======= Add Admin page url =========>
+    path('Addadmin',Addadmin,name = "Addadmin"),
+
+     #<======= Admin list page url =========>
+    path('Adminlist',Adminlist,name = "Adminlist"),
+
+     #<======= View Profile page url =========>
+    path('view_profile',view_profile,name = "view_profile"),
+
+     #<======= Change Password page url =========>
+    path('change_password',change_password,name = "change_password"),
 
     #<=========login page Urls============>
     path('', Login, name = "Login"),
