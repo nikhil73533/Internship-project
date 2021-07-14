@@ -42,7 +42,15 @@ urlpatterns = [
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
 
-  # <=== url for Crud page ====>
+    # <=== url for Crud List Page ====>
+    path('',include('admin_dashboard.urls')),
+    # <==== end of code =====>
+
+    # <=== url for Crud Generator page ====>
+    path('',include('admin_dashboard.urls')),
+    # <==== end of code =====>
+
+    # <=== url for Crud Extension page ====>
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
 

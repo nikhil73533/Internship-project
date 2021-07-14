@@ -662,11 +662,38 @@
               </li>
             </ul>
           </li>
+<<<<<<< HEAD
           <li class="nav-header">CRUD</li>
+=======
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                CRUD
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'CrudGenerator'%}" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Genrate CRUD</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'CrudExtension'%}" class="nav-link">
+                  <i class="nav-icon fas fa-file"></i>
+                  <p>Crud Extension</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-header">MISCELLANEOUS</li>
+>>>>>>> 59679b3cb04a4f3c9d080b05835c5efdde131c9e
           <li class="nav-item">
-            <a href="{% url 'Crud'%}" class="nav-link">
+            <a href="{% url 'CrudList'%}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
-              <p>Crud Extension</p>
+              <p>Crud 1</p>
             </a>
           </li>
           <li class="nav-header">MULTI LEVEL EXAMPLE</li>
