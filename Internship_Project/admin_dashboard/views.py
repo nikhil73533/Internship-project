@@ -12,11 +12,29 @@ from .utils import token_generator
 from django.contrib.auth.decorators import login_required
 
 
-# Dashboard view for home page
+# <----------------------------------- Dash Board Area for creating views --------------->
+# Dashboard 1 view for home page
 @login_required(login_url='/') 
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/dashboard.html',{'user':user})
+    count =  User.objects.all().count()
+    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user,"count":count})
+
+# DashBoard 2 view in  home page
+@login_required(login_url='/') 
+def DashBoardTwo(request):
+    user = User.objects.get(id = request.user.id)
+    return render(request,'admin_dashboard/DashBoard_2.html',{'user':user})
+
+# DashBoard 3 view in  home page
+@login_required(login_url='/') 
+def DashBoardThree(request):
+    user = User.objects.get(id = request.user.id)
+    return render(request,'admin_dashboard/DashBoard_3.html',{'user':user})
+
+
+# <------------------------------------ End of Area------------------------------>
+
 
 def LogOut(request):
     auth.logout(request)
@@ -153,5 +171,33 @@ class Login_View(View):
     def get(self, request):
         return render(request, 'accounts/login.html')
 
+# Crud function 
+def CrudList(request):
+    return render(request, "admin_dashboard/CRUD/crud1.html")
 
+# Crud function 
+def CrudGenerator(request):
+    return render(request, "admin_dashboard/CRUD/crud2.html")
+
+# Crud function 
+def CrudExtension(request):
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+
+
+<<<<<<< HEAD
+def Addadmin(request):
+    return render(request, "admin/add_admin.html")
+
+def Adminlist(request):
+    return render(request, "admin/admin_list.html")
+
+def view_profile(request):
+    return render(request, "profile/view_profile.html")
+
+def change_password(request):
+    return render(request, "profile/change_password.html")
+=======
+
+
+>>>>>>> 59679b3cb04a4f3c9d080b05835c5efdde131c9e
 
