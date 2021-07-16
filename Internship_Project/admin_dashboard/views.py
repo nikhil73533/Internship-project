@@ -182,6 +182,7 @@ def CrudGenerator(request):
 # Crud function 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+    
 def Addadmin(request):
     return render(request, "admin/add_admin.html")
 

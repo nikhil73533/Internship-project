@@ -22,20 +22,19 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    form{
-      width: 1200px;
-    }
-
     .add_admin{
-      width: 200px;
-    margin-left: 280px;
+      {% comment %} width: 1200px; {% endcomment %}
+      position: relative;
+      margin-left: 280px;
     }
     
     .header {
+      {% comment %} width: 1200px; {% endcomment %}
+      position: relative;
+      margin-left: 280px;
       overflow: hidden;
       background-color: #fff;
       padding: 20px 10px;
-      width: 1000px;
     }
     
     .header a {
@@ -74,48 +73,43 @@
     
 </head>
 <body>
-  <div class="add_admin">
-  
     <div class="header">
-        <a href="#default" class="logo"><i class="fas fa-plus"></i> Add new admin</a>
-       
-      </div>
+        <a href="#default" class="logo"><i class="fas fa-pencil-alt"></i> Add new admin </a>
+    </div>
       
-    <form style="width: 1600px">
-        <div class="form-group" >
-          <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username@123">
+    <form class="add_admin">
+        <div class="form-group">
+          <label for="exampleusername" bold style="font-weight: 600;">Username</label>
+          <input type="text" style="width: 97%" class="form-control" id="exampleusername" aria-describedby="emailHelp" placeholder="username@123">
         </div>
         <br>
         <div class="form-group">
-          <label for="exampleInputPassword1" style="font-weight: 600;" >First Name</label>
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Jhon">
+          <label for="examplefirstname" style="font-weight: 600;" >First Name</label>
+          <input type="text" style="width: 97%" class="form-control" id="examplefirstname" placeholder="Jhon">
         </div>
         <br>
         <div class="form-group">
-            <label for="exampleInputPassword1" style="font-weight: 600;">Last Name</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Doe">
+            <label for="examplelastname" style="font-weight: 600;">Last Name</label>
+            <input type="text" style="width: 97%" class="form-control" id="examplelastname" placeholder="Doe">
           </div>
           <br>
           <div class="form-group">
-            <label for="exampleInputPassword1"  style="font-weight: 600;">Email Address</label>
-            <input type="email" class="form-control" id="exampleInputPassword1" placeholder="example@gmail.com">
+            <label for="exampleemailaddress"  style="font-weight: 600;">Email Address</label>
+            <input type="email" style="width: 97%" class="form-control" id="exampleemailaddress" placeholder="example@gmail.com">
           </div>
          <br>
-         <div class="form-group">
+          <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+            <input type="password" style="width: 97%" class="form-control" id="exampleInputPassword1" placeholder="password">
           </div>
          <br>
-         <div class="form-group">
-            <label for="exampleInputPassword1"  style="font-weight: 600;">Conform Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Conform Password">
+          <div class="form-group">
+            <label for="exampleInputPassword1"  style="font-weight: 600;">Confirm Password</label>
+            <input type="password" style="width: 97%" class="form-control" id="exampleInputPassword1" placeholder="confirm password">
           </div>
          <br>
-        <button type="submit" class="btn btn-primary">Add Admin</button>
+        <button type="submit" class="btn btn-primary">Add admin</button>
       </form>
-    </div>
-
       {% endblock %}
 </body>
 </html>
