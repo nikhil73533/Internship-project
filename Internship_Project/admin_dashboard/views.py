@@ -1,8 +1,12 @@
+from django.contrib.auth import models
+from django.forms import fields
+from django import forms
 from django.http import request
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
@@ -10,7 +14,8 @@ from django.urls import reverse
 from django.views import View
 from .utils import token_generator
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
 
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
@@ -177,13 +182,103 @@ def CrudList(request):
 
 # Crud function 
 def CrudGenerator(request):
+    
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+def Addadmin(request):
+    if(request.method == 'POST'):
+        First_Name = request.POST['first_name']
+        Last_Name = request.POST['last_name']
+        Username = request.POST['username']
+        email = request.POST['email_address']
+        password = request.POST.get('Password')
+        confirm_password = request.POST['confirm_password']
+        
+        if(password==confirm_password):
+            if(User.objects.filter(email=email).exists()):
+                messages.error(request,'Email Taken')
+                return render(request, "admin/add_admin.html")
 
 
+            elif(User.objects.filter(username=Username).exists()):
+                messages.error(request,'Username Taken')
+                return render(request, "admin/add_admin.html")
 
+            else:
+                if(password_validate(request,password)):
+                    user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
+                    user.is_active = False
+                    user.is_staff = True
+                    user.save()
+                    
+                    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                    domain = get_current_site(request).domain
+                    link = reverse('activate', kwargs = {'uidb64' : uidb64, 'token' : token_generator.make_token(user)})
+                    activate_url = 'http://' + domain + link
+
+                    email = EmailMessage(
+                        'Account Activation',
+                        'Hello ' + Username + ' you can use the following link to activate your account.\n\n' + activate_url,
+                        'from@example.com',
+                        [email],
+                    )
+                    email.send(fail_silently = False)
+
+                    messages.success(request,'Account activation mail has been sent')
+                    return render(request, "admin/add_admin.html")
+                else:
+                     # return templage to dom using render function
+                    return render(request, "admin/add_admin.html")
+        else:
+            messages.error(request,'Password Does Not Match')
+            return render(request, "admin/add_admin.html")
+    else:
+        # return templage to dom using render function
+        return render(request, "admin/add_admin.html")
+
+     
+    
+
+
+def Adminlist(request):
+    return render(request, "admin/admin_list.html")
+
+def view_profile(request):
+    user = User.objects.get(id = request.user.id)
+    if(request.method == 'POST'):
+        Username = request.POST['username']
+        First_name= request.POST['first_name']
+        Last_name = request.POST['last_name']
+        Email = request.POST.get('email_address')
+        user.username = Username
+        user.first_name = First_name
+        user.last_name = Last_name
+        user.email = Email
+        user.save()
+        messages.success(request,"Profile is updated successuflly")
+ 
+    return render(request, "profile/view_profile.html",{'user':user})
+
+
+# <---- class based views --------------------------------->
+class passwordChangingForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','type':'password'}))
+    new_password1 = forms.CharField(max_length=100,widget= forms.PasswordInput(attrs= {'class':'form-control','type':'password'}))
+    new_password2= forms.CharField(max_length=100,widget= forms.PasswordInput(attrs= {'class':'form-control','type':'password'}))
+
+    class Meta:
+        model = User
+        fields = ('old_password','new_password1','new_password2')    
+
+
+class PasswordsChangesView(PasswordChangeView):
+    form_class =passwordChangingForm
+    success_url = reverse_lazy('login')
+
+
+# <---------------------end ----------------------------------->
 
 
