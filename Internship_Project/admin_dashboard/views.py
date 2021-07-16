@@ -177,13 +177,16 @@ def CrudList(request):
 
 # Crud function 
 def CrudGenerator(request):
+    
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
 
-
+# User profile
+def UserProfile(request):
+    return render(request,"admin_dahsboard/CRUD/crud_part_3.html")
 
 
 
