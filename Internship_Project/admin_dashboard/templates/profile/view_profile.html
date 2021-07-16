@@ -74,30 +74,31 @@
     <div class="header">
         <a href="#default" class="logo"><i class="fas fa-pencil-alt"></i> Profile</a>
         <div class="header-right">
-          <a class="btn btn-success" style="color: white;" href="#home"><i class="fas fa-key"></i> ChangePassword</a>
+          <a class="btn btn-success" style="color: white;" href="password/"><i class="fas fa-key"></i> ChangePassword</a>
         
         </div>
       </div>
       
-    <form class="view_profile">
+    <form class="view_profile" method = "POST">
+    {% csrf_token %}
         <div class="form-group">
           <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username@123">
+          <input type="text" class="form-control" name = "username" id="exampleInputEmail1" value = "{{user.username}}" aria-describedby="emailHelp" placeholder="username@123">
         </div>
         <br>
         <div class="form-group">
-          <label for="exampleInputPassword1" style="font-weight: 600;" >First Name</label>
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Jhon">
+          <label for="exampleInputPassword1"  style="font-weight: 600;" >First Name</label>
+          <input type="text" class="form-control" value = "{{user.first_name}}" name = "first_name" id="exampleInputPassword1" placeholder="Jhon">
         </div>
         <br>
         <div class="form-group">
             <label for="exampleInputPassword1" style="font-weight: 600;">Last Name</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Doe">
+            <input type="text" class="form-control" value = "{{user.last_name}}"  name = "last_name" id="exampleInputPassword1" placeholder="Doe">
           </div>
           <br>
           <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Email Address</label>
-            <input type="email" class="form-control" id="exampleInputPassword1" placeholder="example@gmail.com">
+            <input type="email" class="form-control" value = "{{user.email}}" name = "email_address" id="exampleInputPassword1" placeholder="example@gmail.com">
           </div>
          <br>
         <button type="submit" class="btn btn-primary">Update Profile</button>
