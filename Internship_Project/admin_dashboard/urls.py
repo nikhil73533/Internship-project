@@ -2,12 +2,10 @@ from django.contrib import admin
 from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
-<<<<<<< HEAD
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,Crud,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password
-=======
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,CrudExtension,CrudGenerator,CrudList
 
->>>>>>> 59679b3cb04a4f3c9d080b05835c5efdde131c9e
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password,Login,CrudExtension,CrudGenerator,CrudList
+
+
 
 #<===== Reset Password========>
 from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
