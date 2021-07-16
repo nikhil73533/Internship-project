@@ -182,9 +182,6 @@ def CrudGenerator(request):
 # Crud function 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
-
-
-<<<<<<< HEAD
 def Addadmin(request):
     return render(request, "admin/add_admin.html")
 
@@ -196,8 +193,5 @@ def view_profile(request):
 
 def change_password(request):
     return render(request, "profile/change_password.html")
-=======
 
-
->>>>>>> 59679b3cb04a4f3c9d080b05835c5efdde131c9e
 
