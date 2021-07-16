@@ -13,7 +13,7 @@ body {
     font-size: 13px;
 }
 .mcontainer{
-  width: 100%;
+  width: 80%;
   padding: 60px 20px;
   color: rgb(10, 10, 10);
   border:5px solid rgb(191, 191, 194);
@@ -50,6 +50,18 @@ body {
   outline: none;
   color: #fff;
   border: none;
+}
+.btnn{
+  height: 65%;
+  width: 120%;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 21px;
+  letter-spacing: 1px;
+  outline: none;
+  color: #fff;
+  border: none;
+  background: rgb(241, 112, 73);
 }
 .button{ 
   height: 90%;
