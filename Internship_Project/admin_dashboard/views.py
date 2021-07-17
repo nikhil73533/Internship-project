@@ -195,4 +195,8 @@ def view_profile(request):
 def change_password(request):
     return render(request, "profile/change_password.html")
 
+def module_setting(request):
+    return render(request, "roles_and_permission/module_setting.html")
+
+
 
