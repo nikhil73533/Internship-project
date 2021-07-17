@@ -67,6 +67,45 @@
         float: none;
       }
     }
+
+
+/* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
+success message 
+*/
+.allert-success {
+  padding: 12px;
+  background-color: #469412;
+  
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
     </style>
     
 </head>
@@ -78,6 +117,15 @@
         
         </div>
       </div>
+
+      
+     {% for msg in messages %}  
+            <div class="allert-{{msg.tags}}">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                {{msg}}
+              </div>
+                        {%endfor%}
+<br>
       
     <form class="view_profile" method = "POST">
     {% csrf_token %}

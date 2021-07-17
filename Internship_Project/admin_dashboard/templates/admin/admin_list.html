@@ -274,54 +274,6 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-<script src="http://code.jquery.com/jquery.js"></script>
- 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script>
-var row = 1;
-$(function() {
-  $('#AddPerson').click(function(e) {
-    e.preventDefault();
-    var template = $('#template')
-      .clone()                        // CLONE THE TEMPLATE
-      .attr('id', 'row' + (row++))    // MAKE THE ID UNIQUE
-      .appendTo($('#myTable tbody'))  // APPEND TO THE TABLE
-      .show();                        // SHOW IT
-  });
-});
-</script>
-<!-- jQuery -->
-<script src={% static 'plugins/jquery/jquery.min.js' %}></script>
-<!-- Bootstrap 4 -->
-<script src={% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}></script>
-<!-- DataTables -->
-<script src={% static 'plugins/datatables/jquery.dataTables.min.js' %}></script>
-<script src={% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}></script>
-<script src={% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}></script>
-<script src={% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}></script>
-<!-- AdminLTE App -->
-<script src={% static 'dist/js/adminlte.min.js' %}></script>
-<!-- AdminLTE for demo purposes -->
-<script src={% static 'dist/js/demo.js' %}></script>
-<!-- page script -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true,
-      "autoWidth": false,
-    });
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
 {% endblock %}
 </body>
 </html>
