@@ -13,7 +13,7 @@ body {
 }
 .table-title {        
     padding-bottom: 15px;
-    background: linear-gradient(40deg, #2096ff, #05ffa3) !important;
+    background: linear-gradient(40deg, #a1a2a3, #cecfcf) !important;
     color: #fff;
     padding: 16px 30px;
     margin: -20px -25px 10px;
@@ -83,7 +83,7 @@ table.table td a {
     outline: none !important;
 }
 table.table td a:hover {
-    color: #2196F3;
+    color: #8f8f8fc2;
 }
 table.table td a.edit {
     color: #FFC107;
