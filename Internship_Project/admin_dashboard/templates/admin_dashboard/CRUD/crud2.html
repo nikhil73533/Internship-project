@@ -10,10 +10,15 @@
     <title>Generate CRUD</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> {% endcomment %}
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link rel = "stylesheet" href="../../../static/css/admin_dashboard/crud2.css">
+    <script>
+        function addMore() {
+	    $(".form-main:last").clone().insertAfter(".form-main:last");	
+    }
+    </script>
 </head>
 <body>
     
@@ -40,21 +45,22 @@
         <form action = "#">
             <div class = "user-details">
                 <div class = "input-box">
-                    &emsp;&emsp;&emsp;<span class = "details" style="font-size: 17px;">Module Name</span> &emsp;&emsp;
-                    &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;
-                    &emsp; &emsp;<span class = "details" style="font-size: 17px;">Database Table Name</span><br>
-                    <input type = "text" style="font-size: 15px;" placeholder="Enter your Module Name" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
-                    <input type = "text" style="font-size: 15px;" placeholder="Enter your Database Table Name" required> <br> <br> <br>
+                    &emsp;&emsp;&emsp;<span class = "details" style="font-size: 17px;"><b>Module Name</b></span> 
+                            &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp;
+                    &emsp; &emsp;<span class = "details" style="font-size: 17px;"><b>Database Table Name</b></span><br>
+                    <input type = "text" style="font-size: 14px;" placeholder="Enter your Module Name" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
+                    <input type = "text" style="font-size: 13px;" placeholder="Enter your Database Table Name" required> <br> <br> <br>
                 </div>  
             </div>
         </form>
-    <div class = "btn" style="text-align:center">
-        <input type = "button" class = "btnn" value = "Add Column">
-    </div>
+        <div class = "btnn" style="right: 78rem;">
+            <button class = "btn btn-danger" onClick="addMore();">Add Fields</button>
+        </div>
+    
     <br> <br> <br>
     <br>
     <div class = "container1">
-        <form action = "#">
+        <form class = "form-main">
                 <div class = "input-box">
                     <input type = "text" style="font-size: 15px;" placeholder="Field Label" required> &emsp;  &emsp; &emsp;  
                     <input type = "text" style="font-size: 15px;" placeholder="Field Name" required> &emsp;  &emsp; &emsp;  
@@ -80,13 +86,20 @@
                 </div> <br> <br>
                 <div class = "input-box">
                     <input type = "text" style="font-size: 15px;" placeholder="Enter Length of Data Type" required>
-                </div> 
+                    &emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;
+                    <input type="checkbox" id="show" name="show" value="show_list">
+                        <label for="show"><b>Show in List</b></label>
+                </div> <br><hr style="width: 100%;border: 1px solid black;"><br>
+                
+        </form>
+        <form action="#">
                 <div class = "button" style="text-align:center">
                     <input type = "submit" value = "Genrate CRUD">
                 </div>
-        </form>        
+        </form>            
     </div>
     </div> 
     {% endblock %}    
 </body>
 </html>
+

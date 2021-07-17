@@ -74,4 +74,8 @@ urlpatterns = [
      # <=== url for View Profile page ====>
     path('user/',include('admin_dashboard.urls')),
     # <==== end of code =====>
+
+     # <=== url for Module Setting page ====>
+    path('user/',include('admin_dashboard.urls')),
+    # <==== end of code =====>
 ]
