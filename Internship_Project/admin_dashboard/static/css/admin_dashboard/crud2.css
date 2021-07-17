@@ -52,7 +52,7 @@ body {
 }
 .btnn{
   height: 65%;
-  width: 120%;
+  width: 10%;
   font-size: 18px;
   font-weight: 500;
   border-radius: 21px;
@@ -60,7 +60,7 @@ body {
   outline: none;
   color: #fff;
   border: none;
-  background: rgb(241, 112, 73);
+  /* background: rgb(241, 112, 73); */
 }
 .button{ 
   height: 90%;

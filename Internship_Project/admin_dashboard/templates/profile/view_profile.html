@@ -11,9 +11,9 @@
     <title>View Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- CSS only -->
-{% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
     <!-- JavaScript Bundle with Popper -->
-{% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> {% endcomment %}
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>  -->
 <style>
     * {box-sizing: border-box;}
     
@@ -23,23 +23,12 @@
     }
 
     .view_profile{
-<<<<<<< HEAD
       width: 1200px;
     margin-left: 280px;
     }
     
     .header {
       width: 1200px;
-=======
-      {% comment %} width: 1200px; {% endcomment %}
-      position: relative;
-      margin-left: 280px;
-    }
-    
-    .header {
-      {% comment %} width: 1200px; {% endcomment %}
-      position: relative;
->>>>>>> d3708f23b91abefc0d78c11caf9d2296dfd2c22f
       margin-left: 280px;
       overflow: hidden;
       background-color: #fff;
@@ -93,25 +82,6 @@
     <form class="view_profile" method = "POST">
     {% csrf_token %}
         <div class="form-group">
-<<<<<<< HEAD
-          <label for="exampleusername" bold style="font-weight: 600;">Username</label>
-          <input type="text" style="width: 97%" class="form-control" id="exampleusername" aria-describedby="emailHelp" placeholder="username@123">
-        </div>
-        <br>
-        <div class="form-group">
-          <label for="examplefirstname" style="font-weight: 600;" >First Name</label>
-          <input type="text" style="width: 97%" class="form-control" id="examplefirstname" placeholder="Jhon">
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="examplelastname" style="font-weight: 600;">Last Name</label>
-            <input type="text" style="width: 97%" class="form-control" id="examplelastname" placeholder="Doe">
-          </div>
-          <br>
-          <div class="form-group">
-            <label for="exampleemailaddress"  style="font-weight: 600;">Email Address</label>
-            <input type="email" style="width: 97%" class="form-control" id="exampleemailaddress" placeholder="example@gmail.com">
-=======
           <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
           <input type="text" class="form-control" name = "username" id="exampleInputEmail1" value = "{{user.username}}" aria-describedby="emailHelp" placeholder="username@123">
         </div>
@@ -129,7 +99,6 @@
           <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Email Address</label>
             <input type="email" class="form-control" value = "{{user.email}}" name = "email_address" id="exampleInputPassword1" placeholder="example@gmail.com">
->>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
           </div>
          <br>
         <button type="submit" class="btn btn-primary">Update Profile</button>
