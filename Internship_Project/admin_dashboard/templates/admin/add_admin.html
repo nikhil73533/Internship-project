@@ -81,35 +81,35 @@
        
       </div>
       
-    <form style="width: 1600px">
+    <form style="width: 1600px" method = 'POST'>{%  csrf_token %}
         <div class="form-group" >
           <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username@123">
+          <input type="text" class="form-control"  name = "username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username@123">
         </div>
         <br>
         <div class="form-group">
           <label for="exampleInputPassword1" style="font-weight: 600;" >First Name</label>
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Jhon">
+          <input type="text" class="form-control" name = "first_name" id="exampleInputPassword1" placeholder="Jhon">
         </div>
         <br>
         <div class="form-group">
             <label for="exampleInputPassword1" style="font-weight: 600;">Last Name</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Doe">
+            <input type="password" class="form-control" name = "last_name" id="exampleInputPassword1" placeholder="Doe">
           </div>
           <br>
           <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Email Address</label>
-            <input type="email" class="form-control" id="exampleInputPassword1" placeholder="example@gmail.com">
+            <input type="email" class="form-control" name = 'email_address' id="exampleInputPassword1" placeholder="example@gmail.com">
           </div>
          <br>
          <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+            <input type="password" class="form-control" name = "Password" id="exampleInputPassword1" placeholder="password">
           </div>
          <br>
          <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Conform Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Conform Password">
+            <input type="password" class="form-control" name = "confirm_password" id="exampleInputPassword1" placeholder="Conform Password">
           </div>
          <br>
         <button type="submit" class="btn btn-primary">Add Admin</button>
