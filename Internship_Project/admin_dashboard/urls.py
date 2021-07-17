@@ -2,12 +2,8 @@ from django.contrib import admin
 from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
-<<<<<<< HEAD
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password,Login,CrudExtension,CrudGenerator,CrudList, module_setting
-=======
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,CrudExtension,CrudGenerator,CrudList,Addadmin,Adminlist,view_profile,PasswordsChangesView
->>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting
 
 
 #<===== Reset Password========>
@@ -56,7 +52,6 @@ urlpatterns = [
     #<======= Crud part 3 page url =========>
     path('CrudExtension',CrudExtension,name = "CrudExtension"),
 
-<<<<<<< HEAD
      #<======= Add Admin page url =========>
     path('Addadmin',Addadmin,name = "Addadmin"),
 
@@ -72,8 +67,6 @@ urlpatterns = [
      #<======= Module Settings page url =========>
     path('module_setting',module_setting,name = "module_setting"),
 
-=======
->>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
     #<=========login page Urls============>
     path('', Login, name = "Login"),
 
