@@ -29,6 +29,7 @@ urlpatterns = [
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
 
+
      # <=== url for dashboard two page ====>
     path('',include('admin_dashboard.urls')),
     # <==== end of code =====>
@@ -71,6 +72,10 @@ urlpatterns = [
     # <==== end of code =====>
 
      # <=== url for View Profile page ====>
+    path('user/',include('admin_dashboard.urls')),
+    # <==== end of code =====>
+
+     # <=== url for Module Setting page ====>
     path('user/',include('admin_dashboard.urls')),
     # <==== end of code =====>
 ]

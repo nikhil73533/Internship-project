@@ -22,20 +22,19 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    form{
-      width: 1200px;
-    }
-
     .add_admin{
-      width: 200px;
-    margin-left: 280px;
+      {% comment %} width: 1200px; {% endcomment %}
+      position: relative;
+      margin-left: 280px;
     }
     
     .header {
+      {% comment %} width: 1200px; {% endcomment %}
+      position: relative;
+      margin-left: 280px;
       overflow: hidden;
       background-color: #fff;
       padding: 20px 10px;
-      width: 1000px;
     }
     
     .header a {
@@ -74,48 +73,78 @@
     
 </head>
 <body>
-  <div class="add_admin">
-  
     <div class="header">
-        <a href="#default" class="logo"><i class="fas fa-plus"></i> Add new admin</a>
-       
-      </div>
+        <a href="#default" class="logo"><i class="fas fa-pencil-alt"></i> Add new admin </a>
+    </div>
       
+<<<<<<< HEAD
     <form style="width: 1200px">
+=======
+<<<<<<< HEAD
+    <form class="add_admin">
+        <div class="form-group">
+          <label for="exampleusername" bold style="font-weight: 600;">Username</label>
+          <input type="text" style="width: 97%" class="form-control" id="exampleusername" aria-describedby="emailHelp" placeholder="username@123">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="examplefirstname" style="font-weight: 600;" >First Name</label>
+          <input type="text" style="width: 97%" class="form-control" id="examplefirstname" placeholder="Jhon">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="examplelastname" style="font-weight: 600;">Last Name</label>
+            <input type="text" style="width: 97%" class="form-control" id="examplelastname" placeholder="Doe">
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="exampleemailaddress"  style="font-weight: 600;">Email Address</label>
+            <input type="email" style="width: 97%" class="form-control" id="exampleemailaddress" placeholder="example@gmail.com">
+=======
+    <form style="width: 1600px" method = 'POST'>{%  csrf_token %}
+>>>>>>> d3708f23b91abefc0d78c11caf9d2296dfd2c22f
         <div class="form-group" >
           <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username@123">
+          <input type="text" class="form-control"  name = "username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="username@123">
         </div>
         <br>
         <div class="form-group">
           <label for="exampleInputPassword1" style="font-weight: 600;" >First Name</label>
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Jhon">
+          <input type="text" class="form-control" name = "first_name" id="exampleInputPassword1" placeholder="Jhon">
         </div>
         <br>
         <div class="form-group">
             <label for="exampleInputPassword1" style="font-weight: 600;">Last Name</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Doe">
+            <input type="password" class="form-control" name = "last_name" id="exampleInputPassword1" placeholder="Doe">
           </div>
           <br>
           <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Email Address</label>
-            <input type="email" class="form-control" id="exampleInputPassword1" placeholder="example@gmail.com">
+            <input type="email" class="form-control" name = 'email_address' id="exampleInputPassword1" placeholder="example@gmail.com">
+>>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
           </div>
          <br>
-         <div class="form-group">
+          <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="password">
+<<<<<<< HEAD
+            <input type="password" style="width: 97%" class="form-control" id="exampleInputPassword1" placeholder="password">
+          </div>
+         <br>
+          <div class="form-group">
+            <label for="exampleInputPassword1"  style="font-weight: 600;">Confirm Password</label>
+            <input type="password" style="width: 97%" class="form-control" id="exampleInputPassword1" placeholder="confirm password">
+=======
+            <input type="password" class="form-control" name = "Password" id="exampleInputPassword1" placeholder="password">
           </div>
          <br>
          <div class="form-group">
             <label for="exampleInputPassword1"  style="font-weight: 600;">Conform Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Conform Password">
+            <input type="password" class="form-control" name = "confirm_password" id="exampleInputPassword1" placeholder="Conform Password">
+>>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
           </div>
          <br>
-        <button type="submit" class="btn btn-primary">Add Admin</button>
+        <button type="submit" class="btn btn-primary">Add admin</button>
       </form>
-    </div>
-
       {% endblock %}
 </body>
 </html>

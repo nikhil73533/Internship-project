@@ -3,12 +3,11 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password,Login,CrudExtension,CrudGenerator,CrudList
-
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting
 
 
 #<===== Reset Password========>
-from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView,PasswordChangeView
 
 urlpatterns = [
 
@@ -24,6 +23,25 @@ urlpatterns = [
      #<======= DashBoard three page url =========>
     path('DashboardThree',DashBoardThree,name = "DashBoardThree"),
 
+      #<======= Add admin  page url =========>
+    path('Addadmin',Addadmin,name = "Addadmin"),
+
+ 
+
+#<=======  view profile  page url =========>
+    path('viewprofile',view_profile,name = "view_profile"),
+
+#<=======  change password  page url =========>
+    path('password/',PasswordsChangesView.as_view(template_name = "profile/change_password.html")),
+
+      #<======= Add list page url =========>
+    path('Adminlist',Adminlist,name = "Adminlist"),
+
+
+      #<======= Add admin  page url =========>
+    path('Addadmin',Addadmin,name = "Addadmin"),
+
+    
 
     #<======= Crud part 1 page url =========>
     path('Crudlist',CrudList,name = "CrudList"),
@@ -45,6 +63,9 @@ urlpatterns = [
 
      #<======= Change Password page url =========>
     path('change_password',change_password,name = "change_password"),
+
+     #<======= Module Settings page url =========>
+    path('module_setting',module_setting,name = "module_setting"),
 
     #<=========login page Urls============>
     path('', Login, name = "Login"),
