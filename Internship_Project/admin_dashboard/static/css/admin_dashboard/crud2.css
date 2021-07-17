@@ -16,7 +16,7 @@ body {
   width: 80%;
   padding: 60px 20px;
   color: rgb(10, 10, 10);
-  border:5px solid rgb(191, 191, 194);
+  border:5px solid rgb(146, 228, 228);
 }
 .container .title::before{
   content: '';
@@ -38,18 +38,17 @@ body {
   padding: 25px 30px;
   color: rgb(10, 10, 10);
   border:3px solid black;
+  background: white;
 }
-.btn{ 
-  height: 90%;
-  width: 10%;
+.container2{
+  width: 100%;
+  padding: 25px 30px;
+  color: rgb(10, 10, 10);
+  border:3px solid black;
+  background: white;
+}
+.btnn{ 
   float: right;
-  font-size: 18px;
-  font-weight: 500;
-  border-radius: 5px;
-  letter-spacing: 1px;
-  outline: none;
-  color: #fff;
-  border: none;
 }
 .button{ 
   height: 90%;
