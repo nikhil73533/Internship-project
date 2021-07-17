@@ -188,6 +188,7 @@ def CrudGenerator(request):
 # Crud function 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+    
 def Addadmin(request):
     if(request.method == 'POST'):
         First_Name = request.POST['first_name']
@@ -280,5 +281,9 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
+
+def module_setting(request):
+    return render(request, "roles_and_permission/module_setting.html")
+
 
 
