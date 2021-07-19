@@ -54,7 +54,6 @@
       font-weight: bold;
     }
 
-
     .header-right {
       float: right;
     }
@@ -71,10 +70,23 @@
       }
     }
 
+    
 /* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
 success message 
 */
-.alert-success {
+.allert-success {
   padding: 12px;
   background-color: #469412;
   
@@ -95,40 +107,34 @@ success message
 .closebtn:hover {
   color: black;
 }
-/* 
-Alert messages 
-*/
 
-.alert-error {
-  padding: 12px;
-  background-color: #f44336;
-  color: white;
- 
-}
-/* 
+
 
   </style>
 
 </head>
 
 <body>
-
-
   <div class="add_admin">
 
     <div class="header">
       <a href="#default" class="logo"><i class="fas fa-plus"></i> Add new admin</a>
+
     </div>
 
-     {% for msg in messages %}  
-            <div class="alert-{{msg.tags}}">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                {{msg}}
-              </div>
-                        {%endfor%}
-<br>
+    
 
-    <form style="width: 1600px" method='POST'>{% csrf_token %}
+    <form  method='POST'>{% csrf_token %}
+
+    
+      {% for msg in messages %}  
+      <div class="allert-{{msg.tags}}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+          {{msg}}
+        </div> <br>
+                  {%endfor%}
+                  <br>
+
       <div class="form-group">
         <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
         <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp"
