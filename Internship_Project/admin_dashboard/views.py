@@ -5,7 +5,7 @@ from django.http import request
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, message
 from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -242,10 +242,29 @@ def Addadmin(request):
 
      
     
-
+#<-------------AdminList view----------------------------->
 
 def Adminlist(request):
-    return render(request, "admin/admin_list.html")
+    user = User.objects.all()
+    if(request.method== 'POST'):
+        user_id = request.POST['user_id']
+        Admin = User.objects.get(id = user_id)
+        Admin.delete()
+        messages.success(request,'User deleted successfully !!')
+    return render(request, "admin/admin_list.html",{'users':user})
+
+def EditAdminListValue(request):
+    user = User.objects.get(id = request.user.id)
+    if(request.method == 'POST'):
+        Username = request.POST['username']
+        Email = request.POST['email_address']
+        role = request.POST['role']
+        user.username = Username
+        user.email = Email
+        user.save()
+        messages.success(request,"Admin Updated successfully!!!")
+#<-----------------------AdminList View------------------------->   
+
 
 def view_profile(request):
     user = User.objects.get(id = request.user.id)
