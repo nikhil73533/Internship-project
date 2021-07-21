@@ -21,6 +21,8 @@ from .utils import token_generator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
+from itertools import zip_longest
+import csv
 
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
@@ -189,6 +191,8 @@ def CrudList(request):
 # Crud function
 @login_required(login_url='/')  
 def CrudGenerator(request):
+
+    data_dict = {}
     if(request.method == 'POST'):
         Module_Name = request.POST['Module']
         Table_Name = request.POST['Table']
@@ -197,7 +201,12 @@ def CrudGenerator(request):
         d_type = request.POST['d_type']
         max_length = request.POST['length']
 
-        print("\n", request.POST, "\n")
+        data_dict = dict(request.POST.lists())
+
+    with open("CRUD.csv", "w") as response:
+        writer = csv.writer(response)
+        writer.writerow(data_dict.keys())
+        writer.writerows(zip_longest(*data_dict.values()))
     
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
