@@ -19,7 +19,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
-@login_required(login_url='/') 
+# @login_required(login_url='/') 
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
     count =  User.objects.all().count()
@@ -244,14 +244,6 @@ def Addadmin(request):
     
 #<-------------AdminList view----------------------------->
 
-def Adminlist(request):
-    user = User.objects.all()
-    if(request.method== 'POST'):
-        user_id = request.POST['user_id']
-        Admin = User.objects.get(id = user_id)
-        Admin.delete()
-        messages.success(request,'User deleted successfully !!')
-    return render(request, "admin/admin_list.html",{'users':user})
 
 def EditAdminListValue(request):
     user = User.objects.get(id = request.user.id)
@@ -304,5 +296,18 @@ class PasswordsChangesView(PasswordChangeView):
 def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html")
 
+def general_settings(request):
+    return render(request, "settings/general_settings.html")
 
 
+def admintest(request):
+    user = User.objects.all()
+    if(request.method == 'POST'):
+        Username = request.POST['username']
+        Email = request.POST['email_address']
+        role = request.POST['role']
+        user.username = Username
+        user.email = Email
+        user.save()
+        messages.success(request,"Admin Updated successfully!!!")
+    return render(request,"admin/admin_test.html",{'users':user})
