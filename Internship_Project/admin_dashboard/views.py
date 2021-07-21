@@ -182,6 +182,15 @@ def CrudList(request):
 
 # Crud function 
 def CrudGenerator(request):
+    if(request.method == 'POST'):
+        Module_Name = request.POST['Module']
+        Table_Name = request.POST['Table']
+        label = request.POST['label']
+        name = request.POST['name']
+        d_type = request.POST['d_type']
+        max_length = request.POST['length']
+
+        print("\n", request.POST, "\n")
     
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
