@@ -1,6 +1,9 @@
+
 {% extends 'admin_dashboard/base.html' %}
 {% block body %}
+{% load cart %}
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,6 +57,12 @@
       color: black;
     }
     
+    .edit{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      
+    }
     
     
       </style>
@@ -77,14 +86,16 @@
           </div>
         </div>
       </div><!-- /.container-fluid -->
-    </section>
-    <br>
-    {% for msg in messages %}  
+      {% for msg in messages %} 
+      <br> 
     <div class="allert-{{msg.tags}}">
         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
         {{msg}}
       </div> <br>
                 {%endfor%}
+    </section>
+    <br>
+    
 
                 <div class="wrapper">
                     <div class="container">
@@ -137,6 +148,7 @@
         </thead>
         <tbody>
         {% for user in users %}
+        {% if user|is_equal:count.id%}
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{user.first_name}} {{user.last_name}}
@@ -144,69 +156,64 @@
 
                                         <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
                 </td>
+                <form action="{% url 'EditAdminListValue' %}" method="POST">{% csrf_token %}
+                    
+                  <td>{{user.username}}<input type="text" value = "{{user.id}}" name = "user" hidden ></td>
+                  <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
+                  <td><input class = "edit" type="text" value="Admin" placeholder="Role" name="role"></td>
+                  <td><div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
+                    <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
+                  </div></td>
+                  <td>
+                    <button type="submit" class="btn btn-warning btn-xs mr5">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </form>
+
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{user.first_name}} {{user.last_name}}
+                  <br>
+                  
+                  <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
+                </td>
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>
                 <td><button type="button" class="btn btn-success">Admin</button></td>
                 <td><div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
-                    <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
-                  </div></td>
+                  <input type="checkbox" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
+                  <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
+                </div></td>
                 <td>
-                    <button data-target="#editModal" data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
-
-                        <i class="fa fa-edit"></i>
-
-                      </button>
-
-                      <form action="{{request.path}}"  method  = "POST" style="display: inline-block;">
-                        {% csrf_token%}
-                        <input type="text" name = "user_id" value = "{{user.id}}" hidden>
-                        <button  type = "submit" class="btn btn-danger btn-xs mr5">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </form>
-                     
+                  
+                  <button data-target="#editModal" onClick="document.location='{% url 'EditAdminList' user.id %}'" data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
+                    
+                    <i class="fa fa-edit"></i>
+                    
+                  </button>
+                  
+                  <form action="{{request.path}}"  method  = "POST" style="display: inline-block;">
+                    {% csrf_token%}
+                    <input type="text" name = "user_id" value = "{{user.id}}" hidden>
+                    <button  type = "submit" class="btn btn-danger btn-xs mr5">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                  
                 </td>
-            </tr>
+              </tr>
+              
+              {% endif %}
         {% endfor %}
            
         </tfoot>
     </table>
 
     
-  <!-- Edit Modal HTML -->
-  <div id="editModal" class="modal fade">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form action="{% url 'EditAdminListValue'%}"  method="POST">{%csrf_token %}
-          <div class="modal-header">
-            <h4 class="modal-title">Edit Admin </h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Username</label>
-              <input type="text" name = "username" value="{{user.username}}" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" name = "email"value="{{user.email}}" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Role</label>
-              <input type="text" name = "role" value="Admin" class="form-control" required>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-            <input type="submit" class="btn btn-success" value="Edit">
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <!-- Edit Modal HTML -->
-
     <script>
         $(document).ready(function() {
     $('#example').DataTable({

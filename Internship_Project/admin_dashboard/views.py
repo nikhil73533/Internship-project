@@ -266,18 +266,6 @@ def Addadmin(request):
      
     
 #<-------------AdminList view----------------------------->
-
-@login_required(login_url='/') 
-def EditAdminListValue(request):
-    user = User.objects.get(id = request.user.id)
-    if(request.method == 'POST'):
-        Username = request.POST['username']
-        Email = request.POST['email_address']
-        role = request.POST['role']
-        user.username = Username
-        user.email = Email
-        user.save()
-        messages.success(request,"Admin Updated successfully!!!")
 #<-----------------------AdminList View------------------------->   
 
 
@@ -326,9 +314,29 @@ def general_settings(request):
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
+    count = -1
     if(request.method == 'POST'):
         user_id = request.POST['user_id']
         admin = User.objects.get(id = user_id)
         admin.delete()
         messages.success(request,"Admin deleted successfully!!!")
-    return render(request,"admin/admin_test.html",{'users':user})
+    return render(request,"admin/admin_test.html",{'users':user,"count":count})
+
+def EditAdminList(request,user_id):
+        user = User.objects.all()
+        count = User.objects.get(id = user_id)
+        return render(request,"admin/admin_test.html",{'users':user,"count":count})
+
+@login_required(login_url='/') 
+def EditAdminListValue(request):
+   
+    if(request.method == 'POST'):
+        userid = request.POST.get('user')
+        print("ok   ",userid)
+        user = User.objects.get(id  = userid)
+        Email = request.POST.get('email_address')
+        role = request.POST['role']
+        user.email = Email
+        user.save()
+        messages.success(request,"Admin Updated successfully!!!")
+    return redirect('admintest')
