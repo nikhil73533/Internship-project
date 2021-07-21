@@ -10,7 +10,11 @@ from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
+<<<<<<< Updated upstream
 # from .models import Profile
+=======
+from .models import Profile
+>>>>>>> Stashed changes
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator

@@ -3,10 +3,14 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
+<<<<<<< Updated upstream
 
 
 from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
 
+=======
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
+>>>>>>> Stashed changes
 
 
 #<===== Reset Password========>
