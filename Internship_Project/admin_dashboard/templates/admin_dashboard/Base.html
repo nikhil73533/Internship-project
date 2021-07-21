@@ -452,7 +452,24 @@
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>
+                Settings
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'general_settings'%}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>General Settings</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-user-circle"></i>
               <p>
                 Profile
                 <i class="fas fa-angle-left right"></i>
@@ -466,7 +483,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'change_password'%}" class="nav-link">
+                <a href="/password" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Change Password</p>
                 </a>
@@ -489,11 +506,7 @@
                 </a>
               </li>
               <li class="nav-item">
-<<<<<<< HEAD
                 <a href="{% url 'Adminlist'%}" class="nav-link">
-=======
-                <a href="/password" class="nav-link">
->>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
                   <i class="far fa-circle nav-icon"></i>
                   <p>Admin List</p>
                 </a>
@@ -689,11 +702,8 @@
               </li>
             </ul>
           </li>
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 5753cdbda07a5630b87c353410fd8a9e497e46e4
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>

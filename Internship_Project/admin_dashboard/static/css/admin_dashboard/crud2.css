@@ -1,12 +1,6 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins" , sans-serif;
-  }
+
 body {
-    min-height: 100vh;
-    padding: 30px;
+   
     color: #0a0908;
     background: #fafaf9;
     font-family: 'Varela Round', sans-serif;
@@ -16,7 +10,7 @@ body {
   width: 80%;
   padding: 60px 20px;
   color: rgb(10, 10, 10);
-  border:5px solid rgb(191, 191, 194);
+  border:5px solid rgb(146, 228, 228);
 }
 .container .title::before{
   content: '';
@@ -38,22 +32,21 @@ body {
   padding: 25px 30px;
   color: rgb(10, 10, 10);
   border:3px solid black;
+  background: white;
 }
-.btn{ 
-  height: 90%;
-  width: 10%;
+.container2{
+  width: 100%;
+  padding: 25px 30px;
+  color: rgb(10, 10, 10);
+  border:3px solid black;
+  background: white;
+}
+.btnn{ 
   float: right;
-  font-size: 18px;
-  font-weight: 500;
-  border-radius: 5px;
-  letter-spacing: 1px;
-  outline: none;
-  color: #fff;
-  border: none;
 }
 .btnn{
   height: 65%;
-  width: 120%;
+  width: 10%;
   font-size: 18px;
   font-weight: 500;
   border-radius: 21px;
@@ -61,7 +54,7 @@ body {
   outline: none;
   color: #fff;
   border: none;
-  background: rgb(241, 112, 73);
+  /* background: rgb(241, 112, 73); */
 }
 .button{ 
   height: 90%;

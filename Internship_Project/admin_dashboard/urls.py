@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,change_password,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
 
 
 #<===== Reset Password========>
@@ -34,8 +34,11 @@ urlpatterns = [
 #<=======  change password  page url =========>
     path('password/',PasswordsChangesView.as_view(template_name = "profile/change_password.html")),
 
-      #<======= Add list page url =========>
+      #<======= Addmin list page url =========>
     path('Adminlist',Adminlist,name = "Adminlist"),
+
+     #<=======  Edit Addmin list value page url =========>
+    path('EditAdminListValue',EditAdminListValue,name = "EditAdminListValue"),
 
 
       #<======= Add admin  page url =========>
@@ -61,11 +64,11 @@ urlpatterns = [
      #<======= View Profile page url =========>
     path('view_profile',view_profile,name = "view_profile"),
 
-     #<======= Change Password page url =========>
-    path('change_password',change_password,name = "change_password"),
-
      #<======= Module Settings page url =========>
     path('module_setting',module_setting,name = "module_setting"),
+
+     #<======= General Settings page url =========>
+    path('general_settings',general_settings,name = "general_settings"),
 
     #<=========login page Urls============>
     path('', Login, name = "Login"),
