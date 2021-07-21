@@ -10,7 +10,11 @@ from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-# from .models import MyUser
+<<<<<<< Updated upstream
+# from .models import Profile
+=======
+from .models import Profile
+>>>>>>> Stashed changes
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator
@@ -314,7 +318,6 @@ def module_setting(request):
 def general_settings(request):
     return render(request, "settings/general_settings.html")
 
-<<<<<<< HEAD
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
@@ -324,10 +327,3 @@ def admintest(request):
         admin.delete()
         messages.success(request,"Admin deleted successfully!!!")
     return render(request,"admin/admin_test.html",{'users':user})
-=======
-def general_settings(request):
-    return render(request, "settings/general_settings.html")
-
-
-
->>>>>>> a09951d682807ee89d685e8b84ee94e00d2cfe0a
