@@ -3,7 +3,11 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
+<<<<<<< HEAD
 from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
+=======
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
+>>>>>>> a09951d682807ee89d685e8b84ee94e00d2cfe0a
 
 
 #<===== Reset Password========>
