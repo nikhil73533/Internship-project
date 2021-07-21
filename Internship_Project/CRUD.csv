@@ -1,3 +1,2 @@
 csrfmiddlewaretoken,Module,Table,label,name,d_type,length
-g0mW9eBGLHHNGvV4WXyultRgmIaXooUB0IHttEi9fFLvV6ZWEcWkoNGJHYoJKKzr,mod,db,label1,name1,Char,1
-,,,label2,name2,Varchar,2
+8r7dKfRLMxvfI2HQFgeHKpG3CLHrL1Fpa6k7nKqbVnYIL9Zisq4NhEDB5B2ybCoN,Attendence,Attencence,Roll number,Rollno,Varchar,20
