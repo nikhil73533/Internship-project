@@ -10,6 +10,7 @@ from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
+# from .models import MyUser
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator
@@ -19,7 +20,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
-# @login_required(login_url='/') 
+@login_required(login_url='/') 
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
     count =  User.objects.all().count()
@@ -177,15 +178,18 @@ class Login_View(View):
         return render(request, 'accounts/login.html')
 
 # Crud function 
+@login_required(login_url='/') 
 def CrudList(request):
     return render(request, "admin_dashboard/CRUD/crud1.html")
 
-# Crud function 
+# Crud function
+@login_required(login_url='/')  
 def CrudGenerator(request):
     
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
+@login_required(login_url='/') 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
     
@@ -213,6 +217,7 @@ def Addadmin(request):
                     user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
                     user.is_active = False
                     user.is_staff = True
+                    user.is_superuser = True
                     user.save()
                     
                     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
@@ -244,7 +249,7 @@ def Addadmin(request):
     
 #<-------------AdminList view----------------------------->
 
-
+@login_required(login_url='/') 
 def EditAdminListValue(request):
     user = User.objects.get(id = request.user.id)
     if(request.method == 'POST'):
@@ -276,6 +281,7 @@ def view_profile(request):
 
 
 # <---- class based views --------------------------------->
+
 class passwordChangingForm(PasswordChangeForm):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','type':'password'}))
     new_password1 = forms.CharField(max_length=100,widget= forms.PasswordInput(attrs= {'class':'form-control','type':'password'}))
@@ -292,22 +298,19 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
-
+@login_required(login_url='/') 
 def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html")
-
+@login_required(login_url='/') 
 def general_settings(request):
     return render(request, "settings/general_settings.html")
 
-
+@login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
     if(request.method == 'POST'):
-        Username = request.POST['username']
-        Email = request.POST['email_address']
-        role = request.POST['role']
-        user.username = Username
-        user.email = Email
-        user.save()
-        messages.success(request,"Admin Updated successfully!!!")
+        user_id = request.POST['user_id']
+        admin = User.objects.get(id = user_id)
+        admin.delete()
+        messages.success(request,"Admin deleted successfully!!!")
     return render(request,"admin/admin_test.html",{'users':user})
