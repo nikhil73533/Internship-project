@@ -10,7 +10,7 @@ from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-# from .models import MyUser
+# from .models import Profile
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator
@@ -20,7 +20,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
-# @login_required(login_url='/') 
+@login_required(login_url='/') 
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
     count =  User.objects.all().count()
@@ -258,11 +258,7 @@ def Addadmin(request):
     
 #<-------------AdminList view----------------------------->
 
-<<<<<<< HEAD
-
-=======
 @login_required(login_url='/') 
->>>>>>> dev
 def EditAdminListValue(request):
     user = User.objects.get(id = request.user.id)
     if(request.method == 'POST'):
@@ -318,7 +314,6 @@ def module_setting(request):
 def general_settings(request):
     return render(request, "settings/general_settings.html")
 
-<<<<<<< HEAD
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
@@ -328,24 +323,3 @@ def admintest(request):
         admin.delete()
         messages.success(request,"Admin deleted successfully!!!")
     return render(request,"admin/admin_test.html",{'users':user})
-=======
-def general_settings(request):
-    return render(request, "settings/general_settings.html")
-
-
-<<<<<<< HEAD
-def admintest(request):
-    user = User.objects.all()
-    if(request.method == 'POST'):
-        Username = request.POST['username']
-        Email = request.POST['email_address']
-        role = request.POST['role']
-        user.username = Username
-        user.email = Email
-        user.save()
-        messages.success(request,"Admin Updated successfully!!!")
-    return render(request,"admin/admin_test.html",{'users':user})
-=======
-
->>>>>>> a09951d682807ee89d685e8b84ee94e00d2cfe0a
->>>>>>> dev
