@@ -78,4 +78,8 @@ urlpatterns = [
      # <=== url for Module Setting page ====>
     path('user/',include('admin_dashboard.urls')),
     # <==== end of code =====>
+
+     # <=== url for General Settings page ====>
+    path('user/',include('admin_dashboard.urls')),
+    # <==== end of code =====>
 ]
