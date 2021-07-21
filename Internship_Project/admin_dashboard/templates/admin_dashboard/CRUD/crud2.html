@@ -17,7 +17,7 @@
 
     <script>
         function addMore() {
-	    $(".form1:last").clone().insertAfter(".form1:last").find("input[type=text], textarea").val("");;	
+	    $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");;	
     }
     </script>
 
@@ -50,7 +50,7 @@
             <div class = "user-details">
                 <div class = "input-box">
                     <span class = "details" style="font-size: 17px;"><b>Module Name</b></span> 
-                            &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;
+                            &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; 
                     &emsp; &emsp;<span class = "details" style="font-size: 17px;"><b>Database Table Name</b></span><br>
                     <input type = "text" style="font-size: 14px;" placeholder="Enter your Module Name" name="Module" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
                     <input type = "text" style="font-size: 13px;" placeholder="Enter your Database Table Name" name="Table" required> <br> <br> <br>
@@ -85,7 +85,7 @@
                     </select>    
                 </div> <br> 
                 <div class = "input-box">
-                    <input type = "text" style="font-size: 15px;" placeholder="Enter Length of Data Type" name="length" required>
+                    <input type="number" min="1" style="font-size: 15px;" placeholder="Enter Length of Data Type" name="length" required>
                     &emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;
                     
                 </div> <br><hr style="width: 100%;border: .5px solid black;"><br>
