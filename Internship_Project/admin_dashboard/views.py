@@ -296,6 +296,9 @@ class PasswordsChangesView(PasswordChangeView):
 def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html")
 
+def general_settings(request):
+    return render(request, "settings/general_settings.html")
+
 
 def admintest(request):
     user = User.objects.all()
