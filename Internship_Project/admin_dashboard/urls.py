@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
 
 
 #<===== Reset Password========>
@@ -66,6 +66,9 @@ urlpatterns = [
 
      #<======= Module Settings page url =========>
     path('module_setting',module_setting,name = "module_setting"),
+
+     #<======= General Settings page url =========>
+    path('general_settings',general_settings,name = "general_settings"),
 
     #<=========login page Urls============>
     path('', Login, name = "Login"),
