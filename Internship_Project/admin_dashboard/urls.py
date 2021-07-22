@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList
 
 
 #<===== Reset Password========>
@@ -34,11 +34,16 @@ urlpatterns = [
 #<=======  change password  page url =========>
     path('password/',PasswordsChangesView.as_view(template_name = "profile/change_password.html")),
 
-      #<======= Addmin list page url =========>
-    path('Adminlist',Adminlist,name = "Adminlist"),
 
      #<=======  Edit Addmin list value page url =========>
     path('EditAdminListValue',EditAdminListValue,name = "EditAdminListValue"),
+
+     #<=======  Edit Addmin  value page url =========>
+    path('admin_test',admintest,name = "admintest"),
+
+    
+     #<=======  Edit Addmin  value page url =========>
+    path('edit_admin_list/<int:user_id>/',EditAdminList,name = "EditAdminList"),
 
 
       #<======= Add admin  page url =========>
@@ -58,14 +63,14 @@ urlpatterns = [
      #<======= Add Admin page url =========>
     path('Addadmin',Addadmin,name = "Addadmin"),
 
-     #<======= Admin list page url =========>
-    path('Adminlist',Adminlist,name = "Adminlist"),
-
      #<======= View Profile page url =========>
     path('view_profile',view_profile,name = "view_profile"),
 
      #<======= Module Settings page url =========>
     path('module_setting',module_setting,name = "module_setting"),
+
+     #<======= General Settings page url =========>
+    path('general_settings',general_settings,name = "general_settings"),
 
     #<=========login page Urls============>
     path('', Login, name = "Login"),

@@ -10,12 +10,15 @@ from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
+# from .models import Profile
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
+from itertools import zip_longest
+import csv
 
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
@@ -177,15 +180,35 @@ class Login_View(View):
         return render(request, 'accounts/login.html')
 
 # Crud function 
+@login_required(login_url='/') 
 def CrudList(request):
     return render(request, "admin_dashboard/CRUD/crud1.html")
 
-# Crud function 
+# Crud function
+@login_required(login_url='/')  
 def CrudGenerator(request):
+
+    data_dict = {}
+    if(request.method == 'POST'):
+        Module_Name = request.POST['Module']
+        Table_Name = request.POST['Table']
+        label = request.POST['label']
+        name = request.POST['name']
+        d_type = request.POST['d_type']
+        max_length = request.POST['length']
+
+        data_dict = dict(request.POST.lists())
+
+    with open("CRUD.csv", "w") as response:
+        writer = csv.writer(response)
+        writer.writerow(data_dict.keys())
+        writer.writerows(zip_longest(*data_dict.values()))
+        messages.success(request,"Crud created successfully ")
     
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
+@login_required(login_url='/') 
 def CrudExtension(request):
     return render(request, "admin_dashboard/CRUD/crud_part_3.html")
     
@@ -213,6 +236,7 @@ def Addadmin(request):
                     user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
                     user.is_active = False
                     user.is_staff = True
+                    user.is_superuser = True
                     user.save()
                     
                     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
@@ -243,26 +267,6 @@ def Addadmin(request):
      
     
 #<-------------AdminList view----------------------------->
-
-def Adminlist(request):
-    user = User.objects.all()
-    if(request.method== 'POST'):
-        user_id = request.POST['user_id']
-        Admin = User.objects.get(id = user_id)
-        Admin.delete()
-        messages.success(request,'User deleted successfully !!')
-    return render(request, "admin/admin_list.html",{'users':user})
-
-def EditAdminListValue(request):
-    user = User.objects.get(id = request.user.id)
-    if(request.method == 'POST'):
-        Username = request.POST['username']
-        Email = request.POST['email_address']
-        role = request.POST['role']
-        user.username = Username
-        user.email = Email
-        user.save()
-        messages.success(request,"Admin Updated successfully!!!")
 #<-----------------------AdminList View------------------------->   
 
 
@@ -284,6 +288,7 @@ def view_profile(request):
 
 
 # <---- class based views --------------------------------->
+
 class passwordChangingForm(PasswordChangeForm):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','type':'password'}))
     new_password1 = forms.CharField(max_length=100,widget= forms.PasswordInput(attrs= {'class':'form-control','type':'password'}))
@@ -300,9 +305,39 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
-
+@login_required(login_url='/') 
 def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html")
+@login_required(login_url='/') 
+def general_settings(request):
+    return render(request, "settings/general_settings.html")
 
+@login_required(login_url='/') 
+def admintest(request):
+    user = User.objects.all()
+    count = -1
+    if(request.method == 'POST'):
+        user_id = request.POST['user_id']
+        admin = User.objects.get(id = user_id)
+        admin.delete()
+        messages.success(request,"Admin deleted successfully!!!")
+    return render(request,"admin/admin_test.html",{'users':user,"count":count})
 
+def EditAdminList(request,user_id):
+        user = User.objects.all()
+        count = User.objects.get(id = user_id)
+        return render(request,"admin/admin_test.html",{'users':user,"count":count})
 
+@login_required(login_url='/') 
+def EditAdminListValue(request):
+   
+    if(request.method == 'POST'):
+        userid = request.POST.get('user')
+        print("ok   ",userid)
+        user = User.objects.get(id  = userid)
+        Email = request.POST.get('email_address')
+        role = request.POST['role']
+        user.email = Email
+        user.save()
+        messages.success(request,"Admin Updated successfully!!!")
+    return redirect('admintest')
