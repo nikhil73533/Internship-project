@@ -20,6 +20,103 @@
 	    $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");;	
     }
     </script>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    form {
+      width: 1200px;
+    }
+
+    .add_admin {
+      width: 200px;
+      margin-left: 280px;
+    }
+
+    .header {
+      overflow: hidden;
+      background-color: #fff;
+      padding: 20px 10px;
+      width: 1000px;
+    }
+
+    .header a {
+      float: left;
+      color: black;
+      text-align: center;
+      padding: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      line-height: 25px;
+      border-radius: 4px;
+    }
+
+    .header a.logo {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .header-right {
+      float: right;
+    }
+
+    @media screen and (max-width: 500px) {
+      .header a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+
+      .header-right {
+        float: none;
+      }
+    }
+
+    
+/* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
+success message 
+*/
+.allert-success {
+  padding: 12px;
+  background-color: #469412;
+  
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+  </style>
 
 </head>
 <body>
@@ -41,6 +138,13 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
+      {% for msg in messages %} 
+      <br> 
+    <div class="allert-{{msg.tags}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        {{msg}}
+      </div> <br>
+                {%endfor%}
     </div>
     <!-- /.content-header -->
 

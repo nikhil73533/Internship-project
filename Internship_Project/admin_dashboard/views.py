@@ -203,6 +203,7 @@ def CrudGenerator(request):
         writer = csv.writer(response)
         writer.writerow(data_dict.keys())
         writer.writerows(zip_longest(*data_dict.values()))
+        messages.success(request,"Crud created successfully ")
     
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
