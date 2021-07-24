@@ -346,6 +346,8 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
+def calendar(request):
+    return render(request,"admin_dashboard/pages/calendar.html")
 # Role and Permission
 def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")

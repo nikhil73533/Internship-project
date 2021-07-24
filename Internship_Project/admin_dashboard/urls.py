@@ -3,11 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-<<<<<<< HEAD
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,calander
-=======
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission
->>>>>>> 6b5fdf2253451a68f29fbdc6bfd08451e050c1ea
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar
 
 
 #<===== Reset Password========>
@@ -94,6 +90,6 @@ urlpatterns = [
     path('reset_password_complete/',PasswordResetCompleteView.as_view(template_name = "reset_password/pass_confirm.html"), name = "password_reset_complete"),
 
     #<=======  calander  page url =========>
-    path('calander', calander, name = "calander"),
+    path('calander', calendar, name = "calendar"),
 ]
 
