@@ -345,3 +345,7 @@ def EditAdminListValue(request):
         user.save()
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
+
+# Role and Permission
+def RolePermission(request):
+    return render(request, "roles_and_permission/role_and_permissions.html")
