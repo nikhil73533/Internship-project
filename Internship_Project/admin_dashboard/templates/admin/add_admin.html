@@ -54,7 +54,6 @@
       font-weight: bold;
     }
 
-
     .header-right {
       float: right;
     }
@@ -70,6 +69,45 @@
         float: none;
       }
     }
+
+    
+/* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
+success message 
+*/
+.allert-success {
+  padding: 12px;
+  background-color: #469412;
+  
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
   </style>
 
 </head>
@@ -82,7 +120,19 @@
 
     </div>
 
-    <form style="width: 1600px" method='POST'>{% csrf_token %}
+    
+
+    <form  method='POST'>{% csrf_token %}
+
+    
+      {% for msg in messages %}  
+      <div class="allert-{{msg.tags}}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+          {{msg}}
+        </div> <br>
+                  {%endfor%}
+                  <br>
+
       <div class="form-group">
         <label for="exampleInputEmail1" bold style="font-weight: 600;">Username</label>
         <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp"
@@ -119,7 +169,8 @@
       <button type="submit" class="btn btn-primary">Add Admin</button>
     </form>
   </div>
-
+<!-- jQuery -->
+<script src={%static 'plugins/jquery/jquery.min.js' %}></script>
   {% endblock %}
 </body>
 
