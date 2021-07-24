@@ -41,6 +41,10 @@ def DashBoardThree(request):
     return render(request,'admin_dashboard/DashBoard_3.html',{'user':user})
 
 
+# DashBoard calander 
+@login_required(login_url='/') 
+def calander(request):
+    return render(request,'admin_dashboard/pages/calendar.html')
 # <------------------------------------ End of Area------------------------------>
 
 
