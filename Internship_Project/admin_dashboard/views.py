@@ -3,7 +3,7 @@ from django.forms import fields
 from django import forms
 from django.http import request
 from django.contrib.auth import get_user_model
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
@@ -63,6 +63,15 @@ def Login(request):
         
         if(user is not None and user.is_active):
             auth.login(request, user)
+            # if(request.POST.get('chk')):
+            #     response = HttpResponse('DashBoard')
+            #     response.set_cookie('cid',Username)
+            #     response.set_cookie('cid1',Password)
+            #     return response
+            
+            # if(request.COOKIES.get('cid')):
+            #     return render(request,'accounts/login.html',{'cookie1':request.COOKIES.get('cid'),'cookie2':request.COOKIES.get('cid1')})
+            # else:
             return redirect('DashBoard')
 
         else:
@@ -343,6 +352,7 @@ def EditAdminListValue(request):
         Email = request.POST.get('email_address')
         Role = request.POST['role']
         Status = request.POST.get('status')
+        print("on ",Status)
         user.email = Email
         user.role = Role
         user.status = False
@@ -357,3 +367,17 @@ def calendar(request):
 # Role and Permission
 def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
+
+
+# <--------Remember Me option in django----------------------->
+def sccookie(request):
+    response = HttpResponse('cookie example')
+    response.set_cookie('cid','abc@gmail.com')
+    response.set_cookie('cid1','xyz@gmail.com')
+    return response
+
+def gccookie(request):
+    a = request.COOKIES['cid']
+    b = request.COOKIES['cid1']
+    return HttpResponse('value is ' + a + ' value is ' + b)
+# <-----------------------------------------------end of code---------------->

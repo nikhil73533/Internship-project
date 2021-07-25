@@ -174,7 +174,7 @@
                   <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
                   <td><input class = "edit" type="text" value="{{user.role}}" placeholder="Role" name="role"></td>
                   <td><div class="custom-control custom-switch">
-                    <input type="checkbox" name = "status"  value = {{user.status}} class="custom-control-input" id="customSwitches-{{forloop.counter}}">
+                    <input type="checkbox" name = "status" class="custom-control-input" {% if request.user.status %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
                     <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
                   </div></td>
                   <td>
@@ -198,14 +198,14 @@
                 </td>
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>
-                <td><button type="button" class="btn btn-success">{{user.role}}</button></td>
+                <td><button type="button" onClick="document.location='{% url 'RolePermission' %}'"   class="btn btn-success">{{user.role}}</button></td>
                 <td><div class="custom-control custom-switch">
-                  <input type="checkbox"  value = "on" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
+                  <input type="checkbox" class="custom-control-input"  {% if request.user.status %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
                   <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
                 </div></td>
                 <td>
                   
-                  <button  onClick="document.location='{% url 'EditAdminList' user.id %}'" data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
+                  <button  onClick="document.location='{% url 'EditAdminList' user.id %}'"  {% if request.user.status %}checked{% endif %} data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
                     
                     <i class="fa fa-edit"></i>
                     
