@@ -45,6 +45,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(verbose_name = "last_name",max_length = 500)
     username = models.CharField(verbose_name = "username",unique = True,max_length = 50)
     email = models.EmailField(verbose_name = "email address",max_length = 60,unique = True,blank = True)
+    role = models.CharField(verbose_name = "role",max_length = 500)
+    status = models.BooleanField(verbose_name = "status",default=False)
     last_login = models.DateTimeField(verbose_name = "last login",auto_now = True)
     is_admin = models.BooleanField(default = False)
     is_active = models.BooleanField(default = True)
