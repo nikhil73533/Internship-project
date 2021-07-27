@@ -350,19 +350,16 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
-<<<<<<< HEAD
-
-    # <--------------------------module settings------------------------------>
-@login_required(login_url='/') 
-def module_setting(request):
-    user = User.objects.all()
-    return render(request, "roles_and_permission/module_setting.html",{"users":user})
-    #< --------------------------end------------------------------------->
-
-=======
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html")
 # Role and Permission
 def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
->>>>>>> 968d12fcb0f1b7580a1b0987cb4892a002bc7529
+
+
+ # <--------------------------module settings------------------------------>
+@login_required(login_url='/') 
+def module_setting(request):
+    user = User.objects.all()
+    return render(request, "roles_and_permission/module_setting.html",{"users":user})
+    #< --------------------------end------------------------------------->
