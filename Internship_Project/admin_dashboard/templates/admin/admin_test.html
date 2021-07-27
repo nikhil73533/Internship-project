@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminLite DashBoard | AdminList</title>
+    <title> {% block title %}AdminLTE 3 | AdminList{% endblock %}</title>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
@@ -40,6 +40,15 @@
       background-color: #469412;
       
       color: white;
+    }
+    .name{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      outline: none;
+      width:40%;
+      display:inline-block;
+    
     }
     
     .closebtn {
@@ -151,20 +160,21 @@
         <tbody>
         {% for user in users %}
         {% if user|is_equal:count.id%}
+        
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td>{{user.first_name}} {{user.last_name}}
+                <td>  <input class = "name" type="text" value="{{user.first_name}}" placeholder="first_name" name="first_name"> &emsp; <input class = "name" type="text" value="{{user.last_name}}" placeholder="last_name" name="last_name">
                     <br>
 
-                                        <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
+                                        <p  style="font-size: 15px;">&emsp;&emsp;{{user.role}}</p>
                 </td>
                 <form action="{% url 'EditAdminListValue' %}" method="POST">{% csrf_token %}
                     
                   <td>{{user.username}}<input type="text" value = "{{user.id}}" name = "user" hidden ></td>
                   <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
-                  <td><input class = "edit" type="text" value="Admin" placeholder="Role" name="role"></td>
+                  <td><input class = "edit" type="text" value="{{user.role}}" placeholder="Role" name="role"></td>
                   <td><div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
+                    <input type="checkbox" name = "status"  value = {{user.status}} class="custom-control-input" id="customSwitches-{{forloop.counter}}">
                     <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
                   </div></td>
                   <td>
@@ -172,7 +182,10 @@
                       <i class="fa fa-edit"></i>
                     </button>
                   </form>
+                  <button  onClick="document.location='{% url 'admintest' %}'"  type="button" class="btn btn-danger btn-xs mr5">
 
+                    <i class="fas fa-window-close" ></i>
+                  </button>
                 </td>
             </tr>
             {% else %}
@@ -181,18 +194,18 @@
                 <td>{{user.first_name}} {{user.last_name}}
                   <br>
                   
-                  <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
+                  <p  style="font-size: 15px;">&emsp;&emsp;{{user.role}}</p>
                 </td>
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>
-                <td><button type="button" class="btn btn-success">Admin</button></td>
+                <td><button type="button" class="btn btn-success">{{user.role}}</button></td>
                 <td><div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
+                  <input type="checkbox"  value = "on" class="custom-control-input" id="customSwitches-{{forloop.counter}}">
                   <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
                 </div></td>
                 <td>
                   
-                  <button data-target="#editModal" onClick="document.location='{% url 'EditAdminList' user.id %}'" data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
+                  <button  onClick="document.location='{% url 'EditAdminList' user.id %}'" data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
                     
                     <i class="fa fa-edit"></i>
                     
@@ -201,7 +214,7 @@
                   <form action="{{request.path}}"  method  = "POST" style="display: inline-block;">
                     {% csrf_token%}
                     <input type="text" name = "user_id" value = "{{user.id}}" hidden>
-                    <button  type = "submit" class="btn btn-danger btn-xs mr5">
+                    <button  type = "submit"  class="btn btn-danger btn-xs mr5">
                       <i class="fas fa-trash"></i>
                     </button>
                   </form>
