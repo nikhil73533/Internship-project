@@ -1,0 +1,344 @@
+{% extends 'admin_dashboard/base.html' %}
+{% block body %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role and Permission</title> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
+
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
+
+</head>
+<body>
+  <div class="card-header" style="margin-left: 16.5%;">
+    <div class="d-inline-block">
+      
+      <h3 class="card-title"><i class="far fa-edit"></i>&ensp;Admin Permission</h3>
+    </div>
+    <div class="d-inline-block float-right">
+      <a href="#" class="btn btn-primary"><i class="far fa-hand-point-left"></i>&ensp; Back</a>
+    </div>
+  </div>
+
+    <!-- Content Wrapper. Contains page content -->
+  <form action="{%url 'CrudGenerator'%}" method='post'>{% csrf_token %}
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h3 class="m-0 text-dark">Permission Access : Project Manager</h3>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'DashBoard'%}">Home</a></li>
+                <li class="breadcrumb-item active">Roles and Permissions</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+        {% for msg in messages %} 
+        <br> 
+      <div class="allert-{{msg.tags}}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+          {{msg}}
+        </div>
+                  {%endfor%}
+      </div>
+      <!-- <i class="fa fa-hand-o-left" aria-hidden="true"></i>     Back Button -->
+      <!-- <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Admin Permission -->
+
+      <!-- /.content-header -->
+    <div class="container" style="margin-left: 1%">
+      
+      
+      <!-- DashBoard -->
+      <br>
+      <div class= "dash">
+        <span style="margin-right: 15%;"><b>DashBoard</b></span>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-1">
+          <label class="custom-control-label" for="customSwitches-1">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-2">
+          <label class="custom-control-label" for="customSwitches-2">Index</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-3">
+          <label class="custom-control-label" for="customSwitches-3">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- User Screen -->
+      <div class= "user">
+        <span style="margin-right: 14%;"><b>User -Screen</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10.6%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-4">
+          <label class="custom-control-label" for="customSwitches-4">Img</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 8.6%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-5">
+          <label class="custom-control-label" for="customSwitches-5">Current</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-6">
+          <label class="custom-control-label" for="customSwitches-6">UserView</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-7">
+          <label class="custom-control-label" for="customSwitches-7">Report</label><br>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 22.2%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-8">
+          <label class="custom-control-label" for="customSwitches-8">Access</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 9%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-9">
+          <label class="custom-control-label" for="customSwitches-9">Total</label>
+        </div>
+      </div>
+      
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Profile -->
+      <div class="prof">
+        <span style="margin-right: 17.8%;"><b>Profile</b></span>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-10">
+          <label class="custom-control-label" for="customSwitches-10">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Location -->
+      <div class="loc">
+        <span style="margin-right: 16.6%;"><b>Location</b></span>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-11">
+          <label class="custom-control-label" for="customSwitches-11">Total</label>
+        </div>
+      </div>
+      
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Users -->
+      <div class= "user">
+        <span style="margin-right: 18.5%;"><b>Users</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-12">
+          <label class="custom-control-label" for="customSwitches-12">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 11%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-13">
+          <label class="custom-control-label" for="customSwitches-13">Add</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 13%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-14">
+          <label class="custom-control-label" for="customSwitches-14">Edit</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-15">
+          <label class="custom-control-label" for="customSwitches-15">Delete</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 22.3%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-16">
+          <label class="custom-control-label" for="customSwitches-16">Change_Status</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 3.5%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-17">
+          <label class="custom-control-label" for="customSwitches-17">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+      <!-- Admin -->
+      <div class= "user">
+        <span style="margin-right: 17.9%;"><b>Admin</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-18">
+          <label class="custom-control-label" for="customSwitches-18">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 11%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-19">
+          <label class="custom-control-label" for="customSwitches-19">Add</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 13%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-20">
+          <label class="custom-control-label" for="customSwitches-20">Edit</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-21">
+          <label class="custom-control-label" for="customSwitches-21">Delete</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 22.3%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-22">
+          <label class="custom-control-label" for="customSwitches-22">Change_Status</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 3.7%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-23">
+          <label class="custom-control-label" for="customSwitches-23">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+       <!-- Role & Permissions -->
+       <div class= "user">
+        <span style="margin-right: 10.1%;"><b>Role & Permissions</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-24">
+          <label class="custom-control-label" for="customSwitches-24">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 11%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-25">
+          <label class="custom-control-label" for="customSwitches-25">Add</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 13%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-26">
+          <label class="custom-control-label" for="customSwitches-26">Edit</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-27">
+          <label class="custom-control-label" for="customSwitches-27">Delete</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 22.3%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-28">
+          <label class="custom-control-label" for="customSwitches-28">Change_Status</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 3.7%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-29">
+          <label class="custom-control-label" for="customSwitches-29">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Activity Log -->
+      <div class="loc">
+        <span style="margin-right: 14.5%;"><b>Activity Log</b></span>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-30">
+          <label class="custom-control-label" for="customSwitches-30">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Backup & Export -->
+      <div class="loc">
+        <span style="margin-right: 11.6%;"><b>Backup & Export</b></span>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-31">
+          <label class="custom-control-label" for="customSwitches-31">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Settings -->
+      <div class= "user">
+        <span style="margin-right: 16.8%;"><b>Settings</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10.4%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-32">
+          <label class="custom-control-label" for="customSwitches-32">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 11%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-33">
+          <label class="custom-control-label" for="customSwitches-33">Add</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 13%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-34">
+          <label class="custom-control-label" for="customSwitches-34">Edit</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-35">
+          <label class="custom-control-label" for="customSwitches-35">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Language Setting -->
+      <div class="loc">
+        <span style="margin-right: 11.2%;"><b>Language Setting</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-36">
+          <label class="custom-control-label" for="customSwitches-36">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- CRUD Generator -->
+      <div class= "user">
+        <span style="margin-right: 11.9%;"><b>CRUD Generator</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10.4%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-37">
+          <label class="custom-control-label" for="customSwitches-37">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 11%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-38">
+          <label class="custom-control-label" for="customSwitches-38">Add</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 13%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-39">
+          <label class="custom-control-label" for="customSwitches-39">Edit</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-40">
+          <label class="custom-control-label" for="customSwitches-40">Delete</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 22.3%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-41">
+          <label class="custom-control-label" for="customSwitches-41">Access</label>
+        </div>
+      </div>
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Extension -->
+      <div class= "user">
+        <span style="margin-right: 15.8%;"><b>Extension</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10.5%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-42">
+          <label class="custom-control-label" for="customSwitches-42">View</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 11%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-43">
+          <label class="custom-control-label" for="customSwitches-43">Add</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-right: 13%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-44">
+          <label class="custom-control-label" for="customSwitches-44">Edit</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-45">
+          <label class="custom-control-label" for="customSwitches-45">Delete</label>
+        </div>
+        <div class="custom-control custom-switch" style="display: inline; margin-left: 22.2%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-46">
+          <label class="custom-control-label" for="customSwitches-46">Access</label>
+        </div>
+      </div>
+    </div> 
+    
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+    <!-- jQuery -->
+    <script src={%static 'plugins/jquery/jquery.min.js' %}></script>
+    {% endblock %}    
+</body>
+</html>

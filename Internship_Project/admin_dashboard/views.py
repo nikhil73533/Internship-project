@@ -2,6 +2,7 @@ from django.contrib.auth import models
 from django.forms import fields
 from django import forms
 from django.http import request
+from django.contrib.auth import get_user_model
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
@@ -19,7 +20,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from itertools import zip_longest
 import csv
-
+# User movel initialization 
+User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
 # Dashboard 1 view for home page
 @login_required(login_url='/') 
@@ -41,6 +43,10 @@ def DashBoardThree(request):
     return render(request,'admin_dashboard/DashBoard_3.html',{'user':user})
 
 
+# DashBoard calander 
+@login_required(login_url='/') 
+def calander(request):
+    return render(request,'admin_dashboard/pages/calendar.html')
 # <------------------------------------ End of Area------------------------------>
 
 
@@ -331,15 +337,20 @@ def EditAdminListValue(request):
    
     if(request.method == 'POST'):
         userid = request.POST.get('user')
-        print("ok   ",userid)
         user = User.objects.get(id  = userid)
         Email = request.POST.get('email_address')
-        role = request.POST['role']
+        Role = request.POST['role']
+        Status = request.POST.get('status')
         user.email = Email
+        user.role = Role
+        user.status = False
+        if(Status == "on"):
+            user.status = True
         user.save()
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
+<<<<<<< HEAD
 
     # <--------------------------module settings------------------------------>
 @login_required(login_url='/') 
@@ -348,3 +359,10 @@ def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
     #< --------------------------end------------------------------------->
 
+=======
+def calendar(request):
+    return render(request,"admin_dashboard/pages/calendar.html")
+# Role and Permission
+def RolePermission(request):
+    return render(request, "roles_and_permission/role_and_permissions.html")
+>>>>>>> 968d12fcb0f1b7580a1b0987cb4892a002bc7529
