@@ -305,9 +305,7 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
-@login_required(login_url='/') 
-def module_setting(request):
-    return render(request, "roles_and_permission/module_setting.html")
+
 @login_required(login_url='/') 
 def general_settings(request):
     return render(request, "settings/general_settings.html")
@@ -341,3 +339,12 @@ def EditAdminListValue(request):
         user.save()
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
+
+
+    # <--------------------------module settings------------------------------>
+@login_required(login_url='/') 
+def module_setting(request):
+    user = User.objects.all()
+    return render(request, "roles_and_permission/module_setting.html",{"users":user})
+    #< --------------------------end------------------------------------->
+
