@@ -357,3 +357,7 @@ def calendar(request):
 # Role and Permission
 def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
+
+# <---- Genral Settings View --------------------------------->
+def general_settings(request):
+    return render(request, "settings/general_settings.html")
