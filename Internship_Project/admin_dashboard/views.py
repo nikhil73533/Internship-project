@@ -20,6 +20,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from itertools import zip_longest
 import csv
+from csv import reader
+import pandas as pd
 # User movel initialization 
 User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
@@ -128,10 +130,10 @@ def password_validate(request,password):
       
     if len(password) < 8:
         val = False 
-        return messages.error(request,"length should be at least 8")
+        return messages.error(request,"Password length should be at least 8")
        
     if len(password) > 20: 
-        messages.error(request,"length should  not be greater than 20")
+        messages.error(request,"Password length should not be greater than 20")
         val = False 
         return  val  
           
@@ -152,8 +154,9 @@ def password_validate(request,password):
           
     if not any(char in SpecialSymbol for char in password): 
         val = False 
-        messages.error(request,"Password should have at least one lowercase letter")
+        messages.error(request,"Password should have at least one special character")
         return val
+
     if val: 
         return val
 
@@ -205,12 +208,23 @@ def CrudGenerator(request):
 
         data_dict = dict(request.POST.lists())
 
-    with open("CRUD.csv", "w") as response:
-        writer = csv.writer(response)
-        writer.writerow(data_dict.keys())
-        writer.writerows(zip_longest(*data_dict.values()))
-        messages.success(request,"Crud created successfully ")
-    
+        with open('CRUD.csv', 'a', newline='') as response:
+            flag = 0
+            writer = csv.writer(response)
+
+            with open('CRUD.csv', 'r') as read_obj:
+                one_char = read_obj.read(1)
+
+                if not one_char:
+                    flag = 1
+
+            if flag == 1:
+                writer.writerows([data_dict.keys(), []])
+
+            writer.writerows(zip_longest(*data_dict.values()))
+            writer.writerow([])
+            messages.success(request,"Crud created successfully ")
+        
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
