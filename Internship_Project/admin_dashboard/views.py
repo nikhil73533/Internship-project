@@ -20,6 +20,13 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from itertools import zip_longest
 import csv
+<<<<<<< Updated upstream
+from csv import reader
+import pandas as pd
+=======
+import json
+
+>>>>>>> Stashed changes
 # User movel initialization 
 User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
@@ -137,10 +144,10 @@ def password_validate(request,password):
       
     if len(password) < 8:
         val = False 
-        return messages.error(request,"length should be at least 8")
+        return messages.error(request,"Password length should be at least 8")
        
     if len(password) > 20: 
-        messages.error(request,"length should  not be greater than 20")
+        messages.error(request,"Password length should not be greater than 20")
         val = False 
         return  val  
           
@@ -161,8 +168,9 @@ def password_validate(request,password):
           
     if not any(char in SpecialSymbol for char in password): 
         val = False 
-        messages.error(request,"Password should have at least one lowercase letter")
+        messages.error(request,"Password should have at least one special character")
         return val
+
     if val: 
         return val
 
@@ -214,12 +222,23 @@ def CrudGenerator(request):
 
         data_dict = dict(request.POST.lists())
 
-    with open("CRUD.csv", "w") as response:
-        writer = csv.writer(response)
-        writer.writerow(data_dict.keys())
-        writer.writerows(zip_longest(*data_dict.values()))
-        messages.success(request,"Crud created successfully ")
-    
+        with open('CRUD.csv', 'a', newline='') as response:
+            flag = 0
+            writer = csv.writer(response)
+
+            with open('CRUD.csv', 'r') as read_obj:
+                one_char = read_obj.read(1)
+
+                if not one_char:
+                    flag = 1
+
+            if flag == 1:
+                writer.writerows([data_dict.keys(), []])
+
+            writer.writerows(zip_longest(*data_dict.values()))
+            writer.writerow([])
+            messages.success(request,"Crud created successfully ")
+        
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
@@ -320,13 +339,11 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
-@login_required(login_url='/') 
-def module_setting(request):
-    return render(request, "roles_and_permission/module_setting.html")
+
 @login_required(login_url='/') 
 def general_settings(request):
     return render(request, "settings/general_settings.html")
-
+# <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
@@ -340,9 +357,11 @@ def admintest(request):
     return render(request,"admin/admin_test.html",{'users':user,"count":count})
 
 def filterAdminList(request):
+    user = User.objects.all()
     if(request.method =='POST'):
         all_status = request.POST.get('allstatus[]')
         admin_status = request.POST.get('addadmintypes[]')
+       
         if(all_status):
             if(all_status=="Active"):
                 user = User.objects.filter(is_active =True)
@@ -351,6 +370,7 @@ def filterAdminList(request):
         if(admin_status):
             user = User.objects.filter(role = admin_status)
     return render(request,"admin/admin_test.html",{'users':user})
+
 def EditAdminList(request,user_id):
         user = User.objects.all()
         count = User.objects.get(id = user_id)
@@ -375,22 +395,30 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
+# <---------------------------------end of code---------------------------------------->
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html")
 # Role and Permission
 def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
 
+# <---- General Settings View --------------------------------->
+# with open("settings.json","r") as p:
+#     parm = json.load(p)["json_files/general_settings"]
 
-# <--------Remember Me option in django----------------------->
-def sccookie(request):
-    response = HttpResponse('cookie example')
-    response.set_cookie('cid','abc@gmail.com')
-    response.set_cookie('cid1','xyz@gmail.com')
-    return response
+# def generl_settings_conf(param):
+#     print(parm)    
 
-def gccookie(request):
-    a = request.COOKIES['cid']
-    b = request.COOKIES['cid1']
-    return HttpResponse('value is ' + a + ' value is ' + b)
-# <-----------------------------------------------end of code---------------->
+def general_settings(request):
+
+    return render(request, "settings/general_settings.html")
+
+ # <--------------------------module settings------------------------------>
+@login_required(login_url='/') 
+def module_setting(request):
+    user = User.objects.all()
+    return render(request, "roles_and_permission/module_setting.html",{"users":user})
+
+    #< --------------------------end------------------------------------->
+
+   

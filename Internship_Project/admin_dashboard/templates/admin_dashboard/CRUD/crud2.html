@@ -20,6 +20,7 @@
 	    $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");;	
     }
     </script>
+    
 <style>
     * {
       box-sizing: border-box;
@@ -138,13 +139,18 @@ success message
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
-      <!-- {% for msg in messages %} 
+
+      
+
+      {% for msg in messages %} 
+
       <br> 
     <div class="allert-{{msg.tags}}">
         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
         {{msg}}
       </div> <br>
-                {%endfor%} -->
+                {%endfor%} 
+
     </div>
     <!-- /.content-header -->
 
@@ -208,4 +214,3 @@ success message
     {% endblock %}    
 </body>
 </html>
-
