@@ -1,0 +1,179 @@
+{% extends 'admin_dashboard/base.html' %} {% block body %} {% load static %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>General Setting</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+
+    <style></style>
+  </head>
+
+  <body>
+    <div class="content-wrapper" style="min-height: 661px">
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <div class="d-inline-block">
+              <h3 class="card-title">
+                <i class="fa fa-list"></i>&nbsp; Admin Roles &amp; Permissions
+              </h3>
+            </div>
+            <div class="d-inline-block float-right">
+              <a
+                href="#"
+                class="btn btn-success"
+                ><i class="fa fa-plus"></i> Add New Role</a
+              >
+            </div>
+          </div>
+
+          <div class="card-body">
+            <table id="example2" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th width="50">ID</th>
+                  <th>Admin Role</th>
+                  <th>Status</th>
+                  <th>Permission</th>
+                  <th width="200">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Super Admin</td>
+                  <td>
+                    <div class="custom-control custom-switch" style="display: inline; margin-right: 10%;">
+          <input type="checkbox" class="custom-control-input" id="customSwitches-1">
+          <label class="custom-control-label" for="customSwitches-1"></label>
+        </div>
+                  </td>
+                  <td>
+                    <a href="#"  class="btn btn-info btn-xs mr5">
+                      <i class="fa fa-sliders"></i>
+                    </a>
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>26</td>
+                  <td>Agent2</td>
+                  <td>
+                    <input
+                      class="tgl tgl-ios tgl_checkbox"
+                      data-id="26"
+                      id="cb_26"
+                      type="checkbox"
+                      checked=""
+                    />
+                    <label class="tgl-btn" for="cb_26"></label>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-info btn-xs mr5">
+                      <i class="fa fa-sliders"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-warning btn-xs mr5">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-xs">
+                        <i class="fa fa-remove"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>27</td>
+                  <td>Agent</td>
+                  <td>
+                    <input
+                      class="tgl tgl-ios tgl_checkbox"
+                      data-id="27"
+                      id="cb_27"
+                      type="checkbox"
+                    />
+                    <label class="tgl-btn" for="cb_27"></label>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-info btn-xs mr5">
+                      <i class="fa fa-sliders"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-warning btn-xs mr5">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-xs">
+                      <i class="fa fa-remove"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>29</td>
+                  <td>new</td>
+                  <td>
+                    <input
+                      class="tgl tgl-ios tgl_checkbox"
+                      data-id="29"
+                      id="cb_29"
+                      type="checkbox"
+                    />
+                    <label class="tgl-btn" for="cb_29"></label>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-info btn-xs mr5">
+                      <i class="fa fa-sliders"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-warning btn-xs mr5">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-xs">
+                      <i class="fa fa-remove"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>34</td>
+                  <td>@b</td>
+                  <td>
+                    <input
+                      class="tgl tgl-ios tgl_checkbox"
+                      data-id="34"
+                      id="cb_34"
+                      type="checkbox"
+                    />
+                    <label class="tgl-btn" for="cb_34"></label>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-info btn-xs mr5">
+                      <i class="fa fa-sliders"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a  href="#"  class="btn btn-warning btn-xs mr5">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-xs">
+                      <i class="fa fa-remove"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+
+    {% endblock %}
+  </body>
+</html>
