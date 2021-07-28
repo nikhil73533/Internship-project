@@ -1,0 +1,19 @@
+.dash{
+  display: flex;
+}
+.user{
+  display: flex;
+}
+.user1{
+  display: flex;
+}
+.prof{
+  display: flex;
+}
+.loc{
+  display: flex;
+}
+.container{
+  color: rgb(10, 10, 10);
+  border:3px solid grey;
+}

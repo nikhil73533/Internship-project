@@ -51,7 +51,8 @@
                 </ul>
                 <div class="tab-content">
                     <!-- General Setting -->
-                    <div role="tabpanel" class="tab-pane active show" id="main">
+                    <div role="tabpanel" class="tab-pane active show" id="main" method = "post" action = "/set">
+                    {% csrf_token %}
                         <div class="form-group">
                             <label class="control-label">Favicon</label><br>
                                <p><img src="https://www.tailorbrands.com/wp-content/uploads/2020/03/Superman.jpg" height="50px" class="favicon"></p>
@@ -150,7 +151,12 @@
 </div>
  
 </div>
+<<<<<<< HEAD
+<!-- jQuery -->
+<script src={%static 'plugins/jquery/jquery.min.js' %}></script>
+=======
 
+>>>>>>> a09951d682807ee89d685e8b84ee94e00d2cfe0a
 {% endblock %}
 </body>
 </html>

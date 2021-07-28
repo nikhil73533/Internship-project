@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>AdminLTE 3 | Dashboard 2</title>
+  <title>{% block title %}AdminLTE 3 | Dashboard 2{% endblock %}</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href={% static 'plugins/fontawesome-free/css/all.min.css' %}>
@@ -891,28 +891,28 @@
 
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
+<script src={% static 'plugins/jquery/jquery.min.js'%}></script>
 <!-- Bootstrap -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src={% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}></script>
 <!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src={% static 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.js"></script>
+<script src={% static 'dist/js/adminlte.js' %}></script>
 
 <!-- OPTIONAL SCRIPTS -->
-<script src="dist/js/demo.js"></script>
+<script src={% static 'dist/js/demo.js' %}></script>
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
-<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-<script src="plugins/raphael/raphael.min.js"></script>
-<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+<script src={% static 'plugins/jquery-mousewheel/jquery.mousewheel.js' %}></script>
+<script src={% static 'plugins/raphael/raphael.min.js' %}></script>
+<script src={% static 'plugins/jquery-mapael/jquery.mapael.min.js' %}></script>
+<script src={% static 'plugins/jquery-mapael/maps/usa_states.min.js' %}></script>
 <!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script src={% static 'plugins/chart.js/Chart.min.js'%}></script>
 
 <!-- PAGE SCRIPTS -->
-<script src="dist/js/pages/dashboard2.js"></script>
+<script src={% static 'dist/js/pages/dashboard2.js' %}></script>
  {% endblock %}
 </body>
 </html>
