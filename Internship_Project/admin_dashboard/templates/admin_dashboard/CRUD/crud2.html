@@ -7,21 +7,122 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate CRUD</title>
+    <title> {% block title %}AdminLTE 3 | Generate CRUD {% endblock %}</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link rel = "stylesheet" href="../../../static/css/admin_dashboard/crud2.css">
+
     <script>
         function addMore() {
-	    $(".form-main:last").clone().insertAfter(".form-main:last");	
+	    $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");;	
     }
     </script>
+    
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    form {
+      width: 1200px;
+    }
+
+    .add_admin {
+      width: 200px;
+      margin-left: 280px;
+    }
+
+    .header {
+      overflow: hidden;
+      background-color: #fff;
+      padding: 20px 10px;
+      width: 1000px;
+    }
+
+    .header a {
+      float: left;
+      color: black;
+      text-align: center;
+      padding: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      line-height: 25px;
+      border-radius: 4px;
+    }
+
+    .header a.logo {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .header-right {
+      float: right;
+    }
+
+    @media screen and (max-width: 500px) {
+      .header a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+
+      .header-right {
+        float: none;
+      }
+    }
+
+    
+/* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
+success message 
+*/
+.allert-success {
+  padding: 12px;
+  background-color: #469412;
+  
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+  </style>
+
 </head>
 <body>
   <!-- Content Wrapper. Contains page content -->
+  <form action="{%url 'CrudGenerator'%}" method='post'>{% csrf_token %}
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -38,6 +139,13 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
+      {% for msg in messages %} 
+      <br> 
+    <div class="allert-{{msg.tags}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        {{msg}}
+      </div> <br>
+                {%endfor%}
     </div>
     <!-- /.content-header -->
 
@@ -46,61 +154,58 @@
         <form action = "#">
             <div class = "user-details">
                 <div class = "input-box">
-                    &emsp;&emsp;&emsp;<span class = "details" style="font-size: 17px;"><b>Module Name</b></span> 
-                            &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp;
+                    <span class = "details" style="font-size: 17px;"><b>Module Name</b></span> 
+                            &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; 
                     &emsp; &emsp;<span class = "details" style="font-size: 17px;"><b>Database Table Name</b></span><br>
-                    <input type = "text" style="font-size: 14px;" placeholder="Enter your Module Name" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
-                    <input type = "text" style="font-size: 13px;" placeholder="Enter your Database Table Name" required> <br> <br> <br>
+                    <input type = "text" style="font-size: 14px;" placeholder="Enter your Module Name" name="Module" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
+                    <input type = "text" style="font-size: 13px;" placeholder="Enter your Database Table Name" name="Table" required> <br> <br> <br>
                 </div>  
             </div>
         </form>
         <div class = "btnn" style="right: 78rem;">
-            <button class = "btn btn-danger" onClick="addMore();">Add Fields</button>
+            <button class = "btn btn-danger" onClick="addMore();" type="button">Add Fields</button>
         </div>
     
     <br> <br> <br>
     <br>
     <div class = "container1">
-        <form class = "form-main">
+        <div class = "form1">
                 <div class = "input-box">
-                    <input type = "text" style="font-size: 15px;" placeholder="Field Label" required> &emsp;  &emsp; &emsp;  
-                    <input type = "text" style="font-size: 15px;" placeholder="Field Name" required> &emsp;  &emsp; &emsp;  
-                    <input type = "text" style="font-size: 15px;" placeholder="Field Type" required> &emsp;  &emsp; &emsp; <br> <br>
+                    <input type = "text" style="font-size: 15px; width: 200px;" placeholder="Field Label" name="label" required> &emsp;  &emsp; &emsp;  
+                    <input type = "text" style="font-size: 15px; width: 200px;" placeholder="Field Name" name="name" required> &emsp;  &emsp; &emsp;  
+                     <br> <br>
                 </div>
+
                 <div class = "input-box" >
-                    <select id="valid" style="font-size: 15px;">
-                        <option value="volvo">--Validation--</option>
-                        <option value="saab">Saab</option>
-                        <option value="opel">Opel</option>
-                        <option value="audi">Audi</option>
-                        </select> &emsp;  &emsp; &emsp;
-                    <select id="data" style="font-size: 15px;">
-                        <option value="volvo">Data Types</option>
-                        <option value="volvo">Char</option>
-                        <option value="saab">Varchar</option>
-                        <option value="opel">int</option>
-                        <option value="audi">long</option>
-                        <option value="audi">float</option>
-                        <option value="audi">byte</option>        
-                        <option value="audi">boolean</option>
+                    
+                    <select id="data" name="d_type" style="font-size:15px; height:1.8em;">
+                        <option value="" disabled selected> Data Types </option>
+                        <option value="Char">Char</option>
+                        <option value="Varchar">Varchar</option>
+                        <option value="int">int</option>
+                        <option value="long">long</option>
+                        <option value="float">float</option>
+                        <option value="byte">byte</option>        
+                        <option value="boolean">boolean</option>
                     </select>    
-                </div> <br> <br>
+                </div> <br> 
                 <div class = "input-box">
-                    <input type = "text" style="font-size: 15px;" placeholder="Enter Length of Data Type" required>
+                    <input type="number" min="1" style="font-size: 15px; width: 200px;" placeholder="Enter Length of Data Type" name="length" required>
                     &emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;
-                    <input type="checkbox" id="show" name="show" value="show_list">
-                        <label for="show"><b>Show in List</b></label>
-                </div> <br><hr style="width: 100%;border: 1px solid black;"><br>
-                
-        </form>
-        <form action="#">
+                    
+                </div> <br><hr style="width: 100%;border: .5px solid black;"><br>
+               
+        </div>
+        
                 <div class = "button" style="text-align:center">
-                    <input type = "submit" value = "Genrate CRUD">
-                </div>
-        </form>            
-    </div>
-    </div> 
+                  <input type = "submit" value = "Generate CRUD">
+              </div>
+            </div>
+          </div> 
+
+        </form>
+             
+    
     {% endblock %}    
 </body>
 </html>
-
