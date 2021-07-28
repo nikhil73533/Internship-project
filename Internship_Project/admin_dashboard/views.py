@@ -324,7 +324,7 @@ class PasswordsChangesView(PasswordChangeView):
 @login_required(login_url='/') 
 def general_settings(request):
     return render(request, "settings/general_settings.html")
-
+# <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
@@ -338,9 +338,11 @@ def admintest(request):
     return render(request,"admin/admin_test.html",{'users':user,"count":count})
 
 def filterAdminList(request):
+    user = User.objects.all()
     if(request.method =='POST'):
         all_status = request.POST.get('allstatus[]')
         admin_status = request.POST.get('addadmintypes[]')
+       
         if(all_status):
             if(all_status=="Active"):
                 user = User.objects.filter(is_active =True)
@@ -349,6 +351,7 @@ def filterAdminList(request):
         if(admin_status):
             user = User.objects.filter(role = admin_status)
     return render(request,"admin/admin_test.html",{'users':user})
+
 def EditAdminList(request,user_id):
         user = User.objects.all()
         count = User.objects.get(id = user_id)
@@ -373,6 +376,7 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
+# <---------------------------------end of code---------------------------------------->
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html")
 # Role and Permission
@@ -380,24 +384,10 @@ def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
 
 
-<<<<<<< HEAD
-# <--------Remember Me option in django----------------------->
-def sccookie(request):
-    response = HttpResponse('cookie example')
-    response.set_cookie('cid','abc@gmail.com')
-    response.set_cookie('cid1','xyz@gmail.com')
-    return response
-
-def gccookie(request):
-    a = request.COOKIES['cid']
-    b = request.COOKIES['cid1']
-    return HttpResponse('value is ' + a + ' value is ' + b)
-# <-----------------------------------------------end of code---------------->
-=======
  # <--------------------------module settings------------------------------>
 @login_required(login_url='/') 
 def module_setting(request):
     user = User.objects.all()
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
+
     #< --------------------------end------------------------------------->
->>>>>>> c3c3384904ca27be5664345e1232a8914c6ba4f8

@@ -69,5 +69,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
 
 # <-----------------Module Settings ------------------>
+class Module(models.Model):
+    module_name = models.CharField(max_length=1000,)
+    controlller_name = models.CharField(max_length=1000)
+    fa_icon = models.CharField(max_length=500)
+    operations = models.CharField(max_length=1000)
+    
 
 # <-----------------------end of code------------------>
