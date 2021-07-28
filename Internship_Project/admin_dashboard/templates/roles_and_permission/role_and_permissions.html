@@ -35,7 +35,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
+            {% if user.role %}
               <h3 class="m-0 text-dark">Permission Access : {{user.role}}</h3>
+            {% else %}
+            <h3 class="m-0 text-dark">Permission Access : Admin</h3>
+
+            {% endif %}
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">

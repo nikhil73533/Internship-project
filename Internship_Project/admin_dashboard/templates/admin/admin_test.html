@@ -110,11 +110,13 @@
 
                 <div class="wrapper">
                     <div class="container">
-                      <form class="form" style="width: 100%;" action="reflect.php">
+                      <form class="form" style="width: 100%;" method = "POST" action={% url 'filterAdminList' %}>
+                      {% csrf_token %}
                         <table class="table" id="myTable">
                           <tbody>
                             <tr id="template" style="">
-                              <td><input list="browsers" class="form-control" placeholder="Add Admin Types" name="addadmintypes[]">
+                              <td>
+                              <input  list="browsers" class="form-control" placeholder="Add Admin Types" name="addadmintypes[]">
                                 <datalist class="add_admin" id="browsers">
                                   <option value="Add Admin Type 1">
                                   <option value="Add Admin Type 2">
@@ -123,23 +125,13 @@
                                   <option value="Add Admin Type 5">
                                 </datalist>
                               </td>
-                              <td><input list="browsers1" class="form-control" placeholder="All Status" name="allstatus[]">
-                                <datalist class="all_status" id="browsers1">
-                                  <option value="Status 1">
-                                  <option value="Status 2">
-                                  <option value="Status 3">
-                                  <option value="Status 4">
-                                  <option value="Status 5">
-                                </datalist>
-                              </td>
-                              <td><input type="text" class="form-control" placeholder="Search from here" name="searchfromhere[]" />
+                              <td><input list="browsers1"  class="form-control" placeholder="All Status" name="allstatus[]">
+                                <br>
+                                <input type="submit" class="btn btn-success" style="float: right; ">
                               </td>
                             </tr>
                           </tbody>
                         </table>
-                        <div class="form-group">
-                         
-                        </div>
                       </form>
                     </div>
                   </div>
@@ -174,7 +166,7 @@
                   <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
                   <td><input class = "edit" type="text" value="{{user.role}}" placeholder="Role" name="role"></td>
                   <td><div class="custom-control custom-switch">
-                    <input type="checkbox" name = "status" class="custom-control-input" {% if request.user.status %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
+                    <input type="checkbox" name = "status" value= "ok" class="custom-control-input" {% if request.user.is_active %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
                     <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
                   </div></td>
                   <td>
@@ -198,10 +190,14 @@
                 </td>
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>
-                <td><button type="button" onClick="document.location='{% url 'RolePermission' %}'"   class="btn btn-success">{{user.role}}</button></td>
+                {% if user.role %}
+                <td><button type="button" onClick="document.location='{% url 'RolePermission'  %}'";   class="btn btn-success">{{user.role}}</button></td>
+                {% else %}
+                                <td><button type="button" onClick="document.location='{% url 'RolePermission' %}'" class="btn btn-success">Admin</button></td>
+                {% endif %}
                 <td><div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input"  {% if request.user.status %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
-                  <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
+                  <input type="checkbox"  value= "on" class="custom-control-input" name = "status" {% if request.user.is_active %}checked{% endif %} id="customSwitches">
+                  <label class="custom-control-label" for="customSwitches1"></label>
                 </div></td>
                 <td>
                   

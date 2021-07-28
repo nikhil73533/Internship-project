@@ -334,10 +334,23 @@ def admintest(request):
     if(request.method == 'POST'):
         user_id = request.POST['user_id']
         admin = User.objects.get(id = user_id)
+        all_status = request.POST['allstatus[]']
         admin.delete()
         messages.success(request,"Admin deleted successfully!!!")
     return render(request,"admin/admin_test.html",{'users':user,"count":count})
 
+def filterAdminList(request):
+    if(request.method =='POST'):
+        all_status = request.POST.get('allstatus[]')
+        admin_status = request.POST.get('addadmintypes[]')
+        if(all_status):
+            if(all_status=="Active"):
+                user = User.objects.filter(is_active =True)
+            else:
+                user = User.objects.filter(is_active =False)
+        if(admin_status):
+            user = User.objects.filter(role = admin_status)
+    return render(request,"admin/admin_test.html",{'users':user})
 def EditAdminList(request,user_id):
         user = User.objects.all()
         count = User.objects.get(id = user_id)
@@ -356,8 +369,8 @@ def EditAdminListValue(request):
         user.email = Email
         user.role = Role
         user.status = False
-        if(Status == "on"):
-            user.status = True
+        if(Status == None):
+            user.is_activate = True
         user.save()
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
