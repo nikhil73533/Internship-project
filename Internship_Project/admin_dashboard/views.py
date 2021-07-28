@@ -320,9 +320,7 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
-@login_required(login_url='/') 
-def module_setting(request):
-    return render(request, "roles_and_permission/module_setting.html")
+
 @login_required(login_url='/') 
 def general_settings(request):
     return render(request, "settings/general_settings.html")
@@ -382,6 +380,7 @@ def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
 
 
+<<<<<<< HEAD
 # <--------Remember Me option in django----------------------->
 def sccookie(request):
     response = HttpResponse('cookie example')
@@ -394,3 +393,11 @@ def gccookie(request):
     b = request.COOKIES['cid1']
     return HttpResponse('value is ' + a + ' value is ' + b)
 # <-----------------------------------------------end of code---------------->
+=======
+ # <--------------------------module settings------------------------------>
+@login_required(login_url='/') 
+def module_setting(request):
+    user = User.objects.all()
+    return render(request, "roles_and_permission/module_setting.html",{"users":user})
+    #< --------------------------end------------------------------------->
+>>>>>>> c3c3384904ca27be5664345e1232a8914c6ba4f8
