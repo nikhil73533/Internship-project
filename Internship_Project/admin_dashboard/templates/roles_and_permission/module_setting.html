@@ -5,7 +5,7 @@
 <html style="height: auto;"><head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Module Setting</title>
+  <title> {% block title %}AdminLTE 3 | Module Setting{% endblock %}</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -77,6 +77,9 @@
                                         <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Operations: activate to sort column ascending" style="">
                                             Operations
                                         </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Operations: activate to sort column ascending" style="">
+                                            Sub Module
+                                        </th>
                                         <th width="100px" class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="">
                                             Action
                                         </th>
@@ -90,6 +93,11 @@
                                             <td></td>
                                             <td>view|add|edit|delete|change_status|access</td>
                                             <td>
+                                                <a href="#" class="btn btn-info btn-xs mr5">
+                                                        <i class="fas fa-sliders-h"></i>
+                                                </a>
+                                            </td>
+                                            <td>
                                                 <a href="#" class="btn btn-warning btn-xs mr5">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
@@ -101,6 +109,11 @@
                                             <td>admin_roles</td>
                                             <td></td>
                                             <td>view|add|edit|delete|change_status|access</td>
+                                            <td>
+                                                <a href="#" class="btn btn-info btn-xs mr5">
+                                                        <i class="fas fa-sliders-h"></i>
+                                                </a>
+                                            </td>
                                             <td>
                                                 <a href="#" class="btn btn-warning btn-xs mr5">
                                                         <i class="fa fa-edit"></i>
@@ -114,6 +127,11 @@
                                             <td></td>
                                             <td>view|add|edit|delete|change_status|access</td>
                                             <td>
+                                                <a href="#" class="btn btn-info btn-xs mr5">
+                                                        <i class="fas fa-sliders-h"></i>
+                                                </a>
+                                            </td>
+                                            <td>
                                                 <a href="#" class="btn btn-warning btn-xs mr5">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
@@ -126,12 +144,15 @@
                                             <td></td>
                                             <td>access</td>
                                             <td>
+                                                <a href="#" class="btn btn-info btn-xs mr5">
+                                                        <i class="fas fa-sliders-h"></i>
+                                                </a>
+                                            </td>
+                                            <td>
                                                 <a href="#" class="btn btn-warning btn-xs mr5">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
-                                                <a href="#" onclick="return confirm('are you sure to delete?')" class="btn btn-danger btn-xs mr-5">
-                                                    <i class="fa fa-remove"></i>
-                                                </a>
+                                                <a href="#" onclick="return confirm('are you sure to delete?')" class="btn btn-danger btn-xs mr-5"><i class="fa fa-remove"></i></a>
                                             </td>
                                     </tbody>
                             </table>

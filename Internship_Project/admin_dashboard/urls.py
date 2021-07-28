@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,Adminlist,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar, admin_roles_and_permission
 
 
 #<===== Reset Password========>
@@ -34,11 +34,18 @@ urlpatterns = [
 #<=======  change password  page url =========>
     path('password/',PasswordsChangesView.as_view(template_name = "profile/change_password.html")),
 
-      #<======= Addmin list page url =========>
-    path('Adminlist',Adminlist,name = "Adminlist"),
+    #<=======  view profile  page url =========>
+    path('RolePermission',RolePermission,name = "RolePermission"),
 
      #<=======  Edit Addmin list value page url =========>
     path('EditAdminListValue',EditAdminListValue,name = "EditAdminListValue"),
+
+     #<=======  Edit Addmin  value page url =========>
+    path('admin_test',admintest,name = "admintest"),
+
+    
+     #<=======  Edit Addmin  value page url =========>
+    path('edit_admin_list/<int:user_id>/',EditAdminList,name = "EditAdminList"),
 
 
       #<======= Add admin  page url =========>
@@ -58,9 +65,6 @@ urlpatterns = [
      #<======= Add Admin page url =========>
     path('Addadmin',Addadmin,name = "Addadmin"),
 
-     #<======= Admin list page url =========>
-    path('Adminlist',Adminlist,name = "Adminlist"),
-
      #<======= View Profile page url =========>
     path('view_profile',view_profile,name = "view_profile"),
 
@@ -69,6 +73,9 @@ urlpatterns = [
 
      #<======= General Settings page url =========>
     path('general_settings',general_settings,name = "general_settings"),
+
+     #<======= Admin Roles and permissions page url =========>
+    path('admin_roles_and_permission',admin_roles_and_permission,name = "admin_roles_and_permission"),
 
     #<=========login page Urls============>
     path('', Login, name = "Login"),
@@ -85,5 +92,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>', PasswordResetConfirmView.as_view(template_name = "reset_password/new_pass.html"), name = "password_reset_confirm"),
     path('reset_password_complete/',PasswordResetCompleteView.as_view(template_name = "reset_password/pass_confirm.html"), name = "password_reset_complete"),
 
+    #<=======  calander  page url =========>
+    path('calander', calendar, name = "calendar"),
 ]
 
