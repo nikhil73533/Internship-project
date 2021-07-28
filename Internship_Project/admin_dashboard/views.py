@@ -20,13 +20,10 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from itertools import zip_longest
 import csv
-<<<<<<< Updated upstream
 from csv import reader
 import pandas as pd
-=======
 import json
 
->>>>>>> Stashed changes
 # User movel initialization 
 User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
@@ -226,9 +223,13 @@ def CrudGenerator(request):
             if flag == 1:
                 writer.writerows([data_dict.keys(), []])
 
-            writer.writerows(zip_longest(*data_dict.values()))
-            writer.writerow([])
-            messages.success(request,"Crud created successfully ")
+            if data_dict['Table'][0] not in pd.read_csv('CRUD.csv')['Table'].tolist():
+                writer.writerows(zip_longest(*data_dict.values()))
+                writer.writerow([])
+                messages.success(request, "Crud created successfully ")
+
+            else:
+                messages.error(request, f"The table strucutre named '{data_dict['Table'][0]}' has already been defined")
         
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
