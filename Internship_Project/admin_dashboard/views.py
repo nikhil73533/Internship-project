@@ -20,8 +20,13 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from itertools import zip_longest
 import csv
+<<<<<<< Updated upstream
 from csv import reader
 import pandas as pd
+=======
+import json
+
+>>>>>>> Stashed changes
 # User movel initialization 
 User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
@@ -370,6 +375,16 @@ def calendar(request):
 def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
 
+# <---- General Settings View --------------------------------->
+# with open("settings.json","r") as p:
+#     parm = json.load(p)["json_files/general_settings"]
+
+# def generl_settings_conf(param):
+#     print(parm)    
+
+def general_settings(request):
+
+    return render(request, "settings/general_settings.html")
 
  # <--------------------------module settings------------------------------>
 @login_required(login_url='/') 
@@ -378,6 +393,4 @@ def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
     #< --------------------------end------------------------------------->
 
-# <---- Genral Settings View --------------------------------->
-def general_settings(request):
-    return render(request, "settings/general_settings.html")
+   
