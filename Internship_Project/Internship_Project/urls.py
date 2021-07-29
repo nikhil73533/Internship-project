@@ -85,5 +85,8 @@ urlpatterns = [
 
      # <=== url for Admin Roles and Permission page ====>
     path('user/',include('admin_dashboard.urls')),
+
+     # <=== url for Add new role page ====>
+    path('user/',include('admin_dashboard.urls')),
     # <==== end of code =====>
 ]
