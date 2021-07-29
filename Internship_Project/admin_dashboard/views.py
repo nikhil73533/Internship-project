@@ -399,6 +399,10 @@ def general_settings(request):
 
     return render(request, "settings/general_settings.html")
 
+def add_new_role(request):
+
+    return render(request, "roles_and_permission/add_new_role.html")
+
  # <--------------------------module settings------------------------------>
 @login_required(login_url='/') 
 def module_setting(request):
