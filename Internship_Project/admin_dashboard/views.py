@@ -22,6 +22,7 @@ from itertools import zip_longest
 import csv
 from csv import reader
 import pandas as pd
+from pathlib import Path
 import json
 
 # User movel initialization 
@@ -223,7 +224,7 @@ def CrudGenerator(request):
             if flag == 1:
                 writer.writerows([data_dict.keys(), []])
 
-            if data_dict['Table'][0] not in pd.read_csv('CRUD.csv')['Table'].tolist():
+            if flag == 1 or (flag == 0 and data_dict['Table'][0] not in pd.read_csv('CRUD.csv')['Table'].tolist()):
                 writer.writerows(zip_longest(*data_dict.values()))
                 writer.writerow([])
                 messages.success(request, "Crud created successfully ")
@@ -236,7 +237,12 @@ def CrudGenerator(request):
 # Crud function 
 @login_required(login_url='/') 
 def CrudExtension(request):
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+    models = None
+
+    if Path("CRUD.csv").exists():
+        models = pd.read_csv('CRUD.csv')['Module'].tolist()[:-1]
+
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'models' : models})
     
 def Addadmin(request):
     if(request.method == 'POST'):
