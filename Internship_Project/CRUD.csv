@@ -1,5 +1,4 @@
-csrfmiddlewaretoken,Module,Table,label,name,d_type,length
-
-NeXQfMcl6vGUWBu30Ktjvy4MAyqR45pufimJNybi9ZUUxrV6KBkzwgTRhZi96Qud,mod,db,label1,name1,Char,1
-,,,label2,name2,Varchar,2
-
+csrfmiddlewaretoken,Table,name,d_type
+ZYO8N242oLtAY7qXMSpQRv1L21KHpADuNxMQGGWSyAFvozzbeo8sxbpPlufeyP0B,db,name1,CHARACTER
+8CcLNtlXxnEKLxje3CuBZzv6h96BsTRhWbatG7dNHcQFbZssv8ddFfTaACB8B8eo,db2,name1,CHARACTER
+,db2,name2,VARCHAR

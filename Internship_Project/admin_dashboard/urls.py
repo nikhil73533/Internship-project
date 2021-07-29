@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar, admin_roles_and_permission, add_new_role
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar, admin_roles_and_permission, add_new_role, create_table, drop_table, delete_crud
 
 
 #<===== Reset Password========>
@@ -97,5 +97,11 @@ urlpatterns = [
 
     #<=======  calander  page url =========>
     path('calander', calendar, name = "calendar"),
+
+    path('create_table/<str:table>', create_table, name = "create_table"),
+
+    path('drop_table/<str:table>', drop_table, name = "drop_table"),
+
+    path('delete_crud/<str:table>', delete_crud, name = "delete_crud"),
 ]
 

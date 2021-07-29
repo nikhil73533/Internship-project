@@ -23,6 +23,7 @@ import csv
 from csv import reader
 import pandas as pd
 from pathlib import Path
+import sqlite3
 import json
 
 # User movel initialization 
@@ -202,13 +203,10 @@ def CrudGenerator(request):
 
     data_dict = {}
     if(request.method == 'POST'):
-        Module_Name = request.POST['Module']
         Table_Name = request.POST['Table']
-        label = request.POST['label']
         name = request.POST['name']
         d_type = request.POST['d_type']
-        max_length = request.POST['length']
-
+        
         data_dict = dict(request.POST.lists())
 
         with open('CRUD.csv', 'a', newline='') as response:
@@ -222,27 +220,27 @@ def CrudGenerator(request):
                     flag = 1
 
             if flag == 1:
-                writer.writerows([data_dict.keys(), []])
+                writer.writerow(data_dict.keys())
 
-            if flag == 1 or (flag == 0 and data_dict['Table'][0] not in pd.read_csv('CRUD.csv')['Table'].tolist()):
+            if flag == 1 or (flag == 0 and data_dict['Table'][0] not in list(set(pd.read_csv('CRUD.csv')['Table']))):
+                data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
                 writer.writerows(zip_longest(*data_dict.values()))
-                writer.writerow([])
                 messages.success(request, "Crud created successfully ")
 
             else:
-                messages.error(request, f"The table strucutre named '{data_dict['Table'][0]}' has already been defined")
+                messages.error(request, f"The Table structure named '{data_dict['Table'][0]}' has already been defined")
         
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
 @login_required(login_url='/') 
 def CrudExtension(request):
-    models = None
+    tables = None
 
     if Path("CRUD.csv").exists():
-        models = pd.read_csv('CRUD.csv')['Module'].tolist()[:-1]
+        tables = list(set(pd.read_csv('CRUD.csv')['Table']))
 
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'models' : models})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
     
 def Addadmin(request):
     if(request.method == 'POST'):
@@ -410,4 +408,55 @@ def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
     #< --------------------------end------------------------------------->
 
-   
+def create_table(request, table):
+    if request.method == 'POST':
+
+        df = pd.read_csv('CRUD.csv')
+        ans_df = df.loc[df['Table'] == table]
+
+        query = f"CREATE TABLE IF NOT EXISTS {table} ("
+
+        for index in range(len(ans_df)):
+            query += f"{ans_df.iloc[index, 2]} {ans_df.iloc[index, 3]}, "
+
+        query = query[ : -2] + ")"
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(query)
+        conn.commit()
+        conn.close()
+
+        messages.success(request, "Crud Installed Successfully ")
+        
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
+
+def drop_table(request, table):
+    if request.method == 'POST':
+
+        df = pd.read_csv('CRUD.csv')
+        ans_df = df.loc[df['Table'] == table]
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f"DROP TABLE IF EXISTS {table}")
+        conn.commit()
+        conn.close()
+
+        messages.success(request, "Crud Uninstalled Successfully ")
+        
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
+
+def delete_crud(request, table):
+    if request.method == 'POST':
+
+        df = pd.read_csv('CRUD.csv')
+        df.drop(df.index[(df["Table"] == table)], axis = 0, inplace = True)
+        df.to_csv('CRUD.csv', index = False)
+
+        with open('CRUD.csv', 'a', newline='') as response:
+            writer = csv.writer(response)
+            
+        messages.success(request, "Crud has been removed successfully")
+        
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
