@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import models
 from django.forms import fields
 from django import forms
@@ -200,8 +201,8 @@ def CrudList(request):
 # Crud function
 @login_required(login_url='/')  
 def CrudGenerator(request):
-
     data_dict = {}
+
     if(request.method == 'POST'):
         Table_Name = request.POST['Table']
         name = request.POST['name']
@@ -220,10 +221,12 @@ def CrudGenerator(request):
                     flag = 1
 
             if flag == 1:
+                data_dict['Updated_at'] = []
                 writer.writerow(data_dict.keys())
 
             if flag == 1 or (flag == 0 and data_dict['Table'][0] not in list(set(pd.read_csv('CRUD.csv')['Table']))):
                 data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
+                data_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(data_dict['name'])
                 writer.writerows(zip_longest(*data_dict.values()))
                 messages.success(request, "Crud created successfully ")
 
@@ -238,7 +241,10 @@ def CrudExtension(request):
     tables = None
 
     if Path("CRUD.csv").exists():
-        tables = list(set(pd.read_csv('CRUD.csv')['Table']))
+        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
 
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
     
@@ -409,7 +415,16 @@ def module_setting(request):
     #< --------------------------end------------------------------------->
 
 def create_table(request, table):
+    tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+
     if request.method == 'POST':
+
+        if check_status(table) == [1]:
+            messages.error(request,'CRUD Already Installed')
+            updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+            df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+            tables = json.loads(df.reset_index().to_json(orient = 'records'))
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
 
         df = pd.read_csv('CRUD.csv')
         ans_df = df.loc[df['Table'] == table]
@@ -426,16 +441,28 @@ def create_table(request, table):
         c.execute(query)
         conn.commit()
         conn.close()
+        
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        df.to_csv('CRUD.csv', index = False)
 
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
         messages.success(request, "Crud Installed Successfully ")
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
 
 def drop_table(request, table):
+    tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+
     if request.method == 'POST':
 
-        df = pd.read_csv('CRUD.csv')
-        ans_df = df.loc[df['Table'] == table]
+        if check_status(table) == [0]:
+            messages.error(request,'CRUD Already Uninstalled')
+            updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+            df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+            tables = json.loads(df.reset_index().to_json(orient = 'records'))
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
@@ -443,9 +470,16 @@ def drop_table(request, table):
         conn.commit()
         conn.close()
 
+        df = pd.read_csv('CRUD.csv')
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        df.to_csv('CRUD.csv', index = False)
+
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
         messages.success(request, "Crud Uninstalled Successfully ")
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
 
 def delete_crud(request, table):
     if request.method == 'POST':
@@ -457,6 +491,29 @@ def delete_crud(request, table):
         with open('CRUD.csv', 'a', newline='') as response:
             writer = csv.writer(response)
             
+        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
         messages.success(request, "Crud has been removed successfully")
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+
+def check_status(tables):
+    status = []
+    conn = sqlite3.connect('CRUD.db')
+    c = conn.cursor()
+
+    if isinstance(tables, str):
+        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{tables}'")
+        return list(c.fetchone())
+
+    for table in tables:
+        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{table}'")
+        status += list(c.fetchone())
+
+    conn.commit()
+    conn.close()
+
+    return ["Active" if val == 1 else "Inactive" for val in status]
+
