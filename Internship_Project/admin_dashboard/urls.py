@@ -3,7 +3,11 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
+<<<<<<< HEAD
 from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar,filterAdminList
+=======
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar, admin_roles_and_permission, add_new_role, create_table, drop_table, delete_crud
+>>>>>>> faa60289e38925055cd1b413e4bdb5594f575ccc
 
 
 #<===== Reset Password========>
@@ -77,6 +81,12 @@ urlpatterns = [
      #<======= General Settings page url =========>
     path('general_settings',general_settings,name = "general_settings"),
 
+     #<======= Admin Roles and permissions page url =========>
+    path('admin_roles_and_permission',admin_roles_and_permission,name = "admin_roles_and_permission"),
+
+     #<======= Add_new_role page url =========>
+    path('add_new_role',add_new_role,name = "add_new_role"),
+
     #<=========login page Urls============>
     path('', Login, name = "Login"),
 
@@ -94,5 +104,11 @@ urlpatterns = [
 
     #<=======  calander  page url =========>
     path('calander', calendar, name = "calendar"),
+
+    path('create_table/<str:table>', create_table, name = "create_table"),
+
+    path('drop_table/<str:table>', drop_table, name = "drop_table"),
+
+    path('delete_crud/<str:table>', delete_crud, name = "delete_crud"),
 ]
 

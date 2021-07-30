@@ -3,6 +3,33 @@
   {% load static %} 
 <!DOCTYPE html>
 <html lang="en">
+
+<style> 
+
+/* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
+success message 
+*/
+.allert-success {
+  padding: 12px;
+  background-color: #469412;
+  
+  color: white;
+}
+
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,6 +66,13 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
+      {% for msg in messages %} 
+      <br> 
+    <div class="allert-{{msg.tags}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        {{msg}}
+      </div> <br>
+                {%endfor%}
     </div>
     <!-- /.content-header -->
 
@@ -47,7 +81,7 @@
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
-                        <div class="col-sm-8" style="display: inline;"><h2>Extension <b>List</b></h2></div>
+                        <div class="col-sm-8" style="display: inline;"><h2>Extension List</h2></div>
                         <div class="col-sm-4">
                             <div class="search-box">
                                 <i class="material-icons">&#xE8B6;</i>
@@ -59,27 +93,38 @@
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>Sno.</th>
-                            <th>Models Name <i class="fa fa-sort"></i></th>
+                            <th>Model Name <i class="fa fa-sort"></i></th>
                             <th>Status</th>
-                            <th>Update at <i class="fa fa-sort"></i></th>
+                            <th>Updated at <i class="fa fa-sort"></i></th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {% if tables %}
+                      <tbody>
+                        {% for table_name in tables %}
                         <tr>
-                            <td>2</td>
-                            <td>Maria Anders</td>
-                            <td>Obere Str. 57</td>
-                            <td>Berlin</td>
-                            <td>
-                                <a href="#" class="view" title="Install" data-toggle="tooltip"><i class="fab fa-instalod"></i></a>
-                                <a href="#" class="edit" title="Uninstall" data-toggle="tooltip"><i class="fas fa-eraser"></i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                            </td>
+                            <td style="width: fit-content;"> {{table_name}} </td>
+                            <td style="width: fit-content;">Obere Str. 57</td>
+                            <td style="width: fit-content;">Berlin</td>
+                            <td style="width: fit-content;">
+
+                              <form action="{% url 'create_table' table_name %}" method='post' class="d-inline">{% csrf_token %}
+                                <input type="submit" class="btn btn-success" value="Install">
+                              </form>
+
+                              <form action="{% url 'drop_table' table_name %}" method='post' class="d-inline">{% csrf_token %}
+                                <input type="submit" class="btn btn-warning" value="Uninstall">
+                              </form>
+
+                              <form action="{% url 'delete_crud' table_name %}" method='post' class="d-inline">{% csrf_token %}
+                                <input type="submit" class="btn btn-danger" value="Delete CRUD">
+                              </form>
+
+                              </td>
                         </tr>
-                               
-                    </tbody>
+                        {% endfor %}
+                      </tbody>
+                      {% endif %}
                 </table>
                 <div class="clearfix">
                     <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>

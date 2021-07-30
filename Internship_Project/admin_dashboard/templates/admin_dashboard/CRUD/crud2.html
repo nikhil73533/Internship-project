@@ -159,11 +159,8 @@ success message
         <form action = "#">
             <div class = "user-details">
                 <div class = "input-box">
-                    <span class = "details" style="font-size: 17px;"><b>Module Name</b></span> 
-                            &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; 
-                    &emsp; &emsp;<span class = "details" style="font-size: 17px;"><b>Database Table Name</b></span><br>
-                    <input type = "text" style="font-size: 14px;" placeholder="Enter your Module Name" name="Module" required>&emsp;&emsp;  &emsp;&emsp;  &emsp;
-                    <input type = "text" style="font-size: 13px;" placeholder="Enter your Database Table Name" name="Table" required> <br> <br> <br>
+                    <span class = "details" style="font-size: 17px;"><b>Database Table </b></span><br>
+                    <input type = "text" style="font-size: 13px;" placeholder="Enter Table Name" name="Table" required> <br> <br> <br>
                 </div>  
             </div>
         </form>
@@ -176,34 +173,28 @@ success message
     <div class = "container1">
         <div class = "form1">
                 <div class = "input-box">
-                    <input type = "text" style="font-size: 15px;" placeholder="Field Label" name="label" required> &emsp;  &emsp; &emsp;  
-                    <input type = "text" style="font-size: 15px;" placeholder="Field Name" name="name" required> &emsp;  &emsp; &emsp;  
+                    <input type = "text" style="font-size: 15px; width: 200px;" placeholder="Field Name" name="name" required> &emsp;  &emsp; &emsp;  
                      <br> <br>
                 </div>
 
                 <div class = "input-box" >
                     
-                    <select id="data" name="d_type" style="font-size: 15px;">
+                    <select id="data" name="d_type" style="font-size:15px; height:1.8em;" required>
                         <option value="" disabled selected> Data Types </option>
-                        <option value="Char">Char</option>
-                        <option value="Varchar">Varchar</option>
-                        <option value="int">int</option>
-                        <option value="long">long</option>
-                        <option value="float">float</option>
-                        <option value="byte">byte</option>        
-                        <option value="boolean">boolean</option>
+                        <option value="CHARACTER">char</option>
+                        <option value="VARCHAR">varchar</option>
+                        <option value="INT">int</option>
+                        <option value="BIGINT">long</option>
+                        <option value="FLOAT">float</option>
+                        <option value="BOOLEAN">boolean</option>
                     </select>    
                 </div> <br> 
-                <div class = "input-box">
-                    <input type="number" min="1" style="font-size: 15px;" placeholder="Enter Length of Data Type" name="length" required>
-                    &emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;&emsp;  &emsp; &emsp;
-                    
-                </div> <br><hr style="width: 100%;border: .5px solid black;"><br>
+                <hr style="width: 100%;border: .5px solid black;"><br>
                
         </div>
         
                 <div class = "button" style="text-align:center">
-                  <input type = "submit" value = "Genrate CRUD">
+                  <input type = "submit" value = "Generate CRUD">
               </div>
             </div>
           </div> 
