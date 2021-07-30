@@ -5,6 +5,7 @@ from django.http import request
 from django.contrib.auth import get_user_model
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
+from .models import Module
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
 from django.urls.base import reverse_lazy
@@ -358,6 +359,7 @@ def general_settings(request):
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
+    module = Module.objects.all()
     count = -1
     if(request.method == 'POST'):
         user_id = request.POST['user_id']
@@ -365,9 +367,10 @@ def admintest(request):
         all_status = request.POST['allstatus[]']
         admin.delete()
         messages.success(request,"Admin deleted successfully!!!")
-    return render(request,"admin/admin_test.html",{'users':user,"count":count})
+    return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
 
 def filterAdminList(request):
+    module = Module.objects.all()
     user = User.objects.all()
     if(request.method =='POST'):
         all_status = request.POST.get('allstatus[]')
@@ -380,16 +383,16 @@ def filterAdminList(request):
                 user = User.objects.filter(is_active =False)
         if(admin_status):
             user = User.objects.filter(role = admin_status)
-    return render(request,"admin/admin_test.html",{'users':user})
+    return render(request,"admin/admin_test.html",{'users':user,"modules":module})
 
 def EditAdminList(request,user_id):
+        module = Module.objects.all()
         user = User.objects.all()
         count = User.objects.get(id = user_id)
-        return render(request,"admin/admin_test.html",{'users':user,"count":count})
+        return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
 
 @login_required(login_url='/') 
 def EditAdminListValue(request):
-   
     if(request.method == 'POST'):
         userid = request.POST.get('user')
         user = User.objects.get(id  = userid)
@@ -414,12 +417,6 @@ def RolePermission(request):
     return render(request, "roles_and_permission/role_and_permissions.html")
 
 # <---- General Settings View --------------------------------->
-# with open("settings.json","r") as p:
-#     parm = json.load(p)["json_files/general_settings"]
-
-# def generl_settings_conf(param):
-#     print(parm)    
-
 def general_settings(request):
 
     return render(request, "settings/general_settings.html")
@@ -435,6 +432,8 @@ def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
 
     #< --------------------------end------------------------------------->
+
+# <---------------------Crud section ------------------------------------->
 
 def create_table(request, table):
     if request.method == 'POST':
@@ -488,3 +487,4 @@ def delete_crud(request, table):
         messages.success(request, "Crud has been removed successfully")
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
+# <--------------------------end of code---------------------------------------------------------------------------------------->

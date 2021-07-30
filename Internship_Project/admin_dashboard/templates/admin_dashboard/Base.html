@@ -3,11 +3,6 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{% block title %}AdminLite3 | Dashboard 1{% endblock %}</title>
-
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
   <link rel="stylesheet" href={% static 'plugins/fontawesome-free/css/all.min.css' %}>
   <!-- Ionicons -->
@@ -184,8 +179,9 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
-            <a href="{% url 'DashBoard'%}" class="nav-link active">
+               <!-- menu-open -->
+          <li class="nav-item has-treeview {%block menu_open_dashboard%}{%endblock%}">
+            <a href="{% url 'DashBoard'%}" class="nav-link {%block menu_items_dashboard%}{%endblock%}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -194,27 +190,27 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'DashBoard'%}" class="nav-link active">
+                <a href="{% url 'DashBoard'%}" class="nav-link {%block menu_items_dashboard_1%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard v1</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{% url 'DashBoardTwo' %}" class="nav-link">
+              <li class="nav-item active">
+                <a href="{% url 'DashBoardTwo' %}" class="nav-link  {%block menu_items_dashboard_2%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard v2</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'DashBoardThree'%}" class="nav-link">
+                <a href="{% url 'DashBoardThree'%}" class="nav-link {%block menu_items_dashboard_3%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard v3</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview {%block menu_open_rlap%}{%endblock%}">
+            <a href="#" class="nav-link {%block menu_items_rlap%}{%endblock%}" >
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Roles and permission
@@ -223,21 +219,21 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'module_setting'%}" class="nav-link">
+                <a href="{% url 'module_setting'%}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Module Setting</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'RolePermission'%}" class="nav-link">
+                <a href="{% url 'RolePermission'%}" class="nav-link {%block menu_items_rlp%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Roles & Permissions</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'admin_roles_and_permission'%}" class="nav-link">
+                <a href="{% url 'admin_roles_and_permission'%}" class="nav-link {%block menu_items_add_new_role%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Admin Roles & Permissions</p>
+                  <p>Add new roles</p>
                 </a>
               </li>
             </ul>
@@ -457,25 +453,26 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview {%block menu_open_setting%}{%endblock%}">
+            <a href="#" class="nav-link {%block menu_items_setting%}{%endblock%}">
               <i class="nav-icon fas fa-cogs"></i>
               <p>
                 Settings
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview ">
               <li class="nav-item">
-                <a href="{% url 'general_settings'%}" class="nav-link">
+                <a href="{% url 'general_settings'%}" class="nav-link {%block menu_items_settings%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>General Settings</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview 
+{%block menu_open_profile%}{%endblock%}">
+            <a href="#" class="nav-link {%block menu_items_profile%}{%endblock%}">
               <i class="nav-icon fas fa-user-circle"></i>
               <p>
                 Profile
@@ -484,21 +481,22 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'view_profile'%}" class="nav-link">
+                <a href="{% url 'view_profile'%}" class="nav-link  {%block menu_items_module_view_profile%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View Profile</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/password" class="nav-link">
+                <a href="/password" class="nav-link {%block menu_items_module_changepassword%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Change Password</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview 
+{%block menu_open_admin%}{%endblock%}">
+            <a href="#" class="nav-link {%block menu_items_admin%}{%endblock%}">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Admin
@@ -507,13 +505,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'Addadmin'%}" class="nav-link">
+                <a href="{% url 'Addadmin'%}" class="nav-link {%block menu_items_addadmin%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Admin</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'admintest'%}" class="nav-link">
+                <a href="{% url 'admintest'%}"  class="nav-link {%block menu_items_adminlist%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Admin List</p>
                 </a>
@@ -522,7 +520,7 @@
           </li>
           <li class="nav-header">EXAMPLES</li>
           <li class="nav-item">
-            <a href="{% url 'calendar'%}" class="nav-link">
+            <a href="{% url 'calendar'%}" class="nav-link {%block menu_items_module_calander%}{%endblock%}">
               <i class="nav-icon far fa-calendar-alt"></i>
               <p>
                 Calendar
@@ -711,8 +709,9 @@
           </li>
 
 
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview 
+{%block menu_open_crud%}{%endblock%}">
+            <a href="#" class="nav-link {%block menu_items_crud%}{%endblock%}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 CRUD
@@ -721,13 +720,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'CrudGenerator'%}" class="nav-link active">
+                <a href="{% url 'CrudGenerator'%}" class="nav-link {%block menu_items_crud_2%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Genrate CRUD</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{% url 'CrudExtension'%}" class="nav-link">
+                <a href="{% url 'CrudExtension'%}" class="nav-link {%block menu_items_crud_3%}{%endblock%}">
                   <i class="nav-icon fas fa-file"></i>
                   <p>Crud Extension</p>
                 </a>

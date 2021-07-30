@@ -1,9 +1,11 @@
 
-{% extends 'admin_dashboard/base.html' %}
+ {% extends 'admin_dashboard/base.html' %} 
 {% block body %}
 {% load cart %}
 {% load static %}
-
+{%block menu_items_adminlist%}active{%endblock%}
+{%block menu_items_admin%}active {%endblock%}
+{%block menu_open_admin%}menu-open{%endblock%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,11 +120,9 @@
                               <td>
                               <input  list="browsers" class="form-control" placeholder="Add Admin Types" name="addadmintypes[]">
                                 <datalist class="add_admin" id="browsers">
-                                  <option value="Add Admin Type 1">
-                                  <option value="Add Admin Type 2">
-                                  <option value="Add Admin Type 3">
-                                  <option value="Add Admin Type 4">
-                                  <option value="Add Admin Type 5">
+                                  {% for module in modules %}
+                                  <option value="{{module}}">
+                                  {% endfor %}
                                 </datalist>
                               </td>
                               <td><input list="browsers1"  class="form-control" placeholder="All Status" name="allstatus[]">
@@ -157,8 +157,11 @@
                 <td>{{forloop.counter}}</td>
                 <td>  <input class = "name" type="text" value="{{user.first_name}}" placeholder="first_name" name="first_name"> &emsp; <input class = "name" type="text" value="{{user.last_name}}" placeholder="last_name" name="last_name">
                     <br>
-
+                                        {%if user.role%}
                                         <p  style="font-size: 15px;">&emsp;&emsp;{{user.role}}</p>
+                                        {%else %}
+                                        <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
+                                        {%endif%}
                 </td>
                 <form action="{% url 'EditAdminListValue' %}" method="POST">{% csrf_token %}
                     
@@ -186,7 +189,12 @@
                 <td>{{user.first_name}} {{user.last_name}}
                   <br>
                   
+                  {%if user.role%}
                   <p  style="font-size: 15px;">&emsp;&emsp;{{user.role}}</p>
+                  {%else %}
+                  <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
+                  {%endif%}
+
                 </td>
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>

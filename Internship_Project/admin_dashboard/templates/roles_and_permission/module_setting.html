@@ -2,6 +2,9 @@
 {% block body %}
 {% load static %}
 {% load  cart %}  
+{%block menu_items_module_settings%}active{%endblock%}
+{%block menu_items_rlap%}active {%endblock%}
+{%block menu_open_rlap%}menu-open{%endblock%}
 <!DOCTYPE html>
 <html style="height: auto;"><head>
   <meta charset="utf-8">
@@ -155,10 +158,7 @@
                     <label for="exampleInputEmail1" class="form-label">Module Name</label>
                     <input type="email" class="form-control" id="" placeholder="module Name">
                 </div>
-
-
-
-
+                
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Controller Name</label>
                   <input type="email" class="form-control" id="" placeholder="Controller Name">
