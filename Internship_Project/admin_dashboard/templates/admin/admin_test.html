@@ -13,9 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> {% block title %}AdminLTE 3 | AdminList{% endblock %}</title>
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-       <!-- Font Awesome -->
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 
@@ -180,6 +180,7 @@
                     </button>
                   </form>
                   <button  onClick="document.location='{% url 'admintest' %}'"  type="button" class="btn btn-danger">
+
                     <i class="fa fa-remove"></i>
                   </button>
                 </td>
@@ -211,10 +212,12 @@
                 <td>
                   
                 <button  onClick="document.location='{% url 'EditAdminList' user.id %}'"  {% if request.user.status %}checked{% endif %} data-toggle="modal" type="button" class="btn btn-warning">
-                  <i class="fa fa-edit"></i>
+                    <i class="fa fa-edit"></i>
                   </button>
                   
-                <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('are you sure to delete?')"   class="btn btn-danger"><i class="fa fa-remove"></i></a>
+                <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger ">
+                        <i class="fa fa-remove"></i>
+                    </a>
                   
                 </td>
               </tr>
@@ -224,7 +227,7 @@
            
         </tfoot>
     </table>
-    <script src={%static 'plugins/jquery/jquery.min.js' %}></script>
+
     
     <script>
         $(document).ready(function() {
