@@ -24,13 +24,10 @@ from itertools import zip_longest
 import csv
 from csv import reader
 import pandas as pd
-<<<<<<< HEAD
-=======
 from pathlib import Path
 import sqlite3
 import json
 
->>>>>>> nikhil
 # User movel initialization 
 User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
@@ -234,13 +231,6 @@ def CrudGenerator(request):
                     flag = 1
 
             if flag == 1:
-<<<<<<< HEAD
-                writer.writerows([data_dict.keys(), []])
-
-            writer.writerows(zip_longest(*data_dict.values()))
-            writer.writerow([])
-            messages.success(request,"Crud created successfully ")
-=======
                 data_dict['Updated_at'] = []
                 writer.writerow(data_dict.keys())
 
@@ -252,7 +242,6 @@ def CrudGenerator(request):
 
             else:
                 messages.error(request, f"The Table structure named '{data_dict['Table'][0]}' has already been defined")
->>>>>>> nikhil
         
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
@@ -375,10 +364,7 @@ def admintest(request):
     return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
 
 def filterAdminList(request):
-<<<<<<< HEAD
-=======
     module = Module.objects.all()
->>>>>>> nikhil
     user = User.objects.all()
     if(request.method =='POST'):
         all_status = request.POST.get('allstatus[]')
@@ -391,11 +377,7 @@ def filterAdminList(request):
                 user = User.objects.filter(is_active =False)
         if(admin_status):
             user = User.objects.filter(role = admin_status)
-<<<<<<< HEAD
-    return render(request,"admin/admin_test.html",{'users':user})
-=======
     return render(request,"admin/admin_test.html",{'users':user,"modules":module})
->>>>>>> nikhil
 
 def EditAdminList(request,user_id):
         module = Module.objects.all()
@@ -420,15 +402,12 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
-<<<<<<< HEAD
-=======
 def delete_admin(request,user_id):
     user = User.objects.get(id=  user_id)
     if(request.method =='GET'):
         user.delete()
         messages.success(request,"Admin deleted successfully")
         return redirect("admintest")
->>>>>>> nikhil
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html")
@@ -583,15 +562,5 @@ def check_status(tables):
     conn.commit()
     conn.close()
 
-<<<<<<< HEAD
- # <--------------------------module settings------------------------------>
-@login_required(login_url='/') 
-def module_setting(request):
-    user = User.objects.all()
-    return render(request, "roles_and_permission/module_setting.html",{"users":user})
-
-    #< --------------------------end------------------------------------->
-=======
     return ["Active" if val == 1 else "Inactive" for val in status]
 
->>>>>>> nikhil

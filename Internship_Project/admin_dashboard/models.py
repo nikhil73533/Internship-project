@@ -65,11 +65,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     
     def has_module_perms(self,app_label):
         return True
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
-=======
+
+
 # <--------------------- Settings Model ------------------------>
 class general_settings(models.Model):
     store_id = models.IntegerField(null=True)
@@ -79,7 +78,7 @@ class general_settings(models.Model):
     serilize  = models.CharField(max_length= 200, null=True)
 
 # <------------------- ENd of Code ------------------>
->>>>>>> nikhil
+
 
 # <-----------------Module Settings ------------------>
 class Module(models.Model):
@@ -90,8 +89,6 @@ class Module(models.Model):
     
 
 # <-----------------------end of code------------------>
-<<<<<<< HEAD
-=======
 # <--------------------- Settings Model ------------------------>
 class general_settings(models.Model):
     store_id = models.IntegerField(null=True)
@@ -101,6 +98,4 @@ class general_settings(models.Model):
     serilize  = models.CharField(max_length= 200, null=True)
 
 # <------------------- ENd of Code ------------------>
->>>>>>> bba0df8138ff512d3ebaf42b1ac6de4a99f0b87a
-=======
->>>>>>> nikhil
+
