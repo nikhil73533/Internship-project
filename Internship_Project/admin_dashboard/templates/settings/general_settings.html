@@ -1,6 +1,9 @@
 {% extends 'admin_dashboard/base.html' %}
 {% block body %}
 {% load static %} 
+{%block menu_items_settings%}active{%endblock%}
+{%block menu_items_setting%}active {%endblock%}
+  {%block menu_open_setting%}menu-open{%endblock%}
 <html>
 <head>
   <meta charset="utf-8">
@@ -117,8 +120,24 @@
 
                     <!-- Google reCAPTCHA Setting-->
 
-                    <div role="tabpanel" class="tab-pane" id="reCAPTCHA">
+                    <div role="tabpanel" class="tab-pane active show" id="reCAPTCHA">
 
+                        <div class="form-group">
+                            <label class="control-label">Site Key</label>
+                            <input type="text" class="form-control" name="recaptcha_site_key" placeholder="Site Key" >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Secret Key</label>
+                            <input type="text" class="form-control" name="recaptcha_secret_key" placeholder="Secret Key">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Language</label>
+                            <input type="text" class="form-control" name="recaptcha_lang" placeholder="en">
+                            <a href="https://developers.google.com/recaptcha/docs/language" target="_blank">https://developers.google.com/recaptcha/docs/language</a>
+                        </div>
+                        
                     </div>
 
                 </div>

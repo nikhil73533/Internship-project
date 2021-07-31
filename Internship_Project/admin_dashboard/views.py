@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import models
 from django.forms import fields
 from django import forms
@@ -5,6 +6,7 @@ from django.http import request
 from django.contrib.auth import get_user_model
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
+from .models import Module
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
 from django.urls.base import reverse_lazy
@@ -22,6 +24,13 @@ from itertools import zip_longest
 import csv
 from csv import reader
 import pandas as pd
+<<<<<<< HEAD
+=======
+from pathlib import Path
+import sqlite3
+import json
+
+>>>>>>> nikhil
 # User movel initialization 
 User = get_user_model()
 # <----------------------------------- Dash Board Area for creating views --------------->
@@ -205,16 +214,13 @@ def CrudList(request):
 # Crud function
 @login_required(login_url='/')  
 def CrudGenerator(request):
-
     data_dict = {}
+
     if(request.method == 'POST'):
-        Module_Name = request.POST['Module']
         Table_Name = request.POST['Table']
-        label = request.POST['label']
         name = request.POST['name']
         d_type = request.POST['d_type']
-        max_length = request.POST['length']
-
+        
         data_dict = dict(request.POST.lists())
 
         with open('CRUD.csv', 'a', newline='') as response:
@@ -228,18 +234,40 @@ def CrudGenerator(request):
                     flag = 1
 
             if flag == 1:
+<<<<<<< HEAD
                 writer.writerows([data_dict.keys(), []])
 
             writer.writerows(zip_longest(*data_dict.values()))
             writer.writerow([])
             messages.success(request,"Crud created successfully ")
+=======
+                data_dict['Updated_at'] = []
+                writer.writerow(data_dict.keys())
+
+            if flag == 1 or (flag == 0 and data_dict['Table'][0] not in list(set(pd.read_csv('CRUD.csv')['Table']))):
+                data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
+                data_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(data_dict['name'])
+                writer.writerows(zip_longest(*data_dict.values()))
+                messages.success(request, "Crud created successfully ")
+
+            else:
+                messages.error(request, f"The Table structure named '{data_dict['Table'][0]}' has already been defined")
+>>>>>>> nikhil
         
     return render(request, "admin_dashboard/CRUD/crud2.html")
 
 # Crud function 
 @login_required(login_url='/') 
 def CrudExtension(request):
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html")
+    tables = None
+
+    if Path("CRUD.csv").exists():
+        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
+
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
     
 def Addadmin(request):
     if(request.method == 'POST'):
@@ -342,16 +370,15 @@ def general_settings(request):
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
+    module = Module.objects.all()
     count = -1
-    if(request.method == 'POST'):
-        user_id = request.POST['user_id']
-        admin = User.objects.get(id = user_id)
-        all_status = request.POST['allstatus[]']
-        admin.delete()
-        messages.success(request,"Admin deleted successfully!!!")
-    return render(request,"admin/admin_test.html",{'users':user,"count":count})
+    return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
 
 def filterAdminList(request):
+<<<<<<< HEAD
+=======
+    module = Module.objects.all()
+>>>>>>> nikhil
     user = User.objects.all()
     if(request.method =='POST'):
         all_status = request.POST.get('allstatus[]')
@@ -364,23 +391,26 @@ def filterAdminList(request):
                 user = User.objects.filter(is_active =False)
         if(admin_status):
             user = User.objects.filter(role = admin_status)
+<<<<<<< HEAD
     return render(request,"admin/admin_test.html",{'users':user})
+=======
+    return render(request,"admin/admin_test.html",{'users':user,"modules":module})
+>>>>>>> nikhil
 
 def EditAdminList(request,user_id):
+        module = Module.objects.all()
         user = User.objects.all()
         count = User.objects.get(id = user_id)
-        return render(request,"admin/admin_test.html",{'users':user,"count":count})
+        return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
 
 @login_required(login_url='/') 
 def EditAdminListValue(request):
-   
     if(request.method == 'POST'):
         userid = request.POST.get('user')
         user = User.objects.get(id  = userid)
         Email = request.POST.get('email_address')
         Role = request.POST['role']
         Status = request.POST.get('status')
-        print("on ",Status)
         user.email = Email
         user.role = Role
         user.status = False
@@ -390,14 +420,170 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
+<<<<<<< HEAD
+=======
+def delete_admin(request,user_id):
+    user = User.objects.get(id=  user_id)
+    if(request.method =='GET'):
+        user.delete()
+        messages.success(request,"Admin deleted successfully")
+        return redirect("admintest")
+>>>>>>> nikhil
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html")
-# Role and Permission
+
+# <---- General Settings View --------------------------------->
+def general_settings(request):
+    return render(request, "settings/general_settings.html")
+# <------------------end of code------------------------------------------->
+# <---------------------Admin role view -------------------------------------->
+def add_new_role(request):
+    if(request.method == "POST"):
+        admin_title = request.POST["admin_role_title"]
+        status = request.POST["admin_role_status"]
+        module = Module(module_name = admin_title)
+        module.save()
+        messages.success(request,"Admin created successfully!!!!")
+    return render(request, "roles_and_permission/add_new_role.html")
+
+def edit_new_role(request,module_id):
+    module = Module.objects.get(id = module_id)
+    count = -1
+    if(request.method =="POST"):
+        admin_title = request.POST["admin_role_title"]
+        status = request.POST["admin_role_status"]
+        module.module_name = admin_title
+        module.save()
+        messages.success(request,"Admin role is updated!!")
+        return redirect("admin_roles_and_permission")
+    return render(request, "roles_and_permission/add_new_role.html",{"count":count,"module":module})
+
+def delete_role(request,module_id):
+    module = Module.objects.get(id = module_id)
+    if(request.method == "GET"):
+        module.delete()
+        messages.success(request,"Role deleted successfully!!!")
+        return redirect("admin_roles_and_permission")
+ # <--------------------------roles and permisution settings------------------------------>
+@login_required(login_url='/') 
+def module_setting(request):
+    user = User.objects.all()
+    return render(request, "roles_and_permission/module_setting.html",{"users":user})
+
+def admin_roles_and_permission(request):
+    module = Module.objects.all()
+    return render(request, "roles_and_permission/admin_roles_and_permission.html",{"modules":module})
+
 def RolePermission(request):
-    return render(request, "roles_and_permission/role_and_permissions.html")
+    return render(request,"roles_and_permission/role_and_permissions.html")
 
+    #< --------------------------end------------------------------------->
 
+# <---------------------Crud section ------------------------------------->
+
+def create_table(request, table):
+    tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+
+    if request.method == 'POST':
+
+        if check_status(table) == [1]:
+            messages.error(request,'CRUD Already Installed')
+            updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+            df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+            tables = json.loads(df.reset_index().to_json(orient = 'records'))
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+
+        df = pd.read_csv('CRUD.csv')
+        ans_df = df.loc[df['Table'] == table]
+
+        query = f"CREATE TABLE IF NOT EXISTS {table} ("
+
+        for index in range(len(ans_df)):
+            query += f"{ans_df.iloc[index, 2]} {ans_df.iloc[index, 3]}, "
+
+        query = query[ : -2] + ")"
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(query)
+        conn.commit()
+        conn.close()
+        
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        df.to_csv('CRUD.csv', index = False)
+
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
+        messages.success(request, "Crud Installed Successfully ")
+        
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+
+def drop_table(request, table):
+    tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+
+    if request.method == 'POST':
+
+        if check_status(table) == [0]:
+            messages.error(request,'CRUD Already Uninstalled')
+            updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+            df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+            tables = json.loads(df.reset_index().to_json(orient = 'records'))
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f"DROP TABLE IF EXISTS {table}")
+        conn.commit()
+        conn.close()
+
+        df = pd.read_csv('CRUD.csv')
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        df.to_csv('CRUD.csv', index = False)
+
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
+        messages.success(request, "Crud Uninstalled Successfully ")
+        
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+
+def delete_crud(request, table):
+    if request.method == 'POST':
+
+        df = pd.read_csv('CRUD.csv')
+        df.drop(df.index[(df["Table"] == table)], axis = 0, inplace = True)
+        df.to_csv('CRUD.csv', index = False)
+
+        with open('CRUD.csv', 'a', newline='') as response:
+            writer = csv.writer(response)
+            
+        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
+        messages.success(request, "Crud has been removed successfully")
+        
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+
+def check_status(tables):
+    status = []
+    conn = sqlite3.connect('CRUD.db')
+    c = conn.cursor()
+
+    if isinstance(tables, str):
+        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{tables}'")
+        return list(c.fetchone())
+
+    for table in tables:
+        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{table}'")
+        status += list(c.fetchone())
+
+    conn.commit()
+    conn.close()
+
+<<<<<<< HEAD
  # <--------------------------module settings------------------------------>
 @login_required(login_url='/') 
 def module_setting(request):
@@ -405,3 +591,7 @@ def module_setting(request):
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
 
     #< --------------------------end------------------------------------->
+=======
+    return ["Active" if val == 1 else "Inactive" for val in status]
+
+>>>>>>> nikhil
