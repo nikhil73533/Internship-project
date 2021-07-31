@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,RolePermission,calendar, admin_roles_and_permission, add_new_role, create_table, drop_table, delete_crud,filterAdminList
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,calendar, admin_roles_and_permission, add_new_role, create_table, drop_table, delete_crud,filterAdminList,edit_new_role,RolePermission,delete_role,delete_admin
 
 
 #<===== Reset Password========>
@@ -26,7 +26,14 @@ urlpatterns = [
       #<======= Add admin  page url =========>
     path('Addadmin',Addadmin,name = "Addadmin"),
 
- 
+     #<======= rolesandpermission  page url =========>
+    path('RolePermission',RolePermission,name = "RolePermission"),
+
+   #<======= Edit new role page url =========>
+    path('edit_new_role/<int:module_id>/',edit_new_role,name = "edit_new_role"),
+
+ #<======= Edit new role page url =========>
+    path('delete_role/<int:module_id>/',delete_role,name = "delete_role"),
 
 #<=======  view profile  page url =========>
     path('viewprofile',view_profile,name = "view_profile"),
@@ -34,8 +41,6 @@ urlpatterns = [
 #<=======  change password  page url =========>
     path('password/',PasswordsChangesView.as_view(template_name = "profile/change_password.html")),
 
-    #<=======  view profile  page url =========>
-    path('RolePermission',RolePermission,name = "RolePermission"),
 
      #<=======  Edit Addmin list value page url =========>
     path('EditAdminListValue',EditAdminListValue,name = "EditAdminListValue"),
@@ -50,6 +55,9 @@ urlpatterns = [
      #<=======  Edit Addmin  value page url =========>
     path('edit_admin_list/<int:user_id>/',EditAdminList,name = "EditAdminList"),
 
+     
+     #<=======  Delete Admin value page url =========>
+    path('delete_admin/<int:user_id>/',delete_admin,name = "delete_admin"),
 
       #<======= Add admin  page url =========>
     path('Addadmin',Addadmin,name = "Addadmin"),

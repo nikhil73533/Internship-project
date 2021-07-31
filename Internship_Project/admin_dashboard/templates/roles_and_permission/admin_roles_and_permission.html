@@ -16,7 +16,74 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
 
-    <style></style>
+    <!-- for data table -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+    
+
+    <style>
+          
+    /* 
+    Alert messages 
+    */
+    
+    .allert-error {
+      padding: 12px;
+      background-color: #f44336;
+      color: white;
+     
+    }
+    /* 
+    
+        /* 
+    success message 
+    */
+    .allert-success {
+      padding: 12px;
+      background-color: #469412;
+      
+      color: white;
+    }
+    .name{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      outline: none;
+      width:40%;
+      display:inline-block;
+    
+    }
+    
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .closebtn:hover {
+      color: black;
+    }
+    
+    .edit{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      outline: none;
+
+      
+    }
+    
+   
+    </style>
   </head>
 
   <body>
@@ -28,11 +95,21 @@
               <h3 class="card-title">
                 <i class="fa fa-list"></i>&nbsp; Admin Roles &amp; Permissions
               </h3>
+              
             </div>
+             {% for msg in messages %} 
+      <br> 
+    <div class="allert-{{msg.tags}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        {{msg}} 
+      </div> <br>
+                {%endfor%}
             <div class="d-inline-block float-right">
               <a  href="#" onclick="location.href='add_new_role'" class="btn btn-success">
                 <i class="fa fa-plus"></i> Add New Role
               </a>
+               
+                   
             </div>
           </div>
 
@@ -40,16 +117,16 @@
             <table id="example2" class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <th width="50">ID</th>
+                  <th>ID</th>
                   <th>Admin Role</th>
                   <th>Status</th>
                   <th>Permission</th>
-                  <th width="220">Action</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1</td>
+                  <td>0</td>
                   <td>Super Admin</td>
                   <td>
                     <div class="custom-control custom-switch">
@@ -64,9 +141,11 @@
                   </td>
                   <td></td>
                 </tr>
+                 {% for module in modules %}
                 <tr>
-                  <td>2</td>
-                  <td>Admin</td>
+               
+                  <td>{{forloop.counter}}</td>
+                  <td>{{module.module_name}}</td>
                   <td>
                     <div class="custom-control custom-switch">
                       <input type="checkbox" class="custom-control-input" id="customSwitches-2" checked>
@@ -79,83 +158,16 @@
                     </a>
                   </td>
                   <td>
-                    <a  href="#"  class="btn btn-warning btn-lg mr5">
+                    <a  href="{%url 'edit_new_role' module.id %}"  class="btn btn-warning btn-lg mr5">
                       <i class="fa fa-edit"></i>
                     </a>
-                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-lg">
+                    <a  href="{%url 'delete_role' module.id %}"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-lg">
                         <i class="fa fa-remove"></i>
                     </a>
                   </td>
+                 
                 </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Project Manager</td>
-                  <td>
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitches-3" checked>
-                      <label class="custom-control-label" for="customSwitches-3"></label>
-                    </div>
-                  </td>
-                  <td>
-                    <a  href="#"  class="btn btn-info btn-lg mr5">
-                      <i class="fa fa-sliders"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a  href="#"  class="btn btn-warning btn-lg mr5">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-lg">
-                      <i class="fa fa-remove"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Developers</td>
-                  <td>
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitches-4" checked>
-                      <label class="custom-control-label" for="customSwitches-4"></label>
-                    </div>
-                  </td>
-                  <td>
-                    <a  href="#"  class="btn btn-info btn-lg mr5">
-                      <i class="fa fa-sliders"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a  href="#"  class="btn btn-warning btn-lg mr5">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-lg">
-                      <i class="fa fa-remove"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Billing</td>
-                  <td>
-                   <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitches-5" checked>
-                      <label class="custom-control-label" for="customSwitches-5"></label>
-                    </div>
-                  </td>
-                  <td>
-                    <a  href="#"  class="btn btn-info btn-lg mr5">
-                      <i class="fa fa-sliders"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a  href="#"  class="btn btn-warning btn-lg mr5">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a  href="#"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-lg">
-                      <i class="fa fa-remove"></i>
-                    </a>
-                  </td>
-                </tr>
+                 {%endfor%}
               </tbody>
             </table>
           </div>
@@ -164,6 +176,14 @@
       <!-- /.content -->
     </div>
     <script src={%static 'plugins/jquery/jquery.min.js' %}></script>
+    <script>
+          $(document).ready(function() {
+    $('#example2').DataTable({
+        "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+        "iDisplayLength": 3
+    });
+} );
+    </script>
     {% endblock %}
   </body>
 </html>

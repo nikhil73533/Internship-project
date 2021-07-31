@@ -351,12 +351,6 @@ class PasswordsChangesView(PasswordChangeView):
 
 
 # <---------------------end ----------------------------------->
-@login_required(login_url='/') 
-def module_setting(request):
-    return render(request, "roles_and_permission/module_setting.html")
-
-def admin_roles_and_permission(request):
-    return render(request, "roles_and_permission/admin_roles_and_permission.html")
 
 @login_required(login_url='/') 
 def general_settings(request):
@@ -367,12 +361,6 @@ def admintest(request):
     user = User.objects.all()
     module = Module.objects.all()
     count = -1
-    if(request.method == 'POST'):
-        user_id = request.POST['user_id']
-        admin = User.objects.get(id = user_id)
-        all_status = request.POST['allstatus[]']
-        admin.delete()
-        messages.success(request,"Admin deleted successfully!!!")
     return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
 
 def filterAdminList(request):
@@ -405,7 +393,6 @@ def EditAdminListValue(request):
         Email = request.POST.get('email_address')
         Role = request.POST['role']
         Status = request.POST.get('status')
-        print("on ",Status)
         user.email = Email
         user.role = Role
         user.status = False
@@ -415,27 +402,60 @@ def EditAdminListValue(request):
         messages.success(request,"Admin Updated successfully!!!")
     return redirect('admintest')
 
+def delete_admin(request,user_id):
+    user = User.objects.get(id=  user_id)
+    if(request.method =='GET'):
+        user.delete()
+        messages.success(request,"Admin deleted successfully")
+        return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html")
-# Role and Permission
-def RolePermission(request):
-    return render(request, "roles_and_permission/role_and_permissions.html")
 
 # <---- General Settings View --------------------------------->
 def general_settings(request):
-
     return render(request, "settings/general_settings.html")
-
+# <------------------end of code------------------------------------------->
+# <---------------------Admin role view -------------------------------------->
 def add_new_role(request):
-
+    if(request.method == "POST"):
+        admin_title = request.POST["admin_role_title"]
+        status = request.POST["admin_role_status"]
+        module = Module(module_name = admin_title)
+        module.save()
+        messages.success(request,"Admin created successfully!!!!")
     return render(request, "roles_and_permission/add_new_role.html")
 
- # <--------------------------module settings------------------------------>
+def edit_new_role(request,module_id):
+    module = Module.objects.get(id = module_id)
+    count = -1
+    if(request.method =="POST"):
+        admin_title = request.POST["admin_role_title"]
+        status = request.POST["admin_role_status"]
+        module.module_name = admin_title
+        module.save()
+        messages.success(request,"Admin role is updated!!")
+        return redirect("admin_roles_and_permission")
+    return render(request, "roles_and_permission/add_new_role.html",{"count":count,"module":module})
+
+def delete_role(request,module_id):
+    module = Module.objects.get(id = module_id)
+    if(request.method == "GET"):
+        module.delete()
+        messages.success(request,"Role deleted successfully!!!")
+        return redirect("admin_roles_and_permission")
+ # <--------------------------roles and permisution settings------------------------------>
 @login_required(login_url='/') 
 def module_setting(request):
     user = User.objects.all()
     return render(request, "roles_and_permission/module_setting.html",{"users":user})
+
+def admin_roles_and_permission(request):
+    module = Module.objects.all()
+    return render(request, "roles_and_permission/admin_roles_and_permission.html",{"modules":module})
+
+def RolePermission(request):
+    return render(request,"roles_and_permission/role_and_permissions.html")
 
     #< --------------------------end------------------------------------->
 
@@ -524,10 +544,6 @@ def delete_crud(request, table):
         tables = json.loads(df.reset_index().to_json(orient = 'records'))
         messages.success(request, "Crud has been removed successfully")
         
-<<<<<<< HEAD
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : list(set(pd.read_csv('CRUD.csv')['Table']))})
-# <--------------------------end of code---------------------------------------------------------------------------------------->
-=======
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
 
 def check_status(tables):
@@ -548,4 +564,3 @@ def check_status(tables):
 
     return ["Active" if val == 1 else "Inactive" for val in status]
 
->>>>>>> dfde1928d30a6f4229264cb24b9af50bd0a300be

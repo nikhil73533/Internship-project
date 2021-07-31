@@ -14,6 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> {% block title %}AdminLTE 3 | AdminList{% endblock %}</title>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+       <!-- Font Awesome -->
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 
@@ -121,7 +123,7 @@
                               <input  list="browsers" class="form-control" placeholder="Add Admin Types" name="addadmintypes[]">
                                 <datalist class="add_admin" id="browsers">
                                   {% for module in modules %}
-                                  <option value="{{module}}">
+                                  <option value="{{module.module_name}}">
                                   {% endfor %}
                                 </datalist>
                               </td>
@@ -137,7 +139,7 @@
                   </div>
                  
 
-    <table id="example" class="table table-striped table-bordered" style="width:100%">
+    <table id="example" class="table table-striped table-bordered" >
         <thead>
             <tr>
                 <th>ID</th>
@@ -173,13 +175,12 @@
                     <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>
                   </div></td>
                   <td>
-                    <button type="submit" class="btn btn-warning btn-xs mr5">
+                    <button type="submit" class="btn btn-warning">
                       <i class="fa fa-edit"></i>
                     </button>
                   </form>
-                  <button  onClick="document.location='{% url 'admintest' %}'"  type="button" class="btn btn-danger btn-xs mr5">
-
-                    <i class="fas fa-window-close" ></i>
+                  <button  onClick="document.location='{% url 'admintest' %}'"  type="button" class="btn btn-danger">
+                    <i class="fa fa-remove"></i>
                   </button>
                 </td>
             </tr>
@@ -209,19 +210,11 @@
                 </div></td>
                 <td>
                   
-                  <button  onClick="document.location='{% url 'EditAdminList' user.id %}'"  {% if request.user.status %}checked{% endif %} data-toggle="modal" type="button" class="btn btn-warning btn-xs mr5">
-                    
-                    <i class="fa fa-edit"></i>
-                    
+                <button  onClick="document.location='{% url 'EditAdminList' user.id %}'"  {% if request.user.status %}checked{% endif %} data-toggle="modal" type="button" class="btn btn-warning">
+                  <i class="fa fa-edit"></i>
                   </button>
                   
-                  <form action="{{request.path}}"  method  = "POST" style="display: inline-block;">
-                    {% csrf_token%}
-                    <input type="text" name = "user_id" value = "{{user.id}}" hidden>
-                    <button  type = "submit"  class="btn btn-danger btn-xs mr5">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </form>
+                <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('are you sure to delete?')"   class="btn btn-danger"><i class="fa fa-remove"></i></a>
                   
                 </td>
               </tr>
@@ -231,7 +224,7 @@
            
         </tfoot>
     </table>
-
+    <script src={%static 'plugins/jquery/jquery.min.js' %}></script>
     
     <script>
         $(document).ready(function() {

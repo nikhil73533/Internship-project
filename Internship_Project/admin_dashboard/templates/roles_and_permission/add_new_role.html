@@ -16,7 +16,65 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
 
-    <style></style>
+    <style>
+         
+    /* 
+    Alert messages 
+    */
+    
+    .allert-error {
+      padding: 12px;
+      background-color: #f44336;
+      color: white;
+     
+    }
+    /* 
+    
+        /* 
+    success message 
+    */
+    .allert-success {
+      padding: 12px;
+      background-color: #469412;
+      
+      color: white;
+    }
+    .name{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      outline: none;
+      width:40%;
+      display:inline-block;
+    
+    }
+    
+    .closebtn {
+      margin-left: 15px;
+      color: white;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    .closebtn:hover {
+      color: black;
+    }
+    
+    .edit{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      outline: none;
+
+      
+    }
+    
+   
+    </style>
   </head>
 
   <body>
@@ -39,12 +97,54 @@
                 <div class="col-md-12">
                   <div class="box">
                     <!-- form start -->
+                     {% for msg in messages %} 
+      <br> 
+    <div class="allert-{{msg.tags}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        {{msg}}
+      </div> <br>
+                {%endfor%}
                     <div class="box-body">
 
-    
-                    <form>
-                               
- 
+              {% if count %}
+            <form action = "{{request.path}}" method = "POST" >{%csrf_token%}       
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Admin Role</label>
+                                    {% if module %}
+                                      `<input class="form-control" type="text" name="admin_role_title" value="{{module.module_name}}" required="">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Admin Role Status</label>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="admin_role_status" value="1" checked="checked">
+                                            Active
+                                        </label>
+                                        &nbsp;&nbsp;
+                                        <label>
+                                            <input type="radio" name="admin_role_status" value="0">
+                                            Inactive
+                                        </label>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <input type="hidden" name="submit" value="submit">
+                        <button type="submit" class="btn btn-success pull-right">Edit</button>
+                    </div>
+                    </form>
+
+              {% else %}
+                    <form action = "{{request.path}}" method = "POST" >{%csrf_token%}
+                            
                     <div class="box-body">
                         <div class="row">
                             <div class="col-sm-4">
@@ -73,9 +173,10 @@
                     </div>
                     <div class="box-footer">
                         <input type="hidden" name="submit" value="submit">
-                        <button type="submit" class="btn btn-success pull-right">Submit</button>
+                        <button type="submit" class="btn btn-success pull-right">Create</button>
                     </div>
                     </form>
+                {% endif %}
                 </div>
             </div>
         </div>
