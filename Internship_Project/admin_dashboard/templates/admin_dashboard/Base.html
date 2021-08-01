@@ -733,13 +733,21 @@
               </li>
             </ul>
           </li>
-          <li class="nav-header">MISCELLANEOUS</li>
+
+          <li class="nav-header">Installed CRUD</li>
+          {% if tables %}
+          {% for table in tables %}
+          {% if table.status == "Active" %}
           <li class="nav-item">
             <a href="{% url 'CrudList'%}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
-              <p>Crud 1</p>
+              <p> {{table.name}} </p>
             </a>
           </li>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+
           <li class="nav-header">MULTI LEVEL EXAMPLE</li>
           <li class="nav-item">
             <a href="#" class="nav-link">
