@@ -36,25 +36,26 @@ User = get_user_model()
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
     count =  User.objects.all().count()
-    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user,"count":count})
+
+    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user,"count":count, 'tables' : installed_tables()})
 
 # DashBoard 2 view in  home page
 @login_required(login_url='/') 
 def DashBoardTwo(request):
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/DashBoard_2.html',{'user':user})
+    return render(request,'admin_dashboard/DashBoard_2.html',{'user':user, 'tables' : installed_tables()})
 
 # DashBoard 3 view in  home page
 @login_required(login_url='/') 
 def DashBoardThree(request):
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/DashBoard_3.html',{'user':user})
+    return render(request,'admin_dashboard/DashBoard_3.html',{'user':user, 'tables' : installed_tables()})
 
 
 # DashBoard calander 
 @login_required(login_url='/') 
 def calander(request):
-    return render(request,'admin_dashboard/pages/calendar.html')
+    return render(request,'admin_dashboard/pages/calendar.html', {'tables' : installed_tables()})
 # <------------------------------------ End of Area------------------------------>
 
 
@@ -206,7 +207,7 @@ class Login_View(View):
 # Crud function 
 @login_required(login_url='/') 
 def CrudList(request):
-    return render(request, "admin_dashboard/CRUD/crud1.html")
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables()})
 
 # Crud function
 @login_required(login_url='/')  
@@ -238,25 +239,17 @@ def CrudGenerator(request):
                 data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
                 data_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(data_dict['name'])
                 writer.writerows(zip_longest(*data_dict.values()))
-                messages.success(request, "Crud created successfully ")
+                messages.success(request, f"Crud {Table_Name} has been created successfully ")
 
             else:
                 messages.error(request, f"The Table structure named '{data_dict['Table'][0]}' has already been defined")
         
-    return render(request, "admin_dashboard/CRUD/crud2.html")
+    return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
 
 # Crud function 
 @login_required(login_url='/') 
 def CrudExtension(request):
-    tables = None
-
-    if Path("CRUD.csv").exists():
-        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
-        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
-        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
-        tables = json.loads(df.reset_index().to_json(orient = 'records'))
-
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
     
 def Addadmin(request):
     if(request.method == 'POST'):
@@ -308,7 +301,7 @@ def Addadmin(request):
             return render(request, "admin/add_admin.html")
     else:
         # return templage to dom using render function
-        return render(request, "admin/add_admin.html")
+        return render(request, "admin/add_admin.html", {'tables' : installed_tables()})
 
      
     
@@ -330,7 +323,7 @@ def view_profile(request):
         user.save()
         messages.success(request,"Profile is updated successuflly")
  
-    return render(request, "profile/view_profile.html",{'user':user})
+    return render(request, "profile/view_profile.html",{'user':user, 'tables' : installed_tables()})
 
 
 # <---- class based views --------------------------------->
@@ -354,14 +347,14 @@ class PasswordsChangesView(PasswordChangeView):
 
 @login_required(login_url='/') 
 def general_settings(request):
-    return render(request, "settings/general_settings.html")
+    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
     module = Module.objects.all()
     count = -1
-    return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
+    return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module, 'tables' : installed_tables()})
 
 def filterAdminList(request):
     module = Module.objects.all()
@@ -377,13 +370,13 @@ def filterAdminList(request):
                 user = User.objects.filter(is_active =False)
         if(admin_status):
             user = User.objects.filter(role = admin_status)
-    return render(request,"admin/admin_test.html",{'users':user,"modules":module})
+    return render(request,"admin/admin_test.html",{'users':user,"modules":module, 'tables' : installed_tables()})
 
 def EditAdminList(request,user_id):
         module = Module.objects.all()
         user = User.objects.all()
         count = User.objects.get(id = user_id)
-        return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module})
+        return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module, 'tables' : installed_tables()})
 
 @login_required(login_url='/') 
 def EditAdminListValue(request):
@@ -410,11 +403,11 @@ def delete_admin(request,user_id):
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
-    return render(request,"admin_dashboard/pages/calendar.html")
+    return render(request,"admin_dashboard/pages/calendar.html", {'tables' : installed_tables()})
 
 # <---- General Settings View --------------------------------->
 def general_settings(request):
-    return render(request, "settings/general_settings.html")
+    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
 # <------------------end of code------------------------------------------->
 # <---------------------Admin role view -------------------------------------->
 def add_new_role(request):
@@ -424,7 +417,7 @@ def add_new_role(request):
         module = Module(module_name = admin_title)
         module.save()
         messages.success(request,"Admin created successfully!!!!")
-    return render(request, "roles_and_permission/add_new_role.html")
+    return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables()})
 
 def edit_new_role(request,module_id):
     module = Module.objects.get(id = module_id)
@@ -436,7 +429,7 @@ def edit_new_role(request,module_id):
         module.save()
         messages.success(request,"Admin role is updated!!")
         return redirect("admin_roles_and_permission")
-    return render(request, "roles_and_permission/add_new_role.html",{"count":count,"module":module})
+    return render(request, "roles_and_permission/add_new_role.html",{"count":count,"module":module, 'tables' : installed_tables()})
 
 def delete_role(request,module_id):
     module = Module.objects.get(id = module_id)
@@ -448,30 +441,25 @@ def delete_role(request,module_id):
 @login_required(login_url='/') 
 def module_setting(request):
     user = User.objects.all()
-    return render(request, "roles_and_permission/module_setting.html",{"users":user})
+    return render(request, "roles_and_permission/module_setting.html",{"users":user, 'tables' : installed_tables()})
 
 def admin_roles_and_permission(request):
     module = Module.objects.all()
-    return render(request, "roles_and_permission/admin_roles_and_permission.html",{"modules":module})
+    return render(request, "roles_and_permission/admin_roles_and_permission.html",{"modules":module, 'tables' : installed_tables()})
 
 def RolePermission(request):
-    return render(request,"roles_and_permission/role_and_permissions.html")
+    return render(request,"roles_and_permission/role_and_permissions.html", {'tables' : installed_tables()})
 
     #< --------------------------end------------------------------------->
 
 # <---------------------Crud section ------------------------------------->
 
 def create_table(request, table):
-    tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
-
     if request.method == 'POST':
 
         if check_status(table) == [1]:
-            messages.error(request,'CRUD Already Installed')
-            updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
-            df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
-            tables = json.loads(df.reset_index().to_json(orient = 'records'))
-            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+            messages.error(request,'CRUD {table} is already installed')
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         df = pd.read_csv('CRUD.csv')
         ans_df = df.loc[df['Table'] == table]
@@ -492,24 +480,16 @@ def create_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
-        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
-        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
-        tables = json.loads(df.reset_index().to_json(orient = 'records'))
-        messages.success(request, "Crud Installed Successfully ")
+        messages.success(request, f"Crud {table} has been installed successfully ")
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
 def drop_table(request, table):
-    tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
-
     if request.method == 'POST':
 
         if check_status(table) == [0]:
             messages.error(request,'CRUD Already Uninstalled')
-            updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
-            df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
-            tables = json.loads(df.reset_index().to_json(orient = 'records'))
-            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
@@ -521,15 +501,16 @@ def drop_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
-        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
-        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
-        tables = json.loads(df.reset_index().to_json(orient = 'records'))
-        messages.success(request, "Crud Uninstalled Successfully ")
+        messages.success(request, f"Crud {table} has been uninstalled successfully ")
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
 def delete_crud(request, table):
     if request.method == 'POST':
+
+        if check_status(table) == [1]:
+            messages.error(request,f"The CRUD {table} that you want to delete is still installed ")
+            return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         df = pd.read_csv('CRUD.csv')
         df.drop(df.index[(df["Table"] == table)], axis = 0, inplace = True)
@@ -537,14 +518,9 @@ def delete_crud(request, table):
 
         with open('CRUD.csv', 'a', newline='') as response:
             writer = csv.writer(response)
+            messages.success(request, f"Crud {table} has been deleted successfully ")
             
-        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
-        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
-        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
-        tables = json.loads(df.reset_index().to_json(orient = 'records'))
-        messages.success(request, "Crud has been removed successfully")
-        
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : tables})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
 def check_status(tables):
     status = []
@@ -563,4 +539,15 @@ def check_status(tables):
     conn.close()
 
     return ["Active" if val == 1 else "Inactive" for val in status]
+
+def installed_tables():
+    tables = None
+
+    if Path("CRUD.csv").exists():
+        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
+        tables = json.loads(df.reset_index().to_json(orient = 'records'))
+
+    return tables
 
