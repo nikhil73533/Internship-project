@@ -207,8 +207,26 @@ class Login_View(View):
 
 # Crud function 
 @login_required(login_url='/') 
-def CrudList(request):
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables()})
+def CrudList(request, table):
+    df = None
+    columns = None
+
+    if not table.startswith('{'):
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        cursor = c.execute(f"SELECT * FROM {table}")
+
+        columns = [names[0] for names in cursor.description]
+        rows = cursor.fetchall() 
+
+        conn.commit()
+        conn.close()
+
+        if rows == []:
+            rows = None
+        df = pd.DataFrame(rows)       
+        
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : df, 'columns' : columns, 'tname' : table})
 
 # Crud function
 @login_required(login_url='/')  

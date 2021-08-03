@@ -65,7 +65,7 @@ urlpatterns = [
     
 
     #<======= Crud part 1 page url =========>
-    path('Crudlist',CrudList,name = "CrudList"),
+    path('Crudlist/<str:table>', CrudList, name = "CrudList"),
     
     #<======= Crud part 2 page url =========>
     path('CrudGenerator',CrudGenerator,name = "CrudGenerator"),

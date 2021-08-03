@@ -736,19 +736,33 @@
             </ul>
           </li>
 
-          <li class="nav-header">Installed CRUD</li>
-          {% if tables %}
-          {% for table in tables %}
-          {% if table.status == "Active" %}
-          <li class="nav-item">
-            <a href="{% url 'CrudList'%}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p> {{table.name}} </p>
+          <p></p>
+          <li class="nav-item has-treeview {% block menu_open_cruds %}{% endblock %}">
+            <a href="#" class="nav-link {%block menu_items_cruds %}{% endblock %}">
+              <p>
+                Installed CRUD's
+                <i class="fas fa-angle-left right"></i>
+              </p>
             </a>
+
+            {% if tables %}
+              {% for table in tables %}
+                {% if table.status == "Active" %}
+
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'CrudList' table.name %}" class="nav-link">
+                      <i class="nav-icon fas fa-file"></i>
+                      <p> {{table.name}} </p>
+                    </a>
+                  </li>
+                </ul>
+
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            
           </li>
-          {% endif %}
-          {% endfor %}
-          {% endif %}
 
           <li class="nav-header">MULTI LEVEL EXAMPLE</li>
           <li class="nav-item">
