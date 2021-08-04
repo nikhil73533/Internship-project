@@ -109,6 +109,13 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
+      {% for msg in messages %} 
+        <br> 
+        <div class="allert-{{msg.tags}}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+          {{msg}}
+        </div> <br>
+      {%endfor%}
     </div>
     <!-- /.content-header -->
 
@@ -126,7 +133,7 @@
      
      <div class="col-sm-6">
       <a href="#addModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Member</span></a>
-      <a href="#deleteModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete All</span></a>      
+      <a href="{% url 'delete_all' tname %}" class="btn btn-danger"><i class="material-icons">&#xE15C;</i> <span>Delete All</span></a>      
      </div>
                 </div>
             </div>

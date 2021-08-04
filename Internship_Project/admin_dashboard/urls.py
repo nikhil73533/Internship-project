@@ -3,7 +3,7 @@ from django.urls import path
 
 #<==== Importing function from views of admin dashboard =======>
 
-from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,calendar, admin_roles_and_permission, add_new_role, create_table, drop_table, delete_crud,filterAdminList,edit_new_role,RolePermission,delete_role,delete_admin
+from .views import DashBoardThree, Login, Register, Verification, Login_View,DashBoard,LogOut,DashBoardTwo,DashBoardThree,Addadmin,admintest,view_profile,Login,CrudExtension,CrudGenerator,CrudList,PasswordsChangesView, module_setting,EditAdminListValue, general_settings,EditAdminList,calendar, admin_roles_and_permission, add_new_role, create_table, drop_table, delete_crud,filterAdminList,edit_new_role,RolePermission,delete_role,delete_admin, delete_all
 
 
 #<===== Reset Password========>
@@ -114,5 +114,7 @@ urlpatterns = [
     path('drop_table/<str:table>', drop_table, name = "drop_table"),
 
     path('delete_crud/<str:table>', delete_crud, name = "delete_crud"),
+
+    path('delete_all/<str:table>', delete_all, name = "delete_all"),
 ]
 

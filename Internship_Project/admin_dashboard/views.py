@@ -208,25 +208,26 @@ class Login_View(View):
 # Crud function 
 @login_required(login_url='/') 
 def CrudList(request, table):
-    df = None
+    rows = None
     columns = None
 
     if not table.startswith('{'):
+        df = pd.read_csv('CRUD.csv')
+        columns = list(df.loc[(df["Table"] == table), 'name'])
+
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        cursor = c.execute(f"SELECT * FROM {table}")
-
-        columns = [names[0] for names in cursor.description]
-        rows = cursor.fetchall() 
+        c.execute(f"SELECT * FROM {table}")
+        data = c.fetchall() 
 
         conn.commit()
         conn.close()
 
-        if rows == []:
-            rows = None
-        df = pd.DataFrame(rows)       
+        if data == []:
+            data = None
+        rows = pd.DataFrame(data)       
         
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : df, 'columns' : columns, 'tname' : table})
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
 # Crud function
 @login_required(login_url='/')  
@@ -574,3 +575,32 @@ def installed_tables():
 
     return tables
 
+def delete_all(request, table):
+    rows = None
+    columns = None
+
+    if not table.startswith('{'):
+        df = pd.read_csv('CRUD.csv')
+        columns = list(df.loc[(df["Table"] == table), 'name'])
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f"SELECT count(*) FROM (select 0 from {table} limit 1)")
+
+        if (list(c.fetchone()) == [0]):
+            conn.commit()
+            conn.close()
+            messages.error(request, f'The CRUD {table} is already empty')
+            return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
+        c.execute(f"DELETE FROM {table}")
+        conn.commit()
+        c.execute(f"SELECT * FROM {table}")
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        
+    messages.success(request, f"Data deleted from CRUD {table} successfully")
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+  
