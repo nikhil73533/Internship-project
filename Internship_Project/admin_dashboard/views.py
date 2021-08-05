@@ -1,9 +1,8 @@
 import datetime
-from django.contrib.auth import models
+from django.contrib.auth import models, get_user_model
 from django.forms import fields
 from django import forms
 from django.http import request
-from django.contrib.auth import get_user_model
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
 from .models import Module
@@ -213,7 +212,7 @@ def CrudList(request, table):
 
     if not table.startswith('{'):
         df = pd.read_csv('CRUD.csv')
-        columns = list(df.loc[(df["Table"] == table), 'name'])
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
@@ -241,6 +240,10 @@ def CrudGenerator(request):
         
         data_dict = dict(request.POST.lists())
 
+        if len(set(data_dict['name'])) != len(data_dict['d_type']):
+            messages.error(request, f"Two or more fields have the same name, all fields must have a unique name")
+            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+
         with open('CRUD.csv', 'a', newline='') as response:
             flag = 0
             writer = csv.writer(response)
@@ -259,10 +262,10 @@ def CrudGenerator(request):
                 data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
                 data_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(data_dict['name'])
                 writer.writerows(zip_longest(*data_dict.values()))
-                messages.success(request, f"Crud {Table_Name} has been created successfully ")
+                messages.success(request, f"CRUD {Table_Name} has been created successfully")
 
             else:
-                messages.error(request, f"The Table structure named '{data_dict['Table'][0]}' has already been defined")
+                messages.error(request, f"The CRUD structure named '{data_dict['Table'][0]}' has already been defined")
         
     return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
 
@@ -373,7 +376,7 @@ def general_settings(request):
         application_name = request.POST['application_name']
         timezone = request.POST['timezone']
         language = request.POST['language']
-    return render(request, "settings/general_settings.html", {'tables' : installed_tables})
+    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
 
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
@@ -482,13 +485,13 @@ def create_table(request, table):
     if request.method == 'POST':
 
         if check_status(table) == [1]:
-            messages.error(request,'CRUD {table} is already installed')
+            messages.error(request,f"CRUD {table} is already installed")
             return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         df = pd.read_csv('CRUD.csv')
         ans_df = df.loc[df['Table'] == table]
 
-        query = f"CREATE TABLE IF NOT EXISTS {table} ("
+        query = f"CREATE TABLE IF NOT EXISTS {table} (ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 
         for index in range(len(ans_df)):
             query += f"{ans_df.iloc[index, 2]} {ans_df.iloc[index, 3]}, "
@@ -504,7 +507,7 @@ def create_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
-        messages.success(request, f"Crud {table} has been installed successfully ")
+        messages.success(request, f"CRUD {table} has been installed successfully")
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
@@ -512,7 +515,7 @@ def drop_table(request, table):
     if request.method == 'POST':
 
         if check_status(table) == [0]:
-            messages.error(request,'CRUD Already Uninstalled')
+            messages.error(request,f"CRUD {table} is already uninstalled")
             return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         conn = sqlite3.connect('CRUD.db')
@@ -525,7 +528,7 @@ def drop_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
-        messages.success(request, f"Crud {table} has been uninstalled successfully ")
+        messages.success(request, f"CRUD {table} has been uninstalled successfully")
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
@@ -533,7 +536,7 @@ def delete_crud(request, table):
     if request.method == 'POST':
 
         if check_status(table) == [1]:
-            messages.error(request,f"The CRUD {table} that you want to delete is still installed ")
+            messages.error(request,f"The CRUD {table} that you want to delete is still installed")
             return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         df = pd.read_csv('CRUD.csv')
@@ -542,7 +545,7 @@ def delete_crud(request, table):
 
         with open('CRUD.csv', 'a', newline='') as response:
             writer = csv.writer(response)
-            messages.success(request, f"Crud {table} has been deleted successfully ")
+            messages.success(request, f"CRUD {table} has been deleted successfully")
             
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
@@ -579,9 +582,9 @@ def delete_all(request, table):
     rows = None
     columns = None
 
-    if not table.startswith('{'):
+    if request.method == 'POST':
         df = pd.read_csv('CRUD.csv')
-        columns = list(df.loc[(df["Table"] == table), 'name'])
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
@@ -590,17 +593,44 @@ def delete_all(request, table):
         if (list(c.fetchone()) == [0]):
             conn.commit()
             conn.close()
-            messages.error(request, f'The CRUD {table} is already empty')
+            messages.error(request, f"CRUD {table} is already empty")
             return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
         c.execute(f"DELETE FROM {table}")
         conn.commit()
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds')) 
         c.execute(f"SELECT * FROM {table}")
         rows = pd.DataFrame(c.fetchall())
 
         conn.commit()
         conn.close()
+        df.to_csv('CRUD.csv', index = False)
+        messages.success(request, f"All the data has been deleted from CRUD {table} successfully")
         
-    messages.success(request, f"Data deleted from CRUD {table} successfully")
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+    
+def delete_row(request, table, row_id):
+    rows = None
+    columns = None
+
+    if not table.startswith('{'):
+        df = pd.read_csv('CRUD.csv')
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f"DELETE FROM {table} WHERE ID = {row_id}")
+        conn.commit()
+
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds')) 
+        c.execute(f"SELECT * FROM {table}")
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        df.to_csv('CRUD.csv', index = False)
+
+    messages.success(request, f"Row No. {row_id} has been deleted from CRUD {table} successfully")
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
   
