@@ -38,7 +38,7 @@
                     General Settings </h3>
               </div>
             </div>
-            <form>
+            <form action="{%url 'general_settings'%}" method='post'> {% csrf_token %}
             <div class="card-body">   
                 <input type="hidden" name="csrf_test_name" value="">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -55,7 +55,7 @@
                 <div class="tab-content">
                     <!-- General Setting -->
                     <div role="tabpanel" class="tab-pane active show" id="main" method = "post" action = "/set">
-                        <div class="form-group">
+                        <div class="form-group" >
                             <label class="control-label">Favicon</label><br>
                                <p><img src="https://www.tailorbrands.com/wp-content/uploads/2020/03/Superman.jpg" height="50px" class="favicon"></p>
                            <input type="file" name="favicon" accept=".png, .jpg, .jpeg, .gif, .svg">
@@ -80,7 +80,7 @@
 
                         <div class="form-group">
                             <label for="exampleFormControlSelect1">Default Language</label>
-                            <select class="form-control" id="exampleFormControlSelect1" name="lanuage" placeholder="lanuage" value="English">
+                            <select class="form-control" id="exampleFormControlSelect1" name="language" placeholder="language" value="English">
                                 <option>English</option>
                                 <option>Hindi</option>
                                 <option>French</option>

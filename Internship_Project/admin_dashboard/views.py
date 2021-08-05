@@ -89,6 +89,7 @@ def Login(request):
     else:
         return render(request,'accounts/login.html')
 
+
 # Register view  for register page
 def Register(request):
     if(request.method == 'POST'):
@@ -186,7 +187,7 @@ class Verification(View):
             user.is_active = True
             user.save()
 
-            if not Token_Generator.check_token(user, token):
+            if not token_generator.check_token(user, token):
                 return redirect('Login' + '?message=' + 'User already has an active account')
 
             if user.is_active:
@@ -206,8 +207,27 @@ class Login_View(View):
 
 # Crud function 
 @login_required(login_url='/') 
-def CrudList(request):
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables()})
+def CrudList(request, table):
+    rows = None
+    columns = None
+
+    if not table.startswith('{'):
+        df = pd.read_csv('CRUD.csv')
+        columns = list(df.loc[(df["Table"] == table), 'name'])
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f"SELECT * FROM {table}")
+        data = c.fetchall() 
+
+        conn.commit()
+        conn.close()
+
+        if data == []:
+            data = None
+        rows = pd.DataFrame(data)       
+        
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
 # Crud function
 @login_required(login_url='/')  
@@ -345,9 +365,16 @@ class PasswordsChangesView(PasswordChangeView):
 
 # <---------------------end ----------------------------------->
 
+# <---------------------General Settings  ----------------------------------->
+
 @login_required(login_url='/') 
 def general_settings(request):
-    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
+    if(request.method == 'POST'):
+        application_name = request.POST['application_name']
+        timezone = request.POST['timezone']
+        language = request.POST['language']
+    return render(request, "settings/general_settings.html", {'tables' : installed_tables})
+
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):
@@ -405,9 +432,6 @@ def delete_admin(request,user_id):
 def calendar(request):
     return render(request,"admin_dashboard/pages/calendar.html", {'tables' : installed_tables()})
 
-# <---- General Settings View --------------------------------->
-def general_settings(request):
-    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
 # <------------------end of code------------------------------------------->
 # <---------------------Admin role view -------------------------------------->
 def add_new_role(request):
@@ -551,3 +575,32 @@ def installed_tables():
 
     return tables
 
+def delete_all(request, table):
+    rows = None
+    columns = None
+
+    if not table.startswith('{'):
+        df = pd.read_csv('CRUD.csv')
+        columns = list(df.loc[(df["Table"] == table), 'name'])
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f"SELECT count(*) FROM (select 0 from {table} limit 1)")
+
+        if (list(c.fetchone()) == [0]):
+            conn.commit()
+            conn.close()
+            messages.error(request, f'The CRUD {table} is already empty')
+            return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
+        c.execute(f"DELETE FROM {table}")
+        conn.commit()
+        c.execute(f"SELECT * FROM {table}")
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        
+    messages.success(request, f"Data deleted from CRUD {table} successfully")
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+  

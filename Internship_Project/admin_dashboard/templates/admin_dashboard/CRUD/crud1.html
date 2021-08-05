@@ -1,7 +1,9 @@
 {% extends 'admin_dashboard/base.html' %}
-    {% block body %}
-  {%  load static %} 
-{%block menu_items_crud_1%}active{%endblock%}
+{% block body %}
+{% load static %} 
+{% block menu_open_cruds %}menu-open{% endblock %}
+{% block menu_items_cruds %}active{% endblock %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +19,77 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
     <link rel = "stylesheet" href={% static 'css/admin_dashboard/crud1.css' %}>
+
+  <script>
+    function search() {
+      var input, filter, table, tr, td, txt;
+
+      input = document.getElementById("search_box");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("data_table");
+      tr = table.getElementsByTagName("tr");
+    
+      for (var i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        
+        if (td) {
+          txt = td.textContent || td.innerText;
+          if (txt.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
 </head>
+
+<style>
+        
+  /* 
+  Alert messages 
+  */
+  
+  .allert-error {
+    padding: 12px;
+    background-color: #f44336;
+    color: white;
+  } 
+  
+      /* 
+  success message 
+  */
+  .allert-success {
+    padding: 12px;
+    background-color: #469412;
+    color: white;
+  }
+  
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .closebtn:hover {
+    color: black;
+  }
+  
+  .edit{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    outline: none; 
+  }
+  
+</style>
+
 <body>
 
  <!-- Content Wrapper. Contains page content -->
@@ -27,7 +99,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">CRUD</h1>
+            <h1 class="m-0 text-dark">CRUD : {{tname}} </h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -37,57 +109,59 @@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
+      {% for msg in messages %} 
+        <br> 
+        <div class="allert-{{msg.tags}}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+          {{msg}}
+        </div> <br>
+      {%endfor%}
     </div>
     <!-- /.content-header -->
 
     <div class="container" style="width: 977px;">
+      <div class="search-box">
+        <i class="material-icons">&#xE8B6;</i>
+        <input type="text" class="form-control" id="search_box" onkeyup="search()" placeholder="Search&hellip;">
+      </div>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-      <h2>Manage <b>Employees</b></h2>
+      <h2>Table Data : </h2>
      </div>
+     
      <div class="col-sm-6">
       <a href="#addModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Member</span></a>
-      <a href="#deleteModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>      
+      <a href="{% url 'delete_all' tname %}" class="btn btn-danger"><i class="material-icons">&#xE15C;</i> <span>Delete All</span></a>      
      </div>
                 </div>
             </div>
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-      <th>
-       <span class="custom-checkbox">
-        <input type="checkbox" id="selectAll">
-        <label for="selectAll"></label>
-       </span>
-      </th>
-                        <th>Name</th>
-                        <th>Email</th>
-      <th>Address</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>    
+
+      <table class="table table-striped table-hover table-bordered" id="data_table">
         <tr>
-        <td>
-            <span class="custom-checkbox">
-            <input type="checkbox" id="checkbox5" name="options[]" value="1">
-            <label for="checkbox5"></label>
-            </span>
-        </td>
-            <td>Soeng Souy</td>
-            <td>soengsouy@mail.com</td>
-            <td>Via Monte Bianco 34, Turin, Pursat</td>
-                <td>0966686375</td>
-                    <td>
-                        <a href="#editModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#deleteModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr> 
-            </tbody>
-            </table>
+          {% for column_name in columns %}
+            <th style="width: fit-content;"> {{column_name}} </th>
+          {% endfor %}
+            <th style="width: fit-content;"> Actions </th>
+
+          {% for _, row in rows.iterrows %}    
+            <tr>
+              {% for values in row %}
+                <td style="width: fit-content;"> {{values}} </td>
+              {% endfor %}
+
+              <td style="width: fit-content;">
+                <a href="#deleteModal" class="delete" data-toggle="modal">
+                  <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+
+        </tr> 
+      </table>
+
    <div class="clearfix">
                 <div class="hint-text">Showing <b>5</b> out of <b>100</b> entries</div>
                 <ul class="pagination">

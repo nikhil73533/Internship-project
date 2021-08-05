@@ -24,7 +24,8 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed" >
+
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -159,7 +160,8 @@
     <a href="index3.html" class="brand-link">
       <img src={% static 'dist/img/AdminLTELogo.png' %} alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">Admin Lite </span>
+      <span class="brand-text font-weight-light">AdminFun
+      </span>
     </a>
 
     <!-- Sidebar -->
@@ -734,19 +736,33 @@
             </ul>
           </li>
 
-          <li class="nav-header">Installed CRUD</li>
-          {% if tables %}
-          {% for table in tables %}
-          {% if table.status == "Active" %}
-          <li class="nav-item">
-            <a href="{% url 'CrudList'%}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p> {{table.name}} </p>
+          <p></p>
+          <li class="nav-item has-treeview {% block menu_open_cruds %}{% endblock %}">
+            <a href="#" class="nav-link {%block menu_items_cruds %}{% endblock %}">
+              <p>
+                Installed CRUD's
+                <i class="fas fa-angle-left right"></i>
+              </p>
             </a>
+
+            {% if tables %}
+              {% for table in tables %}
+                {% if table.status == "Active" %}
+
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'CrudList' table.name %}" class="nav-link">
+                      <i class="nav-icon fas fa-file"></i>
+                      <p> {{table.name}} </p>
+                    </a>
+                  </li>
+                </ul>
+
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            
           </li>
-          {% endif %}
-          {% endfor %}
-          {% endif %}
 
           <li class="nav-header">MULTI LEVEL EXAMPLE</li>
           <li class="nav-item">
