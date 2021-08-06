@@ -1,0 +1,161 @@
+{% extends 'admin_dashboard/base.html' %}
+{% block body %}
+{% load static %} 
+{% block menu_open_cruds %}menu-open{% endblock %}
+{% block menu_items_cruds %}active{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %}AdminLTE 3 | Insert Record{% endblock %}</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel = "stylesheet" href="../../../static/css/admin_dashboard/CRUD_Insert.css">
+
+    
+<style>
+  
+
+    
+/* 
+Alert messages 
+*/
+
+.allert-error {
+  padding: 12px;
+  background-color: #f44336;
+  color: white;
+ 
+}
+/* 
+
+    /* 
+success message 
+*/
+.allert-success {
+  padding: 12px;
+  background-color: #469412;
+  
+  color: white;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+  </style>
+
+</head>
+<body>
+  <!-- Content Wrapper. Contains page content -->
+  <form action="{%url 'insert_record' tname %}" method='post'>{% csrf_token %}
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0 text-dark">Insert Record : {{tname}}</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'DashBoard'%}">Home</a></li>
+                <li class="breadcrumb-item active">CRUD Insert Record</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+
+        {% for msg in messages %} 
+
+          <br> 
+          <div class="allert-{{msg.tags}}">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            {{msg}}
+          </div> <br>
+
+        {%endfor%} 
+
+      </div>
+      <!-- /.content-header -->
+
+
+      <div class = "mcontainer" style = "position:absolute; right:40px;">
+        <div class = "container1">
+          <div class = "form1">
+
+            {% for column in table %}
+
+              <h5 class="m-0 text-dark">Column Title : {{column.name}}</h5> <br>
+              <div class = "input-box">
+
+              {% if column.f_type == "TEXT" %}
+                <input type = "text" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+              {% endif %}
+
+              {% if column.f_type == "TEXTAREA" %}
+                <textarea style="font-size: 15px;" placeholder="Enter data" rows="6" cols="150" style="resize:vertical" name="column_values" required></textarea>
+              {% endif %}
+
+              {% if column.f_type == "PASSWORD" %}
+                <input type="password" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+              {% endif %}
+
+              {% if column.f_type == "DATE" %}
+                <input type="date" style="width: 15em;" name="column_values" required>
+              {% endif %}
+
+              {% if column.f_type == "DATETIME" %}
+                <input type="datetime-local" style="width: 15em;" name="column_values" required>
+              {% endif %}
+
+              {% if column.f_type == "EMAIL" %}
+                <input type="email" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+              {% endif %}
+
+              {% if column.f_type == "NUMBER" %}
+                <input type="number" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+              {% endif %}
+
+              {% if column.f_type == "URL" %}
+                <input type="url" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required> 
+              {% endif %}
+
+              </div>
+
+              <br><br>
+              <hr style="width: 100%;border: .5px solid black;"><br>
+
+            {% endfor %}
+  
+          </div>
+          
+              <div class = "button" style="text-align:center">
+                <input type = "submit" value = "Insert Record">
+              </div>
+        </div>
+      </div> 
+
+  </form>
+             
+  {% endblock %}
+        
+</body>
+</html>

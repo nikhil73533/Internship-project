@@ -1,0 +1,104 @@
+
+body {
+   
+    color: #0a0908;
+    background: #fafaf9;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 13px;
+}
+.mcontainer{
+  width: 80%;
+  padding: 60px 20px;
+  color: rgb(10, 10, 10);
+  border:5px solid rgb(146, 228, 228);
+}
+.container .title::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 30px;
+  background: green;
+}
+.container{
+  width: 100%;
+  padding: 25px 30px;
+  color: rgb(10, 10, 10);
+  border:3px solid black;
+}
+.container1{
+  width: 100%;
+  padding: 25px 30px;
+  color: rgb(10, 10, 10);
+  border:3px solid black;
+  background: white;
+}
+.container2{
+  width: 100%;
+  padding: 25px 30px;
+  color: rgb(10, 10, 10);
+  border:3px solid black;
+  background: white;
+}
+.btnn{ 
+  float: right;
+}
+.btnn{
+  height: 65%;
+  width: 10%;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 21px;
+  letter-spacing: 1px;
+  outline: none;
+  color: #fff;
+  border: none;
+  /* background: rgb(241, 112, 73); */
+}
+.button{ 
+  height: 90%;
+  width: 13%;
+  float: right;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  outline: none;
+  color: #fff;
+  border: none;
+}
+.user-details .input-box .details{
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.user-details .input-box input{
+    height: 35px;
+    width: 20%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding-left: 15px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+form .button{
+    height: 50px;
+    margin: 45px;
+}
+form .button input{
+  height: 65%;
+  width: 150%;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 21px;
+  letter-spacing: 1px;
+  outline: none;
+  color: #fff;
+  border: none;
+  background: rgb(5, 219, 59);
+}
+form .button input:hover{
+    background: #377caa;
+}

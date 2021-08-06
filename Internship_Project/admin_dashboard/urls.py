@@ -105,5 +105,7 @@ urlpatterns = [
 
   path('delete_row/<str:table>/<int:row_id>', views.delete_row, name = "delete_row"),
 
+  path('insert_record/<str:table>', views.insert_record, name = "insert_record"),
+
 ]
 
