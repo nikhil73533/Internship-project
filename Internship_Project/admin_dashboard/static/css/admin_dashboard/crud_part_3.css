@@ -21,6 +21,9 @@ body {
 }
 .table-wrapper {
     min-width: 1000px;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     background: #fff;
     padding: 20px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
@@ -33,6 +36,15 @@ body {
 .table-title h2 {
     margin: 8px 0 0;
     font-size: 22px;
+}
+table{
+    width:100%;
+}
+table td{
+    white-space: nowrap;
+}
+table td:last-child{
+    width:100%;
 }
 .search-box {
     position: relative;        

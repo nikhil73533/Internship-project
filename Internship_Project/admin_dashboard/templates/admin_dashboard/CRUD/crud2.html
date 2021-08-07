@@ -19,9 +19,16 @@
     <link rel = "stylesheet" href="../../../static/css/admin_dashboard/crud2.css">
 
     <script>
-        function addMore() {
-	    $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");;	
-    }
+      var form_count = 1;
+
+        function addMore() { form_count += 1;
+	        $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");	
+        }
+
+        function remove() {
+          if (form_count > 1) {  form_count -= 1;
+            $(".form1:last").remove();  }
+        }
     </script>
     
 <style>
@@ -30,7 +37,6 @@
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  margin-left: 73em;
 }
     
 /* 
@@ -117,8 +123,13 @@ success message
                 </div>  
             </div>
         </form>
-        <div class = "btnn" style="right: 78rem;">
+
+        <div class = "btnn" style="margin-left: 73ex;">
             <button class = "btn btn-danger" onClick="addMore();" type="button">Add Fields</button>
+        </div>
+        
+        <div class = "btnn" style="margin-right: 18ex;">
+          <button class = "btn btn-danger" onClick="remove();" type="button">Remove Fields</button>
         </div>
     
     <br> <br> <br>
