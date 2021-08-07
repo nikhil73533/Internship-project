@@ -65,19 +65,37 @@ success message
 </head>
 <body>
   <!-- Content Wrapper. Contains page content -->
-  <form action="{%url 'insert_record' tname %}" method='post'>{% csrf_token %}
+
+  {% if not edit %}
+    <form action="{%url 'insert_record' tname %}" method='post'>{% csrf_token %}
+  {% else %}
+    <form action="{%url 'edit_record' tname row_id %}" method='post'>{% csrf_token %}
+  {% endif %}
+
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Insert Record : {{tname}}</h1>
+
+              {% if not edit %}
+                <h1 class="m-0 text-dark">Insert Record : {{tname}}</h1>
+              {% else %}
+                <h1 class="m-0 text-dark">Edit Record : {{tname}}</h1>
+              {% endif %}
+              
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{% url 'DashBoard'%}">Home</a></li>
-                <li class="breadcrumb-item active">CRUD Insert Record</li>
+
+                {% if not edit %}
+                  <li class="breadcrumb-item active">CRUD Insert Record</li>
+                {% else %}
+                  <li class="breadcrumb-item active">CRUD Edit Record</li>
+                {% endif %}
+
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -106,36 +124,74 @@ success message
               <h5 class="m-0 text-dark">Column Title : {{column.name}}</h5> <br>
               <div class = "input-box">
 
-              {% if column.f_type == "TEXT" %}
-                <input type = "text" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
-              {% endif %}
+              {% if not edit %}
 
-              {% if column.f_type == "TEXTAREA" %}
-                <textarea style="font-size: 15px;" placeholder="Enter data" rows="6" cols="150" style="resize:vertical" name="column_values" required></textarea>
-              {% endif %}
+                {% if column.f_type == "TEXT" %}
+                  <input type = "text" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+                {% endif %}
 
-              {% if column.f_type == "PASSWORD" %}
-                <input type="password" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
-              {% endif %}
+                {% if column.f_type == "TEXTAREA" %}
+                  <textarea style="font-size: 15px;" placeholder="Enter data" rows="6" cols="150" style="resize:vertical" name="column_values" required></textarea>
+                {% endif %}
 
-              {% if column.f_type == "DATE" %}
-                <input type="date" style="width: 15em;" name="column_values" required>
-              {% endif %}
+                {% if column.f_type == "PASSWORD" %}
+                  <input type="password" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+                {% endif %}
 
-              {% if column.f_type == "DATETIME" %}
-                <input type="datetime-local" style="width: 15em;" name="column_values" required>
-              {% endif %}
+                {% if column.f_type == "DATE" %}
+                  <input type="date" style="width: 15em;" name="column_values" required>
+                {% endif %}
 
-              {% if column.f_type == "EMAIL" %}
-                <input type="email" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
-              {% endif %}
+                {% if column.f_type == "DATETIME" %}
+                  <input type="datetime-local" style="width: 15em;" name="column_values" required>
+                {% endif %}
 
-              {% if column.f_type == "NUMBER" %}
-                <input type="number" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
-              {% endif %}
+                {% if column.f_type == "EMAIL" %}
+                  <input type="email" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+                {% endif %}
 
-              {% if column.f_type == "URL" %}
-                <input type="url" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required> 
+                {% if column.f_type == "NUMBER" %}
+                  <input type="number" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required>
+                {% endif %}
+
+                {% if column.f_type == "URL" %}
+                  <input type="url" style="font-size: 15px; width: 73em;" placeholder="Enter data" name="column_values" required> 
+                {% endif %}
+
+              {% else %}
+
+                {% if column.f_type == "TEXT" %}
+                  <input type = "text" style="font-size: 15px; width: 73em;" name="column_values" value="{{column.value}}" required>
+                {% endif %}
+
+                {% if column.f_type == "TEXTAREA" %}
+                  <textarea style="font-size: 15px;" rows="6" cols="150" style="resize:vertical" name="column_values" required>{{column.value}}</textarea>
+                {% endif %}
+
+                {% if column.f_type == "PASSWORD" %}
+                  <input type="password" style="font-size: 15px; width: 73em;" name="column_values" value="{{column.value}}" required>
+                {% endif %}
+
+                {% if column.f_type == "DATE" %}
+                  <input type="date" style="width: 15em;" name="column_values" value="{{column.value}}" required>
+                {% endif %}
+
+                {% if column.f_type == "DATETIME" %}
+                  <input type="datetime-local" style="width: 15em;" name="column_values" value="{{column.value}}" required>
+                {% endif %}
+
+                {% if column.f_type == "EMAIL" %}
+                  <input type="email" style="font-size: 15px; width: 73em;" name="column_values" value="{{column.value}}" required>
+                {% endif %}
+
+                {% if column.f_type == "NUMBER" %}
+                  <input type="number" style="font-size: 15px; width: 73em;" name="column_values" value="{{column.value}}" required>
+                {% endif %}
+
+                {% if column.f_type == "URL" %}
+                  <input type="url" style="font-size: 15px; width: 73em;" name="column_values" value="{{column.value}}" required> 
+                {% endif %}
+
               {% endif %}
 
               </div>
@@ -147,9 +203,22 @@ success message
   
           </div>
           
-              <div class = "button" style="text-align:center">
-                <input type = "submit" value = "Insert Record">
-              </div>
+          {% if not edit %}
+            <div class = "button" style = "text-align:center">
+              <input type = "submit" value = "Insert Record">
+            </div>
+
+          {% else %}
+            <div class = "button" style = "text-align:center">
+              <input type = "submit" value = "Save Changes">
+            </div>
+
+            <div class = "button" style = "text-align:center">
+              <input type= "reset" value = "Reset Data" style="background-color: #dc3545;">
+            </div>
+
+          {% endif %}
+
         </div>
       </div> 
 

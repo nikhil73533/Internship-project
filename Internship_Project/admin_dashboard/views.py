@@ -665,6 +665,58 @@ def insert_record(request, table):
             df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
             data = json.loads(df.reset_index().to_json(orient = 'records'))
             
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : None})
 
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
+def edit_record(request, table, row_id):
+    rows = None
+    columns = None
+    df = pd.read_csv('CRUD.csv')
+
+    if request.method == 'POST':
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
+        data_dict = dict(request.POST.lists())
+        ans_df = pd.DataFrame(list(zip(list(df.loc[(df["Table"] == table), 'name']), data_dict['column_values'])), columns = ['column_name', 'column_value'])
+
+        query = f"UPDATE '{table}' SET "
+
+        for index in range(len(ans_df)):
+            query += f'"{ans_df.iloc[index, 0]}" = "{ans_df.iloc[index, 1]}", '
+
+        query = query[ : -2] + f" WHERE ID = {row_id}"
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(query)
+        conn.commit()
+
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        c.execute(f"SELECT * FROM '{table}'")
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        df.to_csv('CRUD.csv', index = False)
+
+        messages.success(request, f'Row No. {row_id} has been updated successfully')
+
+    else:
+        if not table.startswith('{'):
+            columns = list(df.loc[(df["Table"] == table), 'name'])
+            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+
+            conn = sqlite3.connect('CRUD.db')
+            c = conn.cursor()
+            c.execute(f"SELECT * FROM '{table}' WHERE ID = '{row_id}'")
+            row = list(c.fetchone())
+
+            conn.commit()
+            conn.close()       
+            
+            df = pd.DataFrame(list(zip(columns, f_type, row[1 : ])), columns = ['name', 'f_type', 'value'])
+            data = json.loads(df.reset_index().to_json(orient = 'records'))
+            
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : True, 'row_id' : row_id})
+    
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})

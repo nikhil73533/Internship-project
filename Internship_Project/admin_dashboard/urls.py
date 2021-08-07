@@ -107,5 +107,7 @@ urlpatterns = [
 
   path('insert_record/<str:table>', views.insert_record, name = "insert_record"),
 
+  path('edit_record/<str:table>/<int:row_id>', views.edit_record, name = "edit_record"),
+
 ]
 
