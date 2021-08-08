@@ -29,6 +29,11 @@
           if (form_count > 1) {  form_count -= 1;
             $(".form1:last").remove();  }
         }
+
+        setTimeout(function() { 
+          $('.allert-error').fadeOut('slow'); 
+          $('.allert-success').fadeOut('slow');   }, 3500);
+
     </script>
     
 <style>

@@ -216,7 +216,7 @@ def CrudList(request, table):
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"SELECT * FROM '{table}'")
+        c.execute(f'SELECT * FROM "{table}"')
         rows = pd.DataFrame(c.fetchall()) 
 
         conn.commit()
@@ -232,7 +232,16 @@ def CrudGenerator(request):
     if(request.method == 'POST'):
         data_dict = dict(request.POST.lists())
         data_dict['Table'] = [name.strip() for name in data_dict['Table']]
-        data_dict['name'] = [names.strip() for names in data_dict['name']]
+        data_dict['name'] = [names.strip() for names in data_dict['name']] 
+
+        if "/" in "".join(data_dict['Table']) or "'" in "".join(data_dict['Table']) or '"' in "".join(data_dict['Table']) or "." in "".join(data_dict['Table']):
+            messages.error(request, """Table Name cannot contain these characters ( / or ' or " or . )""")
+            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+
+        for col_name in data_dict['name']:
+            if "/" in col_name or "'" in col_name or '"' in col_name or "." in col_name:
+                messages.error(request, """Field Name cannot contain these characters ( / or ' or " or . )""")
+                return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
 
         if len(set(data_dict['name'])) != len(data_dict['d_type']):
             messages.error(request, f"Two or more fields have the same name, all fields must have a unique name")
@@ -338,7 +347,7 @@ def view_profile(request):
         user.last_name = Last_name
         user.email = Email
         user.save()
-        messages.success(request,"Profile is updated successuflly")
+        messages.success(request,"Profile updated successfully")
  
     return render(request, "profile/view_profile.html",{'user':user, 'tables' : installed_tables()})
 
@@ -485,7 +494,7 @@ def create_table(request, table):
         df = pd.read_csv('CRUD.csv')
         ans_df = df.loc[df['Table'] == table]
 
-        query = f"CREATE TABLE IF NOT EXISTS '{table}' (ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+        query = f'CREATE TABLE IF NOT EXISTS "{table}" (ID INTEGER PRIMARY KEY AUTOINCREMENT,'
 
         for index in range(len(ans_df)):
             query += f'"{ans_df.iloc[index, 2]}" {ans_df.iloc[index, 3]}, '
@@ -514,7 +523,7 @@ def drop_table(request, table):
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"DROP TABLE IF EXISTS '{table}'")
+        c.execute(f'DROP TABLE IF EXISTS "{table}"')
         conn.commit()
         conn.close()
 
@@ -549,11 +558,11 @@ def check_status(tables):
     c = conn.cursor()
 
     if isinstance(tables, str):
-        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{tables}'")
+        c.execute(f'SELECT count(*) FROM sqlite_master WHERE type="table" AND name="{tables}"')
         return list(c.fetchone())
 
     for table in tables:
-        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{table}'")
+        c.execute(f'SELECT count(*) FROM sqlite_master WHERE type="table" AND name="{table}"')
         status += list(c.fetchone())
 
     conn.commit()
@@ -582,7 +591,7 @@ def delete_all(request, table):
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"SELECT count(*) FROM (select 0 from '{table}' limit 1)")
+        c.execute(f'SELECT count(*) FROM (select 0 from "{table}" limit 1)')
 
         if (list(c.fetchone()) == [0]):
             conn.commit()
@@ -590,10 +599,10 @@ def delete_all(request, table):
             messages.error(request, f'CRUD : "{table}" is already empty')
             return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
-        c.execute(f"DELETE FROM '{table}'")
+        c.execute(f'DELETE FROM "{table}"')
         conn.commit()
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds')) 
-        c.execute(f"SELECT * FROM '{table}'")
+        c.execute(f'SELECT * FROM "{table}"')
         rows = pd.DataFrame(c.fetchall())
 
         conn.commit()
@@ -613,11 +622,11 @@ def delete_row(request, table, row_id):
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"DELETE FROM '{table}' WHERE ID = {row_id}")
+        c.execute(f'DELETE FROM "{table}" WHERE ID = {row_id}')
         conn.commit()
 
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds')) 
-        c.execute(f"SELECT * FROM '{table}'")
+        c.execute(f'SELECT * FROM "{table}"')
         rows = pd.DataFrame(c.fetchall())
 
         conn.commit()
@@ -636,10 +645,10 @@ def insert_record(request, table):
         columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
         data_dict = dict(request.POST.lists())
         
-        query = f"INSERT INTO '{table}' VALUES (NULL, "
+        query = f'INSERT INTO "{table}" VALUES (NULL, '
 
         for value in data_dict['column_values']:
-            query += f"'{value.strip()}', "
+            query += f'"{value.strip()}", '
 
         query = query[ : -2] + ")"
 
@@ -649,7 +658,7 @@ def insert_record(request, table):
         conn.commit()
 
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
-        c.execute(f"SELECT * FROM '{table}'")
+        c.execute(f'SELECT * FROM "{table}"')
         rows = pd.DataFrame(c.fetchall())
 
         conn.commit()
@@ -662,8 +671,9 @@ def insert_record(request, table):
         if not table.startswith('{'):
             columns = list(df.loc[(df["Table"] == table), 'name'])
             f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+            d_type = list(df.loc[(df["Table"] == table), 'd_type'])
             
-            df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
+            df = pd.DataFrame(list(zip(columns, f_type, d_type)), columns = ['name', 'f_type', 'd_type'])
             data = json.loads(df.reset_index().to_json(orient = 'records'))
             
             return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : None})
@@ -680,7 +690,7 @@ def edit_record(request, table, row_id):
         data_dict = dict(request.POST.lists())
         ans_df = pd.DataFrame(list(zip(list(df.loc[(df["Table"] == table), 'name']), data_dict['column_values'])), columns = ['column_name', 'column_value'])
 
-        query = f"UPDATE '{table}' SET "
+        query = f'UPDATE "{table}" SET '
 
         for index in range(len(ans_df)):
             query += f'"{ans_df.iloc[index, 0]}" = "{ans_df.iloc[index, 1].strip()}", '
@@ -693,7 +703,7 @@ def edit_record(request, table, row_id):
         conn.commit()
 
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
-        c.execute(f"SELECT * FROM '{table}'")
+        c.execute(f'SELECT * FROM "{table}"')
         rows = pd.DataFrame(c.fetchall())
 
         conn.commit()
@@ -706,16 +716,17 @@ def edit_record(request, table, row_id):
         if not table.startswith('{'):
             columns = list(df.loc[(df["Table"] == table), 'name'])
             f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+            d_type = list(df.loc[(df["Table"] == table), 'd_type'])
 
             conn = sqlite3.connect('CRUD.db')
             c = conn.cursor()
-            c.execute(f"SELECT * FROM '{table}' WHERE ID = '{row_id}'")
+            c.execute(f'SELECT * FROM "{table}" WHERE ID = "{row_id}"')
             row = list(c.fetchone())
 
             conn.commit()
             conn.close()       
             
-            df = pd.DataFrame(list(zip(columns, f_type, row[1 : ])), columns = ['name', 'f_type', 'value'])
+            df = pd.DataFrame(list(zip(columns, f_type, row[1 : ], d_type)), columns = ['name', 'f_type', 'value', 'd_type'])
             data = json.loads(df.reset_index().to_json(orient = 'records'))
             
             return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : True, 'row_id' : row_id})

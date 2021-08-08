@@ -49,6 +49,7 @@ success message
       <title> {% block title %}AdminLTE 3 | CRUD Extension{% endblock %}</title>
 
   <script>
+
     $(document).ready(function(){
       $("#search_box").on("keyup", function() {
         var value = $(this).val().toLowerCase();
@@ -57,6 +58,11 @@ success message
         });
       });
     });
+    
+    setTimeout(function() { 
+      $('.allert-error').fadeOut('slow'); 
+      $('.allert-success').fadeOut('slow');   }, 3500);
+
   </script>
    
 </head>

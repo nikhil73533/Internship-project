@@ -21,6 +21,7 @@
     <link rel = "stylesheet" href={% static 'css/admin_dashboard/crud1.css' %}>
 
   <script>
+
     $(document).ready(function(){
       $("#search_box").on("keyup", function() {
         var value = $(this).val().toLowerCase();
@@ -29,6 +30,11 @@
         });
       });
     });
+    
+    setTimeout(function() { 
+      $('.allert-error').fadeOut('slow'); 
+      $('.allert-success').fadeOut('slow');   }, 3500);
+
   </script>
 </head>
 

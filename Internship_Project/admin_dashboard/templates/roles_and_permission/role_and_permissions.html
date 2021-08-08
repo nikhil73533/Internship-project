@@ -18,7 +18,16 @@
     <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet"> -->
     <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
 
+  <script>
+    
+    setTimeout(function() { 
+      $('.allert-error').fadeOut('slow'); 
+      $('.allert-success').fadeOut('slow');   }, 3500);
+
+  </script>
+
 </head>
+
 <body>
   <div class="card-header" style="margin-left: 16.5%;">
     <div class="d-inline-block">
@@ -31,7 +40,7 @@
   </div>
 
     <!-- Content Wrapper. Contains page content -->
-  <form action="{%url 'CrudGenerator'%}" method='post'>{% csrf_token %}
+  <form action="#" method='post'>{% csrf_token %}
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <div class="content-header">
