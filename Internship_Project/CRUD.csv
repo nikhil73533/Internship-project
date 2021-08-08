@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 csrfmiddlewaretoken,Table,name,d_type,Updated_at
 <<<<<<< HEAD,,,,
 5V991OMO3Nyk5hEhSRTrjmGAOUeeQqZhy6KaubUkrgm7km5b8FMnaGrSHc6QtlBT,db,name1,CHARACTER,2021-08-02 14:13:25
@@ -8,3 +9,9 @@ JaxtSVjKsonGs2FUcIhT9Ar7JsXXEBeIcl8ulirgQRbtH76OswaP0UcpCKPzhwQk,db2,name1,CHARA
 JaxtSVjKsonGs2FUcIhT9Ar7JsXXEBeIcl8ulirgQRbtH76OswaP0UcpCKPzhwQk,db2,name1,CHARACTER,2021-08-08 12:35:42
 ,db2,name2,VARCHAR,2021-08-08 12:35:42
 >>>>>>> 6287eb2390ef40487e45c6665212d2ab5848cf17,,,,
+=======
+csrfmiddlewaretoken,Table,name,d_type,f_type,Updated_at
+idDaWrCtHOoWocIORqsV3ofmCMZQXHs1p2gE4UUixk0KKG5D2oMqMd122q08XeKs,db,name1,CHARACTER,TEXT,08-08-2021 15:38
+L17hfvcNQoLrFMtevaquABsTusMCqqSQSQKLnYuCGUnf1gQ3G8KZjqezU6NUqXah,db2,name1,CHARACTER,TEXT,2021-08-08 18:00:37
+,db2,name2,VARCHAR,TEXTAREA,2021-08-08 18:00:37
+>>>>>>> a2dff870519167e8c1aa64e44f8c4f791325ae11

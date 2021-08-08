@@ -2,8 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
-# Create your models here.
 
+# Create your models here.
 
 # Creating custom  user models here.
 class MyUserManager(BaseUserManager):
@@ -65,20 +65,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     
     def has_module_perms(self,app_label):
         return True
-
-
-
-
-# <--------------------- Settings Model ------------------------>
-class general_settings(models.Model):
-    store_id = models.IntegerField(null=True)
-    code = models.CharField(max_length=200,null=True)
-    key_value = models.CharField(null=True, max_length=200)
-    vale = models.CharField(max_length=5000,null=True)
-    serilize  = models.CharField(max_length= 200, null=True)
-
-# <------------------- ENd of Code ------------------>
-
+# <-----------------------end of code------------------>
 
 # <-----------------Module Settings ------------------>
 class Module(models.Model):
@@ -86,9 +73,8 @@ class Module(models.Model):
     controlller_name = models.CharField(max_length=1000)
     fa_icon = models.CharField(max_length=500)
     operations = models.CharField(max_length=1000)
-    
-
 # <-----------------------end of code------------------>
+    
 # <--------------------- Settings Model ------------------------>
 class general_settings(models.Model):
     store_id = models.IntegerField(null=True)
@@ -96,6 +82,5 @@ class general_settings(models.Model):
     key_value = models.CharField(null=True, max_length=200)
     vale = models.CharField(max_length=5000,null=True)
     serilize  = models.CharField(max_length= 200, null=True)
-
 # <------------------- ENd of Code ------------------>
 

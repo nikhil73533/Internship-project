@@ -46,31 +46,24 @@ success message
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href={% static "css/admin_dashboard/crud_part_3.css" %}>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <title> {% block title %}AdminLTE 3 | CRUD EXTENSION{% endblock %}</title>
+      <title> {% block title %}AdminLTE 3 | CRUD Extension{% endblock %}</title>
 
-    <script>
-      function search() {
-        var input, filter, table, tr, td, txt;
+  <script>
 
-        input = document.getElementById("search_box");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("data_table");
-        tr = table.getElementsByTagName("tr");
-      
-        for (var i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          
-          if (td) {
-            txt = td.textContent || td.innerText;
-            if (txt.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
-            }
-          }
-        }
-      }
-    </script>
+    $(document).ready(function(){
+      $("#search_box").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#data_table tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    
+    setTimeout(function() { 
+      $('.allert-error').fadeOut('slow'); 
+      $('.allert-success').fadeOut('slow');   }, 3500);
+
+  </script>
    
 </head>
 
@@ -83,7 +76,7 @@ success message
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">CRUD EXTENSION</h1>
+            <h1 class="m-0 text-dark">CRUD Extension</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -112,22 +105,22 @@ success message
                         <div class="col-sm-4">
                             <div class="search-box">
                                 <i class="material-icons">&#xE8B6;</i>
-                                <input type="text" class="form-control" id="search_box" onkeyup="search()" placeholder="Search&hellip;">
+                                <input type="text" class="form-control" id="search_box" placeholder="Search&hellip;">
                             </div>
                         </div>
                     </div>
                 </div>
-                <table class="table table-striped table-hover table-bordered" id="data_table">
+                <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>Model Name<i class="fa fa-sort"></i></th>
-                            <th>Status</th>
-                            <th>Updated at<i class="fa fa-sort"></i></th>
-                            <th>Actions</th>
+                            <th style="width: fit-content;">Model Name<i class="fa fa-sort"></i></th>
+                            <th style="width: fit-content;">Status</th>
+                            <th style="width: fit-content;">Updated at<i class="fa fa-sort"></i></th>
+                            <th style="width: fit-content;">Actions</th>
                         </tr>
                     </thead>
                     {% if tables %}
-                      <tbody>
+                      <tbody id="data_table">
                         {% for table in tables %}
                         <tr>
                             <td style="width: fit-content;"> {{table.name}} </td>

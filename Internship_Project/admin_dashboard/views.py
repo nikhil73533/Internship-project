@@ -1,9 +1,8 @@
 import datetime
-from django.contrib.auth import models
+from django.contrib.auth import models, get_user_model
 from django.forms import fields
 from django import forms
 from django.http import request
-from django.contrib.auth import get_user_model
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
 from .models import Module
@@ -67,7 +66,7 @@ def LogOut(request):
 def Login(request):
     if(request.method=='POST'):
         Password = request.POST['password']
-        Username =  request.POST['username']
+        Username = request.POST['username'].strip()
         user = auth.authenticate(username=Username, password=Password)
         
         if(user is not None and user.is_active):
@@ -93,10 +92,10 @@ def Login(request):
 # Register view  for register page
 def Register(request):
     if(request.method == 'POST'):
-        First_Name = request.POST['first_name']
-        Last_Name = request.POST['last_name']
-        Username = request.POST['user_name']
-        email = request.POST['email_address']
+        First_Name = request.POST['first_name'].strip()
+        Last_Name = request.POST['last_name'].strip()
+        Username = request.POST['user_name'].strip()
+        email = request.POST['email_address'].strip()
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
      
@@ -213,19 +212,15 @@ def CrudList(request, table):
 
     if not table.startswith('{'):
         df = pd.read_csv('CRUD.csv')
-        columns = list(df.loc[(df["Table"] == table), 'name'])
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"SELECT * FROM {table}")
-        data = c.fetchall() 
+        c.execute(f'SELECT * FROM "{table}"')
+        rows = pd.DataFrame(c.fetchall()) 
 
         conn.commit()
-        conn.close()
-
-        if data == []:
-            data = None
-        rows = pd.DataFrame(data)       
+        conn.close()       
         
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
@@ -235,11 +230,22 @@ def CrudGenerator(request):
     data_dict = {}
 
     if(request.method == 'POST'):
-        Table_Name = request.POST['Table']
-        name = request.POST['name']
-        d_type = request.POST['d_type']
-        
         data_dict = dict(request.POST.lists())
+        data_dict['Table'] = [name.strip() for name in data_dict['Table']]
+        data_dict['name'] = [names.strip() for names in data_dict['name']] 
+
+        if "/" in "".join(data_dict['Table']) or "'" in "".join(data_dict['Table']) or '"' in "".join(data_dict['Table']) or "." in "".join(data_dict['Table']):
+            messages.error(request, """Table Name cannot contain these characters ( / or ' or " or . )""")
+            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+
+        for col_name in data_dict['name']:
+            if "/" in col_name or "'" in col_name or '"' in col_name or "." in col_name:
+                messages.error(request, """Field Name cannot contain these characters ( / or ' or " or . )""")
+                return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+
+        if len(set(data_dict['name'])) != len(data_dict['d_type']):
+            messages.error(request, f"Two or more fields have the same name, all fields must have a unique name")
+            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
 
         with open('CRUD.csv', 'a', newline='') as response:
             flag = 0
@@ -259,10 +265,10 @@ def CrudGenerator(request):
                 data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
                 data_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(data_dict['name'])
                 writer.writerows(zip_longest(*data_dict.values()))
-                messages.success(request, f"Crud {Table_Name} has been created successfully ")
+                messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been created successfully')
 
             else:
-                messages.error(request, f"The Table structure named '{data_dict['Table'][0]}' has already been defined")
+                messages.error(request, f'The CRUD structure named "{data_dict["Table"][0]}" has already been defined')
         
     return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
 
@@ -273,10 +279,10 @@ def CrudExtension(request):
     
 def Addadmin(request):
     if(request.method == 'POST'):
-        First_Name = request.POST['first_name']
-        Last_Name = request.POST['last_name']
-        Username = request.POST['username']
-        email = request.POST['email_address']
+        First_Name = request.POST['first_name'].strip()
+        Last_Name = request.POST['last_name'].strip()
+        Username = request.POST['username'].strip()
+        email = request.POST['email_address'].strip()
         password = request.POST.get('Password')
         confirm_password = request.POST['confirm_password']
         
@@ -332,16 +338,16 @@ def Addadmin(request):
 def view_profile(request):
     user = User.objects.get(id = request.user.id)
     if(request.method == 'POST'):
-        Username = request.POST['username']
-        First_name= request.POST['first_name']
-        Last_name = request.POST['last_name']
-        Email = request.POST.get('email_address')
+        Username = request.POST['username'].strip()
+        First_name= request.POST['first_name'].strip()
+        Last_name = request.POST['last_name'].strip()
+        Email = request.POST.get('email_address').strip()
         user.username = Username
         user.first_name = First_name
         user.last_name = Last_name
         user.email = Email
         user.save()
-        messages.success(request,"Profile is updated successuflly")
+        messages.success(request,"Profile updated successfully")
  
     return render(request, "profile/view_profile.html",{'user':user, 'tables' : installed_tables()})
 
@@ -370,10 +376,10 @@ class PasswordsChangesView(PasswordChangeView):
 @login_required(login_url='/') 
 def general_settings(request):
     if(request.method == 'POST'):
-        application_name = request.POST['application_name']
-        timezone = request.POST['timezone']
+        application_name = request.POST['application_name'].strip()
+        timezone = request.POST['timezone'].strip()
         language = request.POST['language']
-    return render(request, "settings/general_settings.html", {'tables' : installed_tables})
+    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
 
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
@@ -408,10 +414,10 @@ def EditAdminList(request,user_id):
 @login_required(login_url='/') 
 def EditAdminListValue(request):
     if(request.method == 'POST'):
-        userid = request.POST.get('user')
+        userid = request.POST.get('user').strip()
         user = User.objects.get(id  = userid)
-        Email = request.POST.get('email_address')
-        Role = request.POST['role']
+        Email = request.POST.get('email_address').strip()
+        Role = request.POST['role'].strip()
         Status = request.POST.get('status')
         user.email = Email
         user.role = Role
@@ -436,7 +442,7 @@ def calendar(request):
 # <---------------------Admin role view -------------------------------------->
 def add_new_role(request):
     if(request.method == "POST"):
-        admin_title = request.POST["admin_role_title"]
+        admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
         module = Module(module_name = admin_title)
         module.save()
@@ -447,7 +453,7 @@ def edit_new_role(request,module_id):
     module = Module.objects.get(id = module_id)
     count = -1
     if(request.method =="POST"):
-        admin_title = request.POST["admin_role_title"]
+        admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
         module.module_name = admin_title
         module.save()
@@ -482,16 +488,16 @@ def create_table(request, table):
     if request.method == 'POST':
 
         if check_status(table) == [1]:
-            messages.error(request,'CRUD {table} is already installed')
+            messages.error(request,f'CRUD : "{table}" is already installed')
             return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         df = pd.read_csv('CRUD.csv')
         ans_df = df.loc[df['Table'] == table]
 
-        query = f"CREATE TABLE IF NOT EXISTS {table} ("
+        query = f'CREATE TABLE IF NOT EXISTS "{table}" (ID INTEGER PRIMARY KEY AUTOINCREMENT,'
 
         for index in range(len(ans_df)):
-            query += f"{ans_df.iloc[index, 2]} {ans_df.iloc[index, 3]}, "
+            query += f'"{ans_df.iloc[index, 2]}" {ans_df.iloc[index, 3]}, '
 
         query = query[ : -2] + ")"
 
@@ -504,7 +510,7 @@ def create_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
-        messages.success(request, f"Crud {table} has been installed successfully ")
+        messages.success(request, f'CRUD : "{table}" has been installed successfully')
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
@@ -512,12 +518,12 @@ def drop_table(request, table):
     if request.method == 'POST':
 
         if check_status(table) == [0]:
-            messages.error(request,'CRUD Already Uninstalled')
+            messages.error(request,f'CRUD : "{table}" is already uninstalled')
             return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"DROP TABLE IF EXISTS {table}")
+        c.execute(f'DROP TABLE IF EXISTS "{table}"')
         conn.commit()
         conn.close()
 
@@ -525,7 +531,7 @@ def drop_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
-        messages.success(request, f"Crud {table} has been uninstalled successfully ")
+        messages.success(request, f'CRUD : "{table}" has been uninstalled successfully')
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
@@ -533,7 +539,7 @@ def delete_crud(request, table):
     if request.method == 'POST':
 
         if check_status(table) == [1]:
-            messages.error(request,f"The CRUD {table} that you want to delete is still installed ")
+            messages.error(request,f'The CRUD : "{table}" that you want to delete is still installed')
             return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
         df = pd.read_csv('CRUD.csv')
@@ -542,7 +548,7 @@ def delete_crud(request, table):
 
         with open('CRUD.csv', 'a', newline='') as response:
             writer = csv.writer(response)
-            messages.success(request, f"Crud {table} has been deleted successfully ")
+            messages.success(request, f'CRUD : "{table}" has been deleted successfully')
             
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
@@ -552,11 +558,11 @@ def check_status(tables):
     c = conn.cursor()
 
     if isinstance(tables, str):
-        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{tables}'")
+        c.execute(f'SELECT count(*) FROM sqlite_master WHERE type="table" AND name="{tables}"')
         return list(c.fetchone())
 
     for table in tables:
-        c.execute(f"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='{table}'")
+        c.execute(f'SELECT count(*) FROM sqlite_master WHERE type="table" AND name="{table}"')
         status += list(c.fetchone())
 
     conn.commit()
@@ -579,28 +585,151 @@ def delete_all(request, table):
     rows = None
     columns = None
 
-    if not table.startswith('{'):
+    if request.method == 'POST':
         df = pd.read_csv('CRUD.csv')
-        columns = list(df.loc[(df["Table"] == table), 'name'])
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
 
         conn = sqlite3.connect('CRUD.db')
         c = conn.cursor()
-        c.execute(f"SELECT count(*) FROM (select 0 from {table} limit 1)")
+        c.execute(f'SELECT count(*) FROM (select 0 from "{table}" limit 1)')
 
         if (list(c.fetchone()) == [0]):
             conn.commit()
             conn.close()
-            messages.error(request, f'The CRUD {table} is already empty')
+            messages.error(request, f'CRUD : "{table}" is already empty')
             return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
-        c.execute(f"DELETE FROM {table}")
+        c.execute(f'DELETE FROM "{table}"')
         conn.commit()
-        c.execute(f"SELECT * FROM {table}")
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds')) 
+        c.execute(f'SELECT * FROM "{table}"')
         rows = pd.DataFrame(c.fetchall())
 
         conn.commit()
         conn.close()
+        df.to_csv('CRUD.csv', index = False)
+        messages.success(request, f'All the data has been deleted from CRUD : "{table}" successfully')
         
-    messages.success(request, f"Data deleted from CRUD {table} successfully")
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
-  
+    
+def delete_row(request, table, row_id):
+    rows = None
+    columns = None
+
+    if not table.startswith('{'):
+        df = pd.read_csv('CRUD.csv')
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(f'DELETE FROM "{table}" WHERE ID = {row_id}')
+        conn.commit()
+
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds')) 
+        c.execute(f'SELECT * FROM "{table}"')
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        df.to_csv('CRUD.csv', index = False)
+
+    messages.success(request, f'Row No. {row_id} has been deleted from CRUD : "{table}" successfully')
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
+def insert_record(request, table):
+    rows = None
+    columns = None
+    df = pd.read_csv('CRUD.csv')
+
+    if request.method == 'POST':
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
+        data_dict = dict(request.POST.lists())
+        
+        query = f'INSERT INTO "{table}" VALUES (NULL, '
+
+        for value in data_dict['column_values']:
+            query += f'"{value.strip()}", '
+
+        query = query[ : -2] + ")"
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(query)
+        conn.commit()
+
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        c.execute(f'SELECT * FROM "{table}"')
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        df.to_csv('CRUD.csv', index = False)
+
+        messages.success(request, f'Record inserted into CRUD : "{table}" successfully')
+
+    else:
+        if not table.startswith('{'):
+            columns = list(df.loc[(df["Table"] == table), 'name'])
+            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+            d_type = list(df.loc[(df["Table"] == table), 'd_type'])
+            
+            df = pd.DataFrame(list(zip(columns, f_type, d_type)), columns = ['name', 'f_type', 'd_type'])
+            data = json.loads(df.reset_index().to_json(orient = 'records'))
+            
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : None})
+
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
+def edit_record(request, table, row_id):
+    rows = None
+    columns = None
+    df = pd.read_csv('CRUD.csv')
+
+    if request.method == 'POST':
+        columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
+        data_dict = dict(request.POST.lists())
+        ans_df = pd.DataFrame(list(zip(list(df.loc[(df["Table"] == table), 'name']), data_dict['column_values'])), columns = ['column_name', 'column_value'])
+
+        query = f'UPDATE "{table}" SET '
+
+        for index in range(len(ans_df)):
+            query += f'"{ans_df.iloc[index, 0]}" = "{ans_df.iloc[index, 1].strip()}", '
+
+        query = query[ : -2] + f" WHERE ID = {row_id}"
+
+        conn = sqlite3.connect('CRUD.db')
+        c = conn.cursor()
+        c.execute(query)
+        conn.commit()
+
+        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+        c.execute(f'SELECT * FROM "{table}"')
+        rows = pd.DataFrame(c.fetchall())
+
+        conn.commit()
+        conn.close()
+        df.to_csv('CRUD.csv', index = False)
+
+        messages.success(request, f'Row No. {row_id} has been updated successfully')
+
+    else:
+        if not table.startswith('{'):
+            columns = list(df.loc[(df["Table"] == table), 'name'])
+            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+            d_type = list(df.loc[(df["Table"] == table), 'd_type'])
+
+            conn = sqlite3.connect('CRUD.db')
+            c = conn.cursor()
+            c.execute(f'SELECT * FROM "{table}" WHERE ID = "{row_id}"')
+            row = list(c.fetchone())
+
+            conn.commit()
+            conn.close()       
+            
+            df = pd.DataFrame(list(zip(columns, f_type, row[1 : ], d_type)), columns = ['name', 'f_type', 'value', 'd_type'])
+            data = json.loads(df.reset_index().to_json(orient = 'records'))
+            
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : True, 'row_id' : row_id})
+    
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+

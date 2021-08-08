@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {% block title %}AdminLTE 3 | Generate CRUD {% endblock %}</title>
+    <title> {% block title %}AdminLTE 3 | CRUD Generator{% endblock %}</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
@@ -19,14 +19,30 @@
     <link rel = "stylesheet" href="../../../static/css/admin_dashboard/crud2.css">
 
     <script>
-        function addMore() {
-	    $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");;	
-    }
+      var form_count = 1;
+
+        function addMore() { form_count += 1;
+	        $(".form1:last").clone().insertAfter(".form1:last").find(":input").val("");	
+        }
+
+        function remove() {
+          if (form_count > 1) {  form_count -= 1;
+            $(".form1:last").remove();  }
+        }
+
+        setTimeout(function() { 
+          $('.allert-error').fadeOut('slow'); 
+          $('.allert-success').fadeOut('slow');   }, 3500);
+
     </script>
     
 <style>
   
-
+  div.btnn {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
     
 /* 
 Alert messages 
@@ -82,7 +98,7 @@ success message
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{% url 'DashBoard'%}">Home</a></li>
-              <li class="breadcrumb-item active">CRUD GENERATOR</li>
+              <li class="breadcrumb-item active">CRUD Generator</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -108,12 +124,17 @@ success message
             <div class = "user-details">
                 <div class = "input-box">
                     <span class = "details" style="font-size: 17px;"><b>Database Table </b></span><br>
-                    <input type = "text" style="font-size: 13px;" placeholder="Enter Table Name" name="Table" required> <br> <br> <br>
+                    <input type = "text" style="font-size: 13px; width: 37em;" placeholder="Enter Table Name" name="Table" required> <br> <br> <br>
                 </div>  
             </div>
         </form>
-        <div class = "btnn" style="right: 78rem;">
+
+        <div class = "btnn" style="margin-left: 73ex;">
             <button class = "btn btn-danger" onClick="addMore();" type="button">Add Fields</button>
+        </div>
+        
+        <div class = "btnn" style="margin-right: 18ex;">
+          <button class = "btn btn-danger" onClick="remove();" type="button">Remove Fields</button>
         </div>
     
     <br> <br> <br>
@@ -121,22 +142,40 @@ success message
     <div class = "container1">
         <div class = "form1">
                 <div class = "input-box">
-                    <input type = "text" style="font-size: 15px; width: 200px;" placeholder="Field Name" name="name" required> &emsp;  &emsp; &emsp;  
+                    <input type = "text" style="font-size: 15px; width: 30em;" placeholder="Field Name" name="name" required> &emsp;  &emsp; &emsp;  
                      <br> <br>
                 </div>
 
                 <div class = "input-box" >
                     
-                    <select id="data" name="d_type" style="font-size:15px; height:1.8em;" required>
-                        <option value="" disabled selected> Data Types </option>
-                        <option value="CHARACTER">char</option>
-                        <option value="VARCHAR">varchar</option>
-                        <option value="INT">int</option>
-                        <option value="BIGINT">long</option>
-                        <option value="FLOAT">float</option>
-                        <option value="BOOLEAN">boolean</option>
-                    </select>    
-                </div> <br> 
+                    <select id="data" name="d_type" style="font-size: 15px; height: 1.8em; width: 10em;" required>
+                        <option value="" disabled selected> Data Type </option>
+                        <option value="CHARACTER"> char </option>
+                        <option value="VARCHAR"> varchar </option>
+                        <option value="INT"> int </option>
+                        <option value="BIGINT"> long </option>
+                        <option value="FLOAT"> float </option>
+                        <option value="BOOLEAN"> boolean </option>
+                        <option value="DATE"> date </option>
+                        <option value="DATETIME"> datetime </option>
+                    </select> 
+                    
+                    &emsp; &emsp; &emsp; 
+                    
+                  <select id="data" name="f_type" style="font-size: 15px; height: 1.8em; width: 10em;" required>
+                      <option value="" disabled selected> Field Type </option>
+                      <option value="TEXT"> Text </option>
+                      <option value="TEXTAREA"> Text-area </option>
+                      <option value="PASSWORD"> Password </option>
+                      <option value="DATE"> Date </option>
+                      <option value="DATETIME"> Date-Time </option>
+                      <option value="EMAIL"> Email </option>
+                      <option value="NUMBER"> Numeric </option>
+                      <option value="URL"> URL </option>
+                  </select>    
+              </div>
+
+                <br> 
                 <hr style="width: 100%;border: .5px solid black;"><br>
                
         </div>
