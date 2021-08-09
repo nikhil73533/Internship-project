@@ -639,15 +639,19 @@ def delete_row(request, table, row_id):
 def insert_record(request, table):
     rows = None
     columns = None
-    df = pd.read_csv('CRUD.csv')
 
     if request.method == 'POST':
+        df = pd.read_csv('CRUD.csv')
         columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
         data_dict = dict(request.POST.lists())
         
         query = f'INSERT INTO "{table}" VALUES (NULL, '
 
         for value in data_dict['column_values']:
+            if '"' in value.strip():
+                messages.error(request, """Column data cannot contain " " you can use ' ' instead""")
+                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None})
+            
             query += f'"{value.strip()}", '
 
         query = query[ : -2] + ")"
@@ -669,23 +673,16 @@ def insert_record(request, table):
 
     else:
         if not table.startswith('{'):
-            columns = list(df.loc[(df["Table"] == table), 'name'])
-            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
-            d_type = list(df.loc[(df["Table"] == table), 'd_type'])
-            
-            df = pd.DataFrame(list(zip(columns, f_type, d_type)), columns = ['name', 'f_type', 'd_type'])
-            data = json.loads(df.reset_index().to_json(orient = 'records'))
-            
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : None})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None})
 
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
 def edit_record(request, table, row_id):
     rows = None
     columns = None
-    df = pd.read_csv('CRUD.csv')
 
     if request.method == 'POST':
+        df = pd.read_csv('CRUD.csv')
         columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
         data_dict = dict(request.POST.lists())
         ans_df = pd.DataFrame(list(zip(list(df.loc[(df["Table"] == table), 'name']), data_dict['column_values'])), columns = ['column_name', 'column_value'])
@@ -693,6 +690,10 @@ def edit_record(request, table, row_id):
         query = f'UPDATE "{table}" SET '
 
         for index in range(len(ans_df)):
+            if '"' in ans_df.iloc[index, 1].strip():
+                messages.error(request, """Column data cannot contain " " you can use ' ' instead""")
+                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id})
+
             query += f'"{ans_df.iloc[index, 0]}" = "{ans_df.iloc[index, 1].strip()}", '
 
         query = query[ : -2] + f" WHERE ID = {row_id}"
@@ -714,22 +715,37 @@ def edit_record(request, table, row_id):
 
     else:
         if not table.startswith('{'):
-            columns = list(df.loc[(df["Table"] == table), 'name'])
-            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
-            d_type = list(df.loc[(df["Table"] == table), 'd_type'])
-
-            conn = sqlite3.connect('CRUD.db')
-            c = conn.cursor()
-            c.execute(f'SELECT * FROM "{table}" WHERE ID = "{row_id}"')
-            row = list(c.fetchone())
-
-            conn.commit()
-            conn.close()       
-            
-            df = pd.DataFrame(list(zip(columns, f_type, row[1 : ], d_type)), columns = ['name', 'f_type', 'value', 'd_type'])
-            data = json.loads(df.reset_index().to_json(orient = 'records'))
-            
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, 'edit' : True, 'row_id' : row_id})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id})
     
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+
+def insert_data(table):
+    df = pd.read_csv('CRUD.csv')
+    columns = list(df.loc[(df["Table"] == table), 'name'])
+    f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+    d_type = list(df.loc[(df["Table"] == table), 'd_type'])
+    
+    df = pd.DataFrame(list(zip(columns, f_type, d_type)), columns = ['name', 'f_type', 'd_type'])
+    data = json.loads(df.reset_index().to_json(orient = 'records'))
+    
+    return data
+
+def edit_data(table, row_id):
+    df = pd.read_csv('CRUD.csv')
+    columns = list(df.loc[(df["Table"] == table), 'name'])
+    f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+    d_type = list(df.loc[(df["Table"] == table), 'd_type'])
+
+    conn = sqlite3.connect('CRUD.db')
+    c = conn.cursor()
+    c.execute(f'SELECT * FROM "{table}" WHERE ID = "{row_id}"')
+    row = list(c.fetchone())
+
+    conn.commit()
+    conn.close()       
+    
+    df = pd.DataFrame(list(zip(columns, f_type, row[1 : ], d_type)), columns = ['name', 'f_type', 'value', 'd_type'])
+    data = json.loads(df.reset_index().to_json(orient = 'records'))
+
+    return data
 
