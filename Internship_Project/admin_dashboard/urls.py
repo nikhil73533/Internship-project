@@ -109,5 +109,9 @@ urlpatterns = [
 
   path('edit_record/<str:table>/<int:row_id>', views.edit_record, name = "edit_record"),
 
+  path('edit_crud/<str:table>', views.edit_crud, name = "edit_crud"),
+
+  path('save_changes/<str:table>', views.save_changes, name = "save_changes"),
+
 ]
 

@@ -234,7 +234,7 @@ def CrudGenerator(request):
         data_dict['Table'] = [name.strip() for name in data_dict['Table']]
         data_dict['name'] = [names.strip() for names in data_dict['name']] 
 
-        if "/" in "".join(data_dict['Table']) or "'" in "".join(data_dict['Table']) or '"' in "".join(data_dict['Table']) or "." in "".join(data_dict['Table']):
+        if "/" in data_dict['Table'][0] or "'" in data_dict['Table'][0] or '"' in data_dict['Table'][0] or "." in data_dict['Table'][0]:
             messages.error(request, """Table Name cannot contain these characters ( / or ' or " or . )""")
             return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
 
@@ -494,7 +494,7 @@ def create_table(request, table):
         df = pd.read_csv('CRUD.csv')
         ans_df = df.loc[df['Table'] == table]
 
-        query = f'CREATE TABLE IF NOT EXISTS "{table}" (ID INTEGER PRIMARY KEY AUTOINCREMENT,'
+        query = f'CREATE TABLE IF NOT EXISTS "{table}" (ID INTEGER PRIMARY KEY AUTOINCREMENT, '
 
         for index in range(len(ans_df)):
             query += f'"{ans_df.iloc[index, 2]}" {ans_df.iloc[index, 3]}, '
@@ -650,7 +650,7 @@ def insert_record(request, table):
         for value in data_dict['column_values']:
             if '"' in value.strip():
                 messages.error(request, """Column data cannot contain " " you can use ' ' instead""")
-                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None})
+                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None, 'title' : " | Insert Record"})
             
             query += f'"{value.strip()}", '
 
@@ -673,7 +673,7 @@ def insert_record(request, table):
 
     else:
         if not table.startswith('{'):
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None, 'title' : " | Insert Record"})
 
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
@@ -692,7 +692,7 @@ def edit_record(request, table, row_id):
         for index in range(len(ans_df)):
             if '"' in ans_df.iloc[index, 1].strip():
                 messages.error(request, """Column data cannot contain " " you can use ' ' instead""")
-                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id})
+                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record"})
 
             query += f'"{ans_df.iloc[index, 0]}" = "{ans_df.iloc[index, 1].strip()}", '
 
@@ -715,7 +715,7 @@ def edit_record(request, table, row_id):
 
     else:
         if not table.startswith('{'):
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record"})
     
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
 
@@ -748,4 +748,141 @@ def edit_data(table, row_id):
     data = json.loads(df.reset_index().to_json(orient = 'records'))
 
     return data
+
+def edit_crud(request, table):
+    data = None
+
+    if request.method == 'POST':
+        df = pd.read_csv('CRUD.csv')
+        columns = list(df.loc[(df["Table"] == table), 'name'])
+        f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+
+        df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
+        data = json.loads(df.reset_index().to_json(orient = 'records'))
+        
+    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+            
+def save_changes(request, table):
+    if request.method == 'POST':
+        data_dict = dict(request.POST.lists())
+        
+        if check_status(table) == [1]:
+            df = pd.read_csv('CRUD.csv')
+            columns = list(df.loc[(df["Table"] == table), 'name'])
+            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
+
+            conn = sqlite3.connect('CRUD.db')
+            c = conn.cursor()
+            
+            # checking errors 
+            if "check_box" in data_dict:
+                for del_column in data_dict['check_box']:
+                    if del_column not in data_dict['name']:
+                        df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
+                        data = json.loads(df.reset_index().to_json(orient = 'records'))
+
+                        messages.error(request, "You cannot delete and rename a column at the same time")
+                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+
+            if ((data_dict['new_name'][0] != '' and ("new_d_type" not in data_dict or "new_f_type" not in data_dict)) or ("new_f_type" in data_dict and ("new_d_type" not in data_dict or data_dict['new_name'][0] == '')) or ("new_d_type" in data_dict and ("new_f_type" not in data_dict or data_dict['new_name'][0] == ''))):
+                df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
+                data = json.loads(df.reset_index().to_json(orient = 'records'))
+
+                messages.error(request, "Fill all the fields to add a column")
+                return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+
+            if len(data_dict['new_name']) > 1:
+                for index in range (1, len(data_dict['new_name'])):
+                    if data_dict['new_name'][index] == '':
+                        df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
+                        data = json.loads(df.reset_index().to_json(orient = 'records'))
+
+                        messages.error(request, "Fill all the fields to add a column")
+                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+
+            if (data_dict['new_name'][0] != '' and "new_d_type" in data_dict and "new_f_type" in data_dict):
+                if ((len(data_dict['new_name']) != len(data_dict['new_d_type'])) or (len(data_dict['new_d_type']) != len(data_dict['new_f_type'])) or (len(data_dict['new_f_type']) != len(data_dict['new_name']))): 
+                    df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
+                    data = json.loads(df.reset_index().to_json(orient = 'records'))
+
+                    messages.error(request, "Fill all the fields to add a column")
+                    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+
+
+            # edit column
+            if data_dict['name'] != columns or data_dict['f_type'] != f_type:
+                for index in range(len(data_dict['name'])):
+                    if data_dict['name'][index] != columns[index]:
+                        c.execute(f'ALTER TABLE "{table}" RENAME COLUMN "{columns[index]}" TO "{data_dict["name"][index]}"')
+                        conn.commit()
+
+                        df.loc[(df['Table'] == table) & (df['name'] == columns[index]), ['name']] = str(data_dict["name"][index])
+                        df.loc[(df['Table'] == table) & (df['f_type'] == f_type[index]), ['f_type']] = str(data_dict["f_type"][index])
+                        df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+                        df.to_csv('CRUD.csv', index = False)
+
+            # delete column
+            if "check_box" in data_dict:
+                df = pd.read_csv('CRUD.csv')
+                ans_df = df.loc[df['Table'] == table]
+                query = 'CREATE TABLE IF NOT EXISTS "FAKE" (ID INTEGER PRIMARY KEY AUTOINCREMENT, '
+                select_query = 'INSERT INTO FAKE SELECT ID, '
+
+                for index in range(len(ans_df)):
+                    if ans_df.iloc[index, 2] not in data_dict['check_box']:
+                        query += f'"{ans_df.iloc[index, 2]}" {ans_df.iloc[index, 3]}, '
+                        select_query += f'"{ans_df.iloc[index, 2]}", '
+                        
+                    if ans_df.iloc[index, 2] in data_dict['check_box']:
+                        df.drop(df.index[(df["Table"] == table) & (df['name'] == ans_df.iloc[index, 2])], axis = 0, inplace = True)
+                        
+                query = query[ : -2] + ")"
+                select_query = select_query[ : -2] + f" FROM {table}"
+
+                c.execute(query)
+                c.execute(select_query)
+                c.execute(f'DROP TABLE IF EXISTS "{table}"')
+                c.execute(f'ALTER TABLE "FAKE" RENAME TO "{table}"')
+                conn.commit()
+
+                df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+                df.to_csv('CRUD.csv', index = False)
+
+            # add column
+            if (data_dict['new_name'][0] != '' and "new_d_type" in data_dict and "new_f_type" in data_dict):
+                col_d_type = list(df.loc[df['Table'] == table, ['d_type']])
+
+                for index in range(len(data_dict['new_name'])):
+                    c.execute(f'ALTER TABLE "{table}" ADD COLUMN "{data_dict["new_name"][index]}" {data_dict["new_d_type"][index]}')
+                    col_d_type += [data_dict["new_d_type"][index]]
+                    conn.commit()
+
+                    df.drop(df.index[(df["Table"] == table)], axis = 0, inplace = True)
+                    df.to_csv('CRUD.csv', index = False)
+
+                    with open('CRUD.csv', 'a', newline='') as response:
+                        writer = csv.writer(response)
+                        new_dict = {'csrfmiddlewaretoken': data_dict['csrfmiddlewaretoken'], 'Table': data_dict['Table'], 'name': data_dict['name'], 'd_type': col_d_type, 'f_type': data_dict['f_type']}
+                        
+                        new_dict['name'] = new_dict['name'] + data_dict['new_name']
+                        new_dict['d_type'] = new_dict['d_type'] + data_dict['new_d_type']
+                        new_dict['f_type'] = new_dict['f_type'] + data_dict['new_f_type']
+                        new_dict['Table'] = new_dict['Table'] * len(new_dict['name'])
+                        new_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(new_dict['name'])
+                        
+                        writer.writerows(zip_longest(*new_dict.values()))
+                
+            # rename table
+            if table != data_dict['Table'][0]:
+                c.execute(f'ALTER TABLE "{table}" RENAME TO "{data_dict["Table"][0]}"')
+                conn.commit()
+
+                df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
+                df.loc[df['Table'] == table, ['Table']] = str(data_dict["Table"][0])
+                df.to_csv('CRUD.csv', index = False)
+
+            conn.close()  
+        
+    messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been updated successfully')
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
 
