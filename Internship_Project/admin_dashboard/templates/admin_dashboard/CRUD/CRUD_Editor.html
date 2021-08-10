@@ -1,0 +1,289 @@
+{% extends 'admin_dashboard/base.html' %}
+{% block body %}
+{% load static %}
+{%block menu_items_crud_3%}active{%endblock%}
+{%block menu_items_crud%}active {%endblock%}
+{%block menu_open_crud%}menu-open{%endblock%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %}AdminLTE 3 | CRUD Editor{% endblock %}</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel = "stylesheet" href="../../../static/css/admin_dashboard/CRUD_Editor.css">
+
+    <script>
+      var form_count = 1;
+
+        function addMore() { form_count += 1;
+	        $(".form2:last").clone().insertAfter(".form2:last").find(":input").val("");	
+        }
+
+        function remove() {
+          if (form_count > 1) {  form_count -= 1;
+            $(".form2:last").remove();  }
+        }
+
+        setTimeout(function() { 
+          $('.allert-error').fadeOut('slow'); 
+          $('.allert-success').fadeOut('slow');   }, 3500);
+
+    </script>
+    
+    <style>
+    
+        div.btnn {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        }
+            
+        /* 
+        Alert messages 
+        */
+
+        .allert-error {
+        padding: 12px;
+        background-color: #f44336;
+        color: white;
+        
+        }
+        /* 
+
+            /* 
+        success message 
+        */
+        .allert-success {
+        padding: 12px;
+        background-color: #469412;
+        
+        color: white;
+        }
+
+        .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        }
+
+        .closebtn:hover {
+        color: black;
+        }
+
+    </style>
+
+</head>
+
+<body>
+  <!-- Content Wrapper. Contains page content -->
+    <form action="{% url 'save_changes' tname %}" method='post'>{% csrf_token %}
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">CRUD Editor : {{tname}}</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'DashBoard'%}">Home</a></li>
+                    <li class="breadcrumb-item active">CRUD Editor</li>
+                    </ol>
+                </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+
+                {% for msg in messages %} 
+
+                    <br> 
+                    <div class="allert-{{msg.tags}}">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                        {{msg}}
+                    </div> <br>
+                    
+                {%endfor%} 
+
+            </div>
+            <!-- /.content-header -->
+
+
+            <div class = "mcontainer" style = "position:absolute; right:40px;">
+                <form action = "#">
+                    <div class = "user-details">
+                        <div class = "input-box">
+                            <h5 class="m-0 text-dark">Table Name</h5> <br>
+                            <input type = "text" style="font-size: 15px; width: 75em;" name="Table" value="{{tname}}" required>
+                        </div>  
+                    </div>
+                </form>
+
+                <br><br><br>
+                <h5 class="m-0 text-dark">Delete Columns</h5> <br>
+
+                <div class = "container1">
+                    {% for column in table %}
+                        <input type="checkbox" name="check_box" value="{{column.name}}">
+                        <label for="check_box" style="font-size: 15px;"> {{column.name}} </label><br>
+                    {% endfor %}
+                </div>
+
+                <br><br><br>
+                <h5 class="m-0 text-dark">Edit Columns</h5> <br>
+
+                <div class = "container1">
+                    <div class = "form1">
+
+                        {% for column in table %}
+
+                            <div class = "input-box">
+                                <input type = "text" style="font-size: 15px; width: 73em;" name="name" value="{{column.name}}" required>  
+                                <br> <br>
+                            </div>
+
+                            <div class = "input-box">
+                                <select id="data" name="f_type" style="font-size: 15px; height: 1.8em; width: 10em;" required>
+                                    <option value="" disabled selected> Field Type </option>
+
+                                    {% if column.f_type == "TEXT" %}
+                                        <option value="TEXT" selected> Text </option>
+                                    {% else %}
+                                        <option value="TEXT"> Text </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "TEXTAREA" %}
+                                        <option value="TEXTAREA" selected> Text-area </option>
+                                    {% else %}
+                                        <option value="TEXTAREA"> Text-area </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "PASSWORD" %}
+                                        <option value="PASSWORD" selected> Password </option>
+                                    {% else %}
+                                        <option value="PASSWORD"> Password </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "DATE" %}
+                                        <option value="DATE" selected> Date </option>
+                                    {% else %}
+                                        <option value="DATE"> Date </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "DATETIME" %}
+                                        <option value="DATETIME" selected> Date-Time </option>
+                                    {% else %}
+                                        <option value="DATETIME"> Date-Time </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "EMAIL" %}
+                                        <option value="EMAIL" selected> Email </option>
+                                    {% else %}
+                                        <option value="EMAIL"> Email </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "NUMBER" %}
+                                        <option value="NUMBER" selected> Numeric </option>
+                                    {% else %}
+                                        <option value="NUMBER"> Numeric </option>
+                                    {% endif %}
+
+                                    {% if column.f_type == "URL" %}
+                                        <option value="URL" selected> URL </option>
+                                    {% else %}
+                                        <option value="URL"> URL </option>
+                                    {% endif %}
+
+                                </select>
+
+                            </div>
+
+                            <br> 
+                            <hr style="width: 100%;border: .5px solid black;"><br>
+
+                        {% endfor %}
+ 
+                    </div>
+                </div>
+
+                <br><br><br>
+
+                <div class = "btnn" style="margin-right: -12ex;">
+                    <button class = "btn btn-primary" onClick="addMore();" type="button">Add Fields</button>
+                </div>
+                
+                <div class = "btnn" style="margin-right: -6ex;">
+                    <button class = "btn btn-danger" onClick="remove();" type="button">Remove Fields</button>
+                </div>
+
+                <br><br><br><br>
+                <h5 class="m-0 text-dark">Add Columns</h5> <br>
+
+                <div class = "container1">
+                    <div class = "form2">
+                        <div class = "input-box">
+                            <input type = "text" style="font-size: 15px; width: 73em;" placeholder="Field Name" name="new_name"> &emsp;  &emsp; &emsp;  
+                            <br>
+                        </div>
+        
+                        <div class = "input-box" >
+                            
+                            <select id="data" name="new_d_type" style="font-size: 15px; height: 1.8em; width: 10em;">
+                                <option value="" disabled selected> Data Type </option>
+                                <option value="CHARACTER"> char </option>
+                                <option value="VARCHAR"> varchar </option>
+                                <option value="INT"> int </option>
+                                <option value="BIGINT"> long </option>
+                                <option value="FLOAT"> float </option>
+                                <option value="BOOLEAN"> boolean </option>
+                                <option value="DATE"> date </option>
+                                <option value="DATETIME"> datetime </option>
+                            </select> 
+                            
+                            &emsp; &emsp; &emsp; 
+                            
+                            <select id="data" name="new_f_type" style="font-size: 15px; height: 1.8em; width: 10em;">
+                                <option value="" disabled selected> Field Type </option>
+                                <option value="TEXT"> Text </option>
+                                <option value="TEXTAREA"> Text-area </option>
+                                <option value="PASSWORD"> Password </option>
+                                <option value="DATE"> Date </option>
+                                <option value="DATETIME"> Date-Time </option>
+                                <option value="EMAIL"> Email </option>
+                                <option value="NUMBER"> Numeric </option>
+                                <option value="URL"> URL </option>
+                            </select> 
+
+                      </div>
+        
+                        <br> 
+                        <hr style="width: 100%;border: .5px solid black;"><br>
+                        
+                    </div>
+
+                    <div class = "button" style="text-align:center">
+                        <input type = "submit" value = "Save Changes">
+                    </div>
+
+                    <div class = "button" style = "text-align:center">
+                        <input type= "reset" value = "Reset Data" style="background-color: #ffc107;">
+                    </div>
+
+                </div>
+            </div> 
+        </div>
+    </form>
+{% endblock %}    
+</body>
+</html>
