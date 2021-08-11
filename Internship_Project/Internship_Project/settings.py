@@ -128,6 +128,11 @@ BASE_DIR / 'admin_dashboard/templates'
 ]
 STATIC_ROOT   = BASE_DIR / 'static'
 #<== end of code=====>
+# <======Media Root settings for images ================>
+MEDIA_URL = '/media/'
+MEDIA_ROOT =  BASE_DIR / 'media'
+
+# <======================end of code=====================>
 
 # SMTP configration
 

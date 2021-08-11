@@ -379,6 +379,13 @@ def general_settings(request):
         application_name = request.POST['application_name'].strip()
         timezone = request.POST['timezone'].strip()
         language = request.POST['language']
+        if("logo" in request.FILES):
+            logo= request.FILES['logo']
+           
+        if("favicon" in request.FILES):
+            favicon = request.FILES['favicon']
+            messages.success(request,"Data inserted successfully")
+        
     return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
 
 # <------------------------------Admin List functions ---------------------------------->
@@ -574,8 +581,8 @@ def installed_tables():
     tables = None
 
     if Path("CRUD.csv").exists():
-        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Table']))
-        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv')['Updated_at']))
+        tables = list(dict.fromkeys(pd.read_csv('CRUD.csv', error_bad_lines=False)['Table']))
+        updated_at = list(dict.fromkeys(pd.read_csv('CRUD.csv', error_bad_lines=False)['Updated_at']))
         df = pd.DataFrame(list(zip(tables, check_status(tables), updated_at)), columns = ['name', 'status', 'updated_at'])
         tables = json.loads(df.reset_index().to_json(orient = 'records'))
 

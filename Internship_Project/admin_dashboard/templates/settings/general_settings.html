@@ -35,10 +35,11 @@
               <div class="d-inline-block">
                   <h3 class="card-title"> 
                     <i class="fa fa-plus"></i>
-                    General Settings </h3>
+                    General Settings 
+                    </h3>
               </div>
             </div>
-            <form action="{%url 'general_settings'%}" method='post'> {% csrf_token %}
+            <form action="{%url 'general_settings'%}" method='post' enctype="multipart/form-data" > {% csrf_token %}
             <div class="card-body">   
                 <input type="hidden" name="csrf_test_name" value="">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">

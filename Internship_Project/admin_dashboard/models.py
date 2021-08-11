@@ -77,10 +77,6 @@ class Module(models.Model):
     
 # <--------------------- Settings Model ------------------------>
 class general_settings(models.Model):
-    store_id = models.IntegerField(null=True)
-    code = models.CharField(max_length=200,null=True)
-    key_value = models.CharField(null=True, max_length=200)
-    vale = models.CharField(max_length=5000,null=True)
-    serilize  = models.CharField(max_length= 200, null=True)
+    favicon = models.ImageField(upload_to='Favicon/', blank = True, null = True)
 # <------------------- ENd of Code ------------------>
 
