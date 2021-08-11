@@ -135,8 +135,8 @@
 
                 <div class = "container1">
                     {% for column in table %}
-                        <input type="checkbox" name="check_box" value="{{column.name}}">
-                        <label for="check_box" style="font-size: 15px;"> {{column.name}} </label><br>
+                        <input type="checkbox" name="check_box" value="{{column.name}}" id="{{column.name}}">
+                        <label for="{{column.name}}" style="font-size: 15px;"> {{column.name}} </label><br>
                     {% endfor %}
                 </div>
 
