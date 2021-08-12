@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+{% if gen.logo %}
+<link href='/media/{{gen.logo}}' rel='icon' type='image/x-icon'/>
+{% else %}
+  <link href='{% static 'dist/img/AdminLTELogo.png' %}' rel='icon' type='image/x-icon'/>
+  {% endif %}
   <meta charset="utf-8">
   <!-- Font Awesome -->
   <link rel="stylesheet" href={% static 'plugins/fontawesome-free/css/all.min.css' %}>
@@ -157,11 +162,20 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <img src={% static 'dist/img/AdminLTELogo.png' %} alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-           style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminFun
+    <a href="{% url 'DashBoard' %}" class="brand-link">
+     {%if gen.favicon %} 
+ <img src = "/media/{{gen.favicon}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">            {%else%}
+ <img src={% static 'dist/img/AdminLTELogo.png' %} alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">        
+           {%endif%}
+     {% if gen.Application_Name %}
+      <span class="brand-text font-weight-light">{{gen.Application_Name}}
       </span>
+      {% else %}
+         <span class="brand-text font-weight-light">Admin Lite 3
+      </span>
+      {% endif %}
     </a>
 
     <!-- Sidebar -->
@@ -212,7 +226,7 @@
             </ul>
           </li>
           <li class="nav-item has-treeview {%block menu_open_rlap%}{%endblock%}">
-            <a href="#" class="nav-link {%block menu_items_rlap%}{%endblock%}" >
+            <a href="{% url 'module_setting' %}" class="nav-link {%block menu_items_rlap%}{%endblock%}" >
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Roles and permission

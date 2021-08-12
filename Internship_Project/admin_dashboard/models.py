@@ -76,7 +76,12 @@ class Module(models.Model):
 # <-----------------------end of code------------------>
     
 # <--------------------- Settings Model ------------------------>
-class general_settings(models.Model):
+class general_setting(models.Model):
     favicon = models.ImageField(upload_to='Favicon/', blank = True, null = True)
+    logo = models.ImageField(upload_to='Logo/', blank = True, null = True)
+    Application_Name = models.CharField(max_length=500)
+    timezone = models.CharField(max_length=100)
+    Default_language = models.CharField(max_length=100)
+    
 # <------------------- ENd of Code ------------------>
 

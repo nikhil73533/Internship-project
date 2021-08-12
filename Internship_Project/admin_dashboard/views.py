@@ -5,14 +5,13 @@ from django import forms
 from django.http import request
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
-from .models import Module
+from .models import Module,general_setting
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
 from django.urls.base import reverse_lazy
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-# from .models import Profile
 from django.urls import reverse
 from django.views import View
 from .utils import token_generator
@@ -33,28 +32,40 @@ User = get_user_model()
 # Dashboard 1 view for home page
 @login_required(login_url='/') 
 def DashBoard(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     user = User.objects.get(id = request.user.id)
     count =  User.objects.all().count()
 
-    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user,"count":count, 'tables' : installed_tables()})
+    return render(request,'admin_dashboard/DashBoard_1.html',{'user':user,"count":count, 'tables' : installed_tables(),"gen":gen})
 
 # DashBoard 2 view in  home page
 @login_required(login_url='/') 
 def DashBoardTwo(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/DashBoard_2.html',{'user':user, 'tables' : installed_tables()})
+    return render(request,'admin_dashboard/DashBoard_2.html',{'user':user, 'tables' : installed_tables(),"gen":gen})
 
 # DashBoard 3 view in  home page
 @login_required(login_url='/') 
 def DashBoardThree(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     user = User.objects.get(id = request.user.id)
-    return render(request,'admin_dashboard/DashBoard_3.html',{'user':user, 'tables' : installed_tables()})
+    return render(request,'admin_dashboard/DashBoard_3.html',{'user':user, 'tables' : installed_tables(),"gen":gen})
 
 
 # DashBoard calander 
 @login_required(login_url='/') 
 def calander(request):
-    return render(request,'admin_dashboard/pages/calendar.html', {'tables' : installed_tables()})
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
+    return render(request,'admin_dashboard/pages/calendar.html', {'tables' : installed_tables(),"gen":gen})
 # <------------------------------------ End of Area------------------------------>
 
 
@@ -209,7 +220,9 @@ class Login_View(View):
 def CrudList(request, table):
     rows = None
     columns = None
-
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if not table.startswith('{'):
         df = pd.read_csv('CRUD.csv')
         columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
@@ -222,13 +235,15 @@ def CrudList(request, table):
         conn.commit()
         conn.close()       
         
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table,"gen":gen})
 
 # Crud function
 @login_required(login_url='/')  
 def CrudGenerator(request):
     data_dict = {}
-
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if(request.method == 'POST'):
         data_dict = dict(request.POST.lists())
         data_dict['Table'] = [name.strip() for name in data_dict['Table']]
@@ -236,16 +251,16 @@ def CrudGenerator(request):
 
         if "/" in data_dict['Table'][0] or "'" in data_dict['Table'][0] or '"' in data_dict['Table'][0] or "." in data_dict['Table'][0]:
             messages.error(request, """Table Name cannot contain these characters ( / or ' or " or . )""")
-            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables(),"gen":gen})
 
         for col_name in data_dict['name']:
             if "/" in col_name or "'" in col_name or '"' in col_name or "." in col_name:
                 messages.error(request, """Field Name cannot contain these characters ( / or ' or " or . )""")
-                return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+                return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables(),"gen":gen})
 
         if len(set(data_dict['name'])) != len(data_dict['d_type']):
             messages.error(request, f"Two or more fields have the same name, all fields must have a unique name")
-            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+            return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables(),"gen":gen})
 
         with open('CRUD.csv', 'a', newline='') as response:
             flag = 0
@@ -270,14 +285,20 @@ def CrudGenerator(request):
             else:
                 messages.error(request, f'The CRUD structure named "{data_dict["Table"][0]}" has already been defined')
         
-    return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables()})
+    return render(request, "admin_dashboard/CRUD/crud2.html", {'tables' : installed_tables(),"gen":gen})
 
 # Crud function 
 @login_required(login_url='/') 
 def CrudExtension(request):
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
     
 def Addadmin(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if(request.method == 'POST'):
         First_Name = request.POST['first_name'].strip()
         Last_Name = request.POST['last_name'].strip()
@@ -289,12 +310,12 @@ def Addadmin(request):
         if(password==confirm_password):
             if(User.objects.filter(email=email).exists()):
                 messages.error(request,'Email Taken')
-                return render(request, "admin/add_admin.html")
+                return render(request, "admin/add_admin.html",{"gen":gen})
 
 
             elif(User.objects.filter(username=Username).exists()):
                 messages.error(request,'Username Taken')
-                return render(request, "admin/add_admin.html")
+                return render(request, "admin/add_admin.html",{"gen":gen})
 
             else:
                 if(password_validate(request,password)):
@@ -318,16 +339,16 @@ def Addadmin(request):
                     email.send(fail_silently = False)
 
                     messages.success(request,'Account activation mail has been sent')
-                    return render(request, "admin/add_admin.html")
+                    return render(request, "admin/add_admin.html",{"gen":gen})
                 else:
                      # return templage to dom using render function
-                    return render(request, "admin/add_admin.html")
+                    return render(request, "admin/add_admin.html",{"gen":gen})
         else:
             messages.error(request,'Password Does Not Match')
-            return render(request, "admin/add_admin.html")
+            return render(request, "admin/add_admin.html",{"gen":gen})
     else:
         # return templage to dom using render function
-        return render(request, "admin/add_admin.html", {'tables' : installed_tables()})
+        return render(request, "admin/add_admin.html", {'tables' : installed_tables(),"gen":gen})
 
      
     
@@ -336,20 +357,29 @@ def Addadmin(request):
 
 
 def view_profile(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     user = User.objects.get(id = request.user.id)
     if(request.method == 'POST'):
         Username = request.POST['username'].strip()
         First_name= request.POST['first_name'].strip()
         Last_name = request.POST['last_name'].strip()
         Email = request.POST.get('email_address').strip()
-        user.username = Username
+        if(Username):
+            if(Username == user.username):
+                 user.username = Username
+            elif(User.objects.filter(username=Username).exists()):
+                messages.error(request,'Username Taken')
+                return redirect("view_profile")
+        
         user.first_name = First_name
         user.last_name = Last_name
         user.email = Email
         user.save()
         messages.success(request,"Profile updated successfully")
  
-    return render(request, "profile/view_profile.html",{'user':user, 'tables' : installed_tables()})
+    return render(request, "profile/view_profile.html",{'user':user, 'tables' : installed_tables(),"gen":gen})
 
 
 # <---- class based views --------------------------------->
@@ -372,31 +402,64 @@ class PasswordsChangesView(PasswordChangeView):
 # <---------------------end ----------------------------------->
 
 # <---------------------General Settings  ----------------------------------->
-
+triger = True
 @login_required(login_url='/') 
 def general_settings(request):
+    global triger
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if(request.method == 'POST'):
         application_name = request.POST['application_name'].strip()
         timezone = request.POST['timezone'].strip()
         language = request.POST['language']
+        logo = ""
+        favicon = ""
+        
         if("logo" in request.FILES):
             logo= request.FILES['logo']
            
         if("favicon" in request.FILES):
             favicon = request.FILES['favicon']
-            messages.success(request,"Data inserted successfully")
-        
-    return render(request, "settings/general_settings.html", {'tables' : installed_tables()})
+        if(triger==False):
+            gen = general_setting.objects.all()[0]
+            if(favicon):
+                gen.favicon=  favicon
+            if(logo):
+                gen.logo=  logo
+            gen.Application_Name = application_name
+            gen.language = language
+            gen.save()
+           
+            messages.success(request,"Data Updated successfully")
+            return redirect("general_settings")
+       
+        triger = False
+        gen = general_setting(logo = logo,favicon = favicon,Application_Name = application_name,timezone = timezone,Default_language = language)
+        gen.save()
+        gen = general_setting.objects.all()
+        if(len(gen)>1):
+                gen = general_setting.objects.all()[1]
+                gen.delete()
+        messages.success(request,"Data inserted successfully")
+        return redirect("general_settings")
+    return render(request, "settings/general_settings.html", {'tables' : installed_tables(),"gen":gen})
 
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     user = User.objects.all()
     module = Module.objects.all()
     count = -1
-    return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module, 'tables' : installed_tables()})
+    return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module, 'tables' : installed_tables(),"gen":gen})
 
 def filterAdminList(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     module = Module.objects.all()
     user = User.objects.all()
     if(request.method =='POST'):
@@ -410,16 +473,20 @@ def filterAdminList(request):
                 user = User.objects.filter(is_active =False)
         if(admin_status):
             user = User.objects.filter(role = admin_status)
-    return render(request,"admin/admin_test.html",{'users':user,"modules":module, 'tables' : installed_tables()})
+    return render(request,"admin/admin_test.html",{'users':user,"modules":module, 'tables' : installed_tables(),"gen":gen})
 
 def EditAdminList(request,user_id):
+        gen = general_setting.objects.all()
+        if(len(gen)>0):
+            gen = general_setting.objects.all()[0]
         module = Module.objects.all()
         user = User.objects.all()
         count = User.objects.get(id = user_id)
-        return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module, 'tables' : installed_tables()})
+        return render(request,"admin/admin_test.html",{'users':user,"count":count,"modules":module, 'tables' : installed_tables(),"gen":gen})
 
 @login_required(login_url='/') 
 def EditAdminListValue(request):
+    
     if(request.method == 'POST'):
         userid = request.POST.get('user').strip()
         user = User.objects.get(id  = userid)
@@ -443,20 +510,30 @@ def delete_admin(request,user_id):
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
-    return render(request,"admin_dashboard/pages/calendar.html", {'tables' : installed_tables()})
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
+    return render(request,"admin_dashboard/pages/calendar.html", {'tables' : installed_tables(),"gen":gen})
 
 # <------------------end of code------------------------------------------->
 # <---------------------Admin role view -------------------------------------->
 def add_new_role(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if(request.method == "POST"):
         admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
         module = Module(module_name = admin_title)
         module.save()
         messages.success(request,"Admin created successfully!!!!")
-    return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables()})
+        return redirect("admin_roles_and_permission")
+    return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables(),"gen":gen})
 
 def edit_new_role(request,module_id):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     module = Module.objects.get(id = module_id)
     count = -1
     if(request.method =="POST"):
@@ -466,7 +543,7 @@ def edit_new_role(request,module_id):
         module.save()
         messages.success(request,"Admin role is updated!!")
         return redirect("admin_roles_and_permission")
-    return render(request, "roles_and_permission/add_new_role.html",{"count":count,"module":module, 'tables' : installed_tables()})
+    return render(request, "roles_and_permission/add_new_role.html",{"count":count,"module":module, 'tables' : installed_tables(),"gen":gen})
 
 def delete_role(request,module_id):
     module = Module.objects.get(id = module_id)
@@ -477,21 +554,33 @@ def delete_role(request,module_id):
  # <--------------------------roles and permisution settings------------------------------>
 @login_required(login_url='/') 
 def module_setting(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     user = User.objects.all()
-    return render(request, "roles_and_permission/module_setting.html",{"users":user, 'tables' : installed_tables()})
+    return render(request, "roles_and_permission/module_setting.html",{"users":user, 'tables' : installed_tables(),"gen":gen})
 
 def admin_roles_and_permission(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     module = Module.objects.all()
-    return render(request, "roles_and_permission/admin_roles_and_permission.html",{"modules":module, 'tables' : installed_tables()})
+    return render(request, "roles_and_permission/admin_roles_and_permission.html",{"modules":module, 'tables' : installed_tables(),"gen":gen})
 
 def RolePermission(request):
-    return render(request,"roles_and_permission/role_and_permissions.html", {'tables' : installed_tables()})
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
+    return render(request,"roles_and_permission/role_and_permissions.html", {'tables' : installed_tables(),"gen":gen})
 
     #< --------------------------end------------------------------------->
 
 # <---------------------Crud section ------------------------------------->
 
 def create_table(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if request.method == 'POST':
 
         if check_status(table) == [1]:
@@ -519,9 +608,12 @@ def create_table(request, table):
 
         messages.success(request, f'CRUD : "{table}" has been installed successfully')
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
 
 def drop_table(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if request.method == 'POST':
 
         if check_status(table) == [0]:
@@ -540,9 +632,12 @@ def drop_table(request, table):
 
         messages.success(request, f'CRUD : "{table}" has been uninstalled successfully')
         
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
 
 def delete_crud(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if request.method == 'POST':
 
         if check_status(table) == [1]:
@@ -557,9 +652,10 @@ def delete_crud(request, table):
             writer = csv.writer(response)
             messages.success(request, f'CRUD : "{table}" has been deleted successfully')
             
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
 
 def check_status(tables):
+    
     status = []
     conn = sqlite3.connect('CRUD.db')
     c = conn.cursor()
@@ -589,6 +685,9 @@ def installed_tables():
     return tables
 
 def delete_all(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     rows = None
     columns = None
 
@@ -617,9 +716,12 @@ def delete_all(request, table):
         df.to_csv('CRUD.csv', index = False)
         messages.success(request, f'All the data has been deleted from CRUD : "{table}" successfully')
         
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table,"gen":gen})
     
 def delete_row(request, table, row_id):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     rows = None
     columns = None
 
@@ -641,9 +743,12 @@ def delete_row(request, table, row_id):
         df.to_csv('CRUD.csv', index = False)
 
     messages.success(request, f'Row No. {row_id} has been deleted from CRUD : "{table}" successfully')
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table,"gen":gen})
 
 def insert_record(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     rows = None
     columns = None
 
@@ -657,7 +762,7 @@ def insert_record(request, table):
         for value in data_dict['column_values']:
             if '"' in value.strip():
                 messages.error(request, """Column data cannot contain " " you can use ' ' instead""")
-                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None, 'title' : " | Insert Record"})
+                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None,"gen":gen, 'title' : " | Insert Record"})
             
             query += f'"{value.strip()}", '
 
@@ -680,11 +785,14 @@ def insert_record(request, table):
 
     else:
         if not table.startswith('{'):
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None, 'title' : " | Insert Record"})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None,"gen":gen, 'title' : " | Insert Record"})
 
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table,"gen": gen})
 
 def edit_record(request, table, row_id):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     rows = None
     columns = None
 
@@ -699,7 +807,7 @@ def edit_record(request, table, row_id):
         for index in range(len(ans_df)):
             if '"' in ans_df.iloc[index, 1].strip():
                 messages.error(request, """Column data cannot contain " " you can use ' ' instead""")
-                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record"})
+                return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record","gen":gen})
 
             query += f'"{ans_df.iloc[index, 0]}" = "{ans_df.iloc[index, 1].strip()}", '
 
@@ -722,11 +830,12 @@ def edit_record(request, table, row_id):
 
     else:
         if not table.startswith('{'):
-            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record"})
+            return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record","gen":gen})
     
-    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table})
+    return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table,"gen":gen})
 
 def insert_data(table):
+    
     df = pd.read_csv('CRUD.csv')
     columns = list(df.loc[(df["Table"] == table), 'name'])
     f_type = list(df.loc[(df["Table"] == table), 'f_type'])
@@ -757,6 +866,9 @@ def edit_data(table, row_id):
     return data
 
 def edit_crud(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     data = None
 
     if request.method == 'POST':
@@ -767,9 +879,12 @@ def edit_crud(request, table):
         df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
         data = json.loads(df.reset_index().to_json(orient = 'records'))
         
-    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen":gen})
             
 def save_changes(request, table):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if request.method == 'POST':
         data_dict = dict(request.POST.lists())
         
@@ -789,14 +904,14 @@ def save_changes(request, table):
                         data = json.loads(df.reset_index().to_json(orient = 'records'))
 
                         messages.error(request, "You cannot delete and rename a column at the same time")
-                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen": gen})
 
             if ((data_dict['new_name'][0] != '' and ("new_d_type" not in data_dict or "new_f_type" not in data_dict)) or ("new_f_type" in data_dict and ("new_d_type" not in data_dict or data_dict['new_name'][0] == '')) or ("new_d_type" in data_dict and ("new_f_type" not in data_dict or data_dict['new_name'][0] == ''))):
                 df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
                 data = json.loads(df.reset_index().to_json(orient = 'records'))
 
                 messages.error(request, "Fill all the fields to add a column")
-                return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+                return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen": gen})
 
             if len(data_dict['new_name']) > 1:
                 for index in range (1, len(data_dict['new_name'])):
@@ -805,7 +920,7 @@ def save_changes(request, table):
                         data = json.loads(df.reset_index().to_json(orient = 'records'))
 
                         messages.error(request, "Fill all the fields to add a column")
-                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen": gen})
 
             if (data_dict['new_name'][0] != '' and "new_d_type" in data_dict and "new_f_type" in data_dict):
                 if ((len(data_dict['new_name']) != len(data_dict['new_d_type'])) or (len(data_dict['new_d_type']) != len(data_dict['new_f_type'])) or (len(data_dict['new_f_type']) != len(data_dict['new_name']))): 
@@ -813,7 +928,7 @@ def save_changes(request, table):
                     data = json.loads(df.reset_index().to_json(orient = 'records'))
 
                     messages.error(request, "Fill all the fields to add a column")
-                    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data})
+                    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen":gen})
 
 
             # edit column
@@ -891,5 +1006,5 @@ def save_changes(request, table):
             conn.close()  
         
     messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been updated successfully')
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
 
