@@ -890,7 +890,6 @@ def save_changes(request, table):
         columns = list(df.loc[(df["Table"] == table), 'name'])
         f_type = list(df.loc[(df["Table"] == table), 'f_type'])
         
-<<<<<<< HEAD
         if check_status(table) == [1]:
             df = pd.read_csv('CRUD.csv')
             columns = list(df.loc[(df["Table"] == table), 'name'])
@@ -908,10 +907,7 @@ def save_changes(request, table):
 
                         messages.error(request, "You cannot delete and rename a column at the same time")
                         return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen": gen})
-=======
         data_dict = dict(request.POST.lists())
->>>>>>> b1ca666c75c43ff683b3e533f2bf9e689f772494
-
         data_dict['Table'] = [name.strip() for name in data_dict['Table']]
         data_dict['name'] = [names.strip() for names in data_dict['name']]
         data_dict['new_name'] = [names.strip() for names in data_dict['new_name']]
@@ -936,11 +932,7 @@ def save_changes(request, table):
         if (data_dict['new_name'][0] != '' and "new_d_type" in data_dict and "new_f_type" in data_dict):
             if ((len(data_dict['new_name']) != len(data_dict['new_d_type'])) or (len(data_dict['new_d_type']) != len(data_dict['new_f_type'])) or (len(data_dict['new_f_type']) != len(data_dict['new_name']))): 
                 messages.error(request, "Fill all the fields to add a column")
-<<<<<<< HEAD
-                return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen": gen})
-=======
-                return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : error_data(table)})
->>>>>>> b1ca666c75c43ff683b3e533f2bf9e689f772494
+                return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : error_data(table),"gen":gen})
 
         if (data_dict['new_name'][0] == '' and "new_d_type" not in data_dict and "new_f_type" not in data_dict and "check_box" in data_dict):
             if len(data_dict["check_box"]) == len(data_dict['name']):
@@ -956,13 +948,9 @@ def save_changes(request, table):
                 messages.error(request, """Field Name cannot contain these characters ( / or ' or " or . )""")
                 return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : error_data(table)})
 
-<<<<<<< HEAD
-                        messages.error(request, "Fill all the fields to add a column")
-                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen": gen})
-=======
         if (len(set(data_dict['name'])) != len(data_dict['f_type'])) or ("new_f_type" in data_dict and len(set(data_dict['name'] + data_dict['new_name'])) != len(data_dict['f_type'] + data_dict['new_f_type'])):
             messages.error(request, f"Two or more fields have the same name, all fields must have a unique name")
-            return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : error_data(table)})
+            return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : error_data(table),"gen":gen})
     
         # edit column
         if data_dict['name'] != columns or data_dict['f_type'] != f_type:
@@ -971,23 +959,17 @@ def save_changes(request, table):
                     if check_status(table) == [1]:
                         conn = sqlite3.connect('CRUD.db')
                         c = conn.cursor()
->>>>>>> b1ca666c75c43ff683b3e533f2bf9e689f772494
 
                         c.execute(f'ALTER TABLE "{table}" RENAME COLUMN "{columns[index]}" TO "{data_dict["name"][index]}"')
                         
                         conn.commit()
                         conn.close()
 
-<<<<<<< HEAD
-                    messages.error(request, "Fill all the fields to add a column")
-                    return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data,"gen":gen})
-=======
                     df = pd.read_csv('CRUD.csv')
                     df.loc[(df['Table'] == table) & (df['name'] == columns[index]), ['name']] = str(data_dict["name"][index])
                     df.loc[(df['Table'] == table) & (df['f_type'] == f_type[index]), ['f_type']] = str(data_dict["f_type"][index])
                     df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
                     df.to_csv('CRUD.csv', index = False)
->>>>>>> b1ca666c75c43ff683b3e533f2bf9e689f772494
 
         # delete column
         if "check_box" in data_dict:
@@ -1073,13 +1055,8 @@ def save_changes(request, table):
             df.loc[df['Table'] == table, ['Table']] = str(data_dict["Table"][0])
             df.to_csv('CRUD.csv', index = False)  
         
-<<<<<<< HEAD
-    messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been updated successfully')
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
-=======
         messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been updated successfully')
-    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables()})
->>>>>>> b1ca666c75c43ff683b3e533f2bf9e689f772494
+    return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(),"gen":gen})
 
 def error_data(table):
     df = pd.read_csv('CRUD.csv')
