@@ -179,7 +179,14 @@
                     
                   <td>{{user.username}}<input type="text" value = "{{user.id}}" name = "user" hidden ></td>
                   <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
-                  <td><input class = "edit" type="text" value="{{user.role}}" placeholder="Role" name="role"></td>
+                  <td>
+                  <select type="text" class = "edit"  id="exampleFormControlSelect1"  name="role" placeholder="Role" value="{{user.role}}">
+                              {% for module in modules %}
+                                <option>{{module.module_name}}</option>
+                                {% endfor%}
+                               
+                            </select>
+                  </td>
                   <td><div class="custom-control custom-switch">
                     <input type="checkbox" name = "status" value= "ok" class="custom-control-input" {% if request.user.is_active %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
                     <label class="custom-control-label" for="customSwitches-{{forloop.counter}}"></label>

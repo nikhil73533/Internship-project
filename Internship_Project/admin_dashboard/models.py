@@ -76,11 +76,12 @@ class Module(models.Model):
 # <-----------------------end of code------------------>
     
 # <--------------------- Settings Model ------------------------>
-class general_settings(models.Model):
-    store_id = models.IntegerField(null=True)
-    code = models.CharField(max_length=200,null=True)
-    key_value = models.CharField(null=True, max_length=200)
-    vale = models.CharField(max_length=5000,null=True)
-    serilize  = models.CharField(max_length= 200, null=True)
+class general_setting(models.Model):
+    favicon = models.ImageField(upload_to='Favicon/', blank = True, null = True)
+    logo = models.ImageField(upload_to='Logo/', blank = True, null = True)
+    Application_Name = models.CharField(max_length=500)
+    timezone = models.CharField(max_length=100)
+    Default_language = models.CharField(max_length=100)
+    
 # <------------------- ENd of Code ------------------>
 

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -107,6 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
+PRODUCT_MODEL = 'admin_dashboard.general_setting'
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
@@ -128,6 +131,11 @@ BASE_DIR / 'admin_dashboard/templates'
 ]
 STATIC_ROOT   = BASE_DIR / 'static'
 #<== end of code=====>
+# <======Media Root settings for images ================>
+MEDIA_URL = '/media/'
+MEDIA_ROOT =  BASE_DIR / 'media'
+
+# <======================end of code=====================>
 
 # SMTP configration
 
