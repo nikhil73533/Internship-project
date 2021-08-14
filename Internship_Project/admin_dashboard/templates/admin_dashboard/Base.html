@@ -484,6 +484,20 @@
                   <p>General Settings</p>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a href="{% url 'EmailSettings'%}" class="nav-link {%block menu_items_email_settings%}{%endblock%}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Email Settings</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{% url 'reCAPTCHA'%}" class="nav-link {%block menu_items_recaptcha_settings%}{%endblock%}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Google  reCAPTCHA</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview 

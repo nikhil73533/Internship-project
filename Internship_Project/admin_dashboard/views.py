@@ -75,6 +75,9 @@ def LogOut(request):
 
 # Login view for login page
 def Login(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if(request.method=='POST'):
         Password = request.POST['password']
         Username = request.POST['username'].strip()
@@ -97,11 +100,14 @@ def Login(request):
             messages.error(request,'Login Failed! ')
             return render(request,'accounts/login.html')
     else:
-        return render(request,'accounts/login.html')
+        return render(request,'accounts/login.html',{"gen":gen})
 
 
 # Register view  for register page
 def Register(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
     if(request.method == 'POST'):
         First_Name = request.POST['first_name'].strip()
         Last_Name = request.POST['last_name'].strip()
@@ -114,11 +120,11 @@ def Register(request):
         if(password==confirm_password):
             if(User.objects.filter(email=email).exists()):
                 messages.error(request,'Email Taken')
-                return render(request,'accounts/Register.html')
+                return render(request,'accounts/Register.html',{"gen":gen})
 
             elif(User.objects.filter(username=Username).exists()):
                 messages.error(request,'Username Taken')
-                return render(request,'accounts/Register.html')
+                return render(request,'accounts/Register.html',{"gen":gen})
             else:
                 if(password_validate(request,password)):
                     user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
@@ -139,16 +145,16 @@ def Register(request):
                     email.send(fail_silently = False)
 
                     messages.success(request,'Account activation mail has been sent')
-                    return render(request,"accounts/Register.html")
+                    return render(request,"accounts/Register.html",{"gen":gen})
                 else:
                      # return templage to dom using render function
-                    return render(request,"accounts/Register.html")
+                    return render(request,"accounts/Register.html",{"gen":gen})
         else:
             messages.error(request,'Password Does Not Match')
             return redirect('Register')
     else:
         # return templage to dom using render function
-        return render(request,"accounts/Register.html")
+        return render(request,"accounts/Register.html",{"gen":gen})
 
 # static function for password validitation
 def password_validate(request,password):
@@ -445,6 +451,23 @@ def general_settings(request):
         return redirect("general_settings")
     return render(request, "settings/general_settings.html", {'tables' : installed_tables(),"gen":gen})
 
+
+# Email Settings
+@login_required(login_url='/') 
+def EmailSettings(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
+    return render(request,"settings/Email_Settings.html",{"gen":gen,'tables' : installed_tables()})
+
+
+# Google reCAPTCHA
+@login_required(login_url='/') 
+def reCAPTCHA(request):
+    gen = general_setting.objects.all()
+    if(len(gen)>0):
+        gen = general_setting.objects.all()[0]
+    return render(request,"settings/google_recaptcha.html",{"gen":gen,'tables' : installed_tables()})
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):

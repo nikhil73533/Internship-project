@@ -71,6 +71,12 @@ urlpatterns = [
   #<======= General Settings page url =========>
   path('general_settings', views.general_settings, name = "general_settings"),
 
+  #<======= Email Settings page url =========>
+  path('email_settings', views.EmailSettings, name = "EmailSettings"),
+  
+  #<======= google reCAPTCHA page url =========>
+  path('reCAPTCHA', views.reCAPTCHA, name = "reCAPTCHA"),
+
   #<======= Admin Roles and permissions page url =========>
   path('admin_roles_and_permission', views.admin_roles_and_permission, name = "admin_roles_and_permission"),
 
