@@ -5,7 +5,7 @@ from django import forms
 from django.http import request
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
-from .models import Module,general_setting
+from .models import Module,general_setting, email_settings
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
 from django.urls.base import reverse_lazy
@@ -458,8 +458,27 @@ def EmailSettings(request):
     gen = general_setting.objects.all()
     if(len(gen)>0):
         gen = general_setting.objects.all()[0]
-    return render(request,"settings/Email_Settings.html",{"gen":gen,'tables' : installed_tables()})
 
+    if(request.method == 'POST'):
+        email_from = request.POST['email_from'].strip()
+        smpt_host = request.POST['smtp_host'].strip()
+        smpt_port = request.POST['smtp_port'].strip()
+        smpt_user = request.POST['smtp_user'].strip()
+        smpt_pass = request.POST['smtp_pass'].strip()   
+
+        if(email_settings.objects.exists()):    
+            print("Table is not Empty!!")
+            email_settings.objects.all().delete()    
+
+        eml = email_settings()
+        eml.email_from = email_from
+        eml.smtp_host = smpt_host
+        eml.smtp_pass = smpt_pass
+        eml.smtp_port = smpt_port
+        eml.smtp_user = smpt_user
+        eml.save()
+
+    return render(request,"settings/Email_Settings.html",{"gen":gen,'tables' : installed_tables()})
 
 # Google reCAPTCHA
 @login_required(login_url='/') 
@@ -468,6 +487,7 @@ def reCAPTCHA(request):
     if(len(gen)>0):
         gen = general_setting.objects.all()[0]
     return render(request,"settings/google_recaptcha.html",{"gen":gen,'tables' : installed_tables()})
+
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
 def admintest(request):

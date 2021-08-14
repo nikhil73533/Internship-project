@@ -85,3 +85,10 @@ class general_setting(models.Model):
     
 # <------------------- ENd of Code ------------------>
 
+class email_settings(models.Model):
+    email_from = models.CharField(max_length=100)
+    smtp_host = models.CharField(max_length=100)
+    smtp_port = models.CharField(max_length=100)
+    smtp_user = models.CharField(max_length=100)
+    smtp_pass = models.CharField(max_length=100)
+
