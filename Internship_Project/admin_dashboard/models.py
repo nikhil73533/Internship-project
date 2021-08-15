@@ -92,3 +92,6 @@ class email_settings(models.Model):
     smtp_user = models.CharField(max_length=100)
     smtp_pass = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f'{self.email_from} {self.smtp_host} {self.smtp_port} {self.smtp_user} {self.smtp_pass}'
+
