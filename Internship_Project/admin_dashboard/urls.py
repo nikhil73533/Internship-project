@@ -119,5 +119,7 @@ urlpatterns = [
 
   path('save_changes/<str:table>', views.save_changes, name = "save_changes"),
 
+  path('log', views.log, name = "log"),
+
 ]
 

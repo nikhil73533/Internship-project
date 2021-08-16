@@ -37,29 +37,30 @@ User = get_user_model()
 def DashBoard(request):
     user = User.objects.get(id = request.user.id)
     count =  User.objects.all().count()
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Dashboard V1")
+
     return render(request,'admin_dashboard/DashBoard_1.html', {'user' : user, "count" : count, 'tables' : installed_tables(), "gen" : gen_data()})
 
 # DashBoard 2 view in  home page
 @login_required(login_url='/') 
 def DashBoardTwo(request):
     user = User.objects.get(id = request.user.id)
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Dashboard V2")
+
     return render(request,'admin_dashboard/DashBoard_2.html', {'user' : user, 'tables' : installed_tables(), "gen" : gen_data()})
 
 # DashBoard 3 view in  home page
 @login_required(login_url='/') 
 def DashBoardThree(request):
     user = User.objects.get(id = request.user.id)
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Dashboard V3")
+
     return render(request,'admin_dashboard/DashBoard_3.html', {'user' : user, 'tables' : installed_tables(), "gen" : gen_data()})
-
-
-# DashBoard calander 
-@login_required(login_url='/') 
-def calander(request):
-    return render(request,'admin_dashboard/pages/calendar.html', {'tables' : installed_tables(), "gen" : gen_data()})
 
 # <------------------------------------ End of Area------------------------------>
 
 def LogOut(request):
+    update_log(User.objects.get(id = request.user.id).username, "Logged Out")
     auth.logout(request)
     return redirect('/')
 
@@ -72,6 +73,7 @@ def Login(request):
         
         if(user is not None and user.is_active):
             auth.login(request, user)
+            update_log(User.objects.get(id = request.user.id).username, "Logged In")
             # if(request.POST.get('chk')):
             #     response = HttpResponse('DashBoard')
             #     response.set_cookie('cid',Username)
@@ -217,6 +219,8 @@ def CrudList(request, table):
     columns = None
     
     if not table.startswith('{'):
+        update_log(User.objects.get(id = request.user.id).username, f'Opened and viewed Installed CRUD : "{table}"')
+
         df = pd.read_csv('CRUD.csv')
         columns = ['S. No.'] + list(df.loc[(df["Table"] == table), 'name'])
 
@@ -234,6 +238,7 @@ def CrudList(request, table):
 @login_required(login_url='/')  
 def CrudGenerator(request):
     data_dict = {}
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed CRUD Generator')
     
     if(request.method == 'POST'):
         data_dict = dict(request.POST.lists())
@@ -271,6 +276,8 @@ def CrudGenerator(request):
                 data_dict['Table'] = data_dict['Table'] * len(data_dict['name'])
                 data_dict['Updated_at'] = [str(datetime.datetime.now().isoformat(' ', 'seconds'))] * len(data_dict['name'])
                 writer.writerows(zip_longest(*data_dict.values()))
+
+                update_log(User.objects.get(id = request.user.id).username, f'Created CRUD : "{data_dict["Table"][0]}"')
                 messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been created successfully')
 
             else:
@@ -281,9 +288,12 @@ def CrudGenerator(request):
 # Crud function 
 @login_required(login_url='/') 
 def CrudExtension(request):
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed CRUD Extension')
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(), "gen" : gen_data()})
     
 def Addadmin(request):
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Add Admin')
+
     if(request.method == 'POST'):
         First_Name = request.POST['first_name'].strip()
         Last_Name = request.POST['last_name'].strip()
@@ -350,6 +360,7 @@ def Addadmin(request):
 
 def view_profile(request):
     user = User.objects.get(id = request.user.id)
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Profile')
 
     if(request.method == 'POST'):
         Username = request.POST['username'].strip()
@@ -367,6 +378,7 @@ def view_profile(request):
         user.last_name = Last_name
         user.email = Email
         user.save()
+        update_log(User.objects.get(id = request.user.id).username, 'Updated Profile')
         messages.success(request,"Profile updated successfully")
  
     return render(request, "profile/view_profile.html", {'user': user, 'tables' : installed_tables(), "gen" : gen_data()})
@@ -396,6 +408,8 @@ triger = True
 @login_required(login_url='/') 
 def general_settings(request):
     global triger
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed General Settings')
+
     gen = general_setting.objects.all()
     if(len(gen)>0):
         gen = general_setting.objects.all()[0]
@@ -412,6 +426,7 @@ def general_settings(request):
            
         if("favicon" in request.FILES):
             favicon = request.FILES['favicon']
+
         if(triger==False):
             gen = general_setting.objects.all()[0]
             if(favicon):
@@ -422,6 +437,7 @@ def general_settings(request):
             gen.language = language
             gen.save()
            
+            update_log(User.objects.get(id = request.user.id).username, 'Updated General Settings')
             messages.success(request,"Data Updated successfully")
             return redirect("general_settings")
        
@@ -429,9 +445,12 @@ def general_settings(request):
         gen = general_setting(logo = logo,favicon = favicon,Application_Name = application_name,timezone = timezone,Default_language = language)
         gen.save()
         gen = general_setting.objects.all()
+
         if(len(gen)>1):
                 gen = general_setting.objects.all()[1]
                 gen.delete()
+
+        update_log(User.objects.get(id = request.user.id).username, 'Data inserted in General Settings')
         messages.success(request,"Data inserted successfully")
         return redirect("general_settings")
         
@@ -441,6 +460,8 @@ def general_settings(request):
 # Email Settings
 @login_required(login_url='/') 
 def EmailSettings(request):
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Email Settings')
+
     if(request.method == 'POST'):
         email_from = request.POST['email_from'].strip()
         smtp_host = request.POST['smtp_host'].strip()
@@ -457,7 +478,6 @@ def EmailSettings(request):
             return render(request, "settings/Email_Settings.html", {"gen" : gen_data(), 'tables' : installed_tables()})
 
         if(email_settings.objects.exists()):    
-            print("Table is not Empty!!")
             email_settings.objects.all().delete()    
 
         eml = email_settings()
@@ -468,11 +488,15 @@ def EmailSettings(request):
         eml.smtp_user = smtp_user
         eml.save()
 
+        update_log(User.objects.get(id = request.user.id).username, 'Updated Email Settings')
+        messages.success(request, "Email Settings updated successfully")
+
     return render(request, "settings/Email_Settings.html", {"gen" : gen_data(), 'tables' : installed_tables()})
 
 # Google reCAPTCHA
 @login_required(login_url='/') 
 def reCAPTCHA(request):
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Google reCAPTCHA Settings')
     return render(request,"settings/google_recaptcha.html", {"gen" : gen_data(), 'tables' : installed_tables()})
 
 # <------------------------------Admin List functions ---------------------------------->
@@ -482,6 +506,7 @@ def admintest(request):
     module = Module.objects.all()
     count = -1
 
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Admin List')
     return render(request, "admin/admin_test.html", {'users' : user, "count" : count, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data()})
 
 def filterAdminList(request):
@@ -489,6 +514,7 @@ def filterAdminList(request):
     user = User.objects.all()
 
     if(request.method =='POST'):
+        update_log(User.objects.get(id = request.user.id).username, 'Performed search in Admin List')
         all_status = request.POST.get('allstatus[]')
         admin_status = request.POST.get('addadmintypes[]')
        
@@ -525,6 +551,7 @@ def EditAdminListValue(request):
             user.is_activate = True
 
         user.save()
+        update_log(User.objects.get(id = request.user.id).username, f'Updated Admin Details : "{user}"')
         messages.success(request,"Admin Updated successfully!!!")
 
     return redirect('admintest')
@@ -533,24 +560,29 @@ def delete_admin(request,user_id):
     user = User.objects.get(id=  user_id)
 
     if(request.method =='GET'):
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{user}"')
         user.delete()
         messages.success(request,"Admin deleted successfully")
 
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Calendar")
     return render(request, "admin_dashboard/pages/calendar.html", {'tables' : installed_tables(), "gen" : gen_data()})
 
 # <------------------end of code------------------------------------------->
 
 # <---------------------Admin role view -------------------------------------->
 def add_new_role(request):
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Add new Role")
+
     if(request.method == "POST"):
         admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
         module = Module(module_name = admin_title)
         module.save()
-        messages.success(request,"Admin created successfully!!!!")
+        update_log(User.objects.get(id = request.user.id).username, f'Created new Admin Role : "{admin_title}"')
+        messages.success(request,"New Admin Role created successfully!!!!")
         return redirect("admin_roles_and_permission")
 
     return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables(), "gen" : gen_data()})
@@ -564,7 +596,8 @@ def edit_new_role(request,module_id):
         status = request.POST["admin_role_status"]
         module.module_name = admin_title
         module.save()
-        messages.success(request,"Admin role is updated!!")
+        update_log(User.objects.get(id = request.user.id).username, f'Updated Admin Role to "{admin_title}"')
+        messages.success(request,"Admin role updated!!")
         return redirect("admin_roles_and_permission")
 
     return render(request, "roles_and_permission/add_new_role.html", {"count" : count, "module" : module, 'tables' : installed_tables(), "gen" : gen_data()})
@@ -573,6 +606,7 @@ def delete_role(request,module_id):
     module = Module.objects.get(id = module_id)
 
     if(request.method == "GET"):
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin Role')
         module.delete()
         messages.success(request,"Role deleted successfully!!!")
 
@@ -581,14 +615,17 @@ def delete_role(request,module_id):
  # <--------------------------roles and permission settings------------------------------>
 @login_required(login_url='/') 
 def module_setting(request):
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Module Settings')
     user = User.objects.all()
     return render(request, "roles_and_permission/module_setting.html", {"users" : user, 'tables' : installed_tables(), "gen" : gen_data()})
 
 def admin_roles_and_permission(request):
     module = Module.objects.all()
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Add new Role')
     return render(request, "roles_and_permission/admin_roles_and_permission.html", {"modules" : module, 'tables' : installed_tables(), "gen" : gen_data()})
 
 def RolePermission(request):
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Roles & Permissions')
     return render(request, "roles_and_permission/role_and_permissions.html", {'tables' : installed_tables(), "gen" : gen_data()})
 
     #< --------------------------end------------------------------------->
@@ -621,6 +658,7 @@ def create_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
+        update_log(User.objects.get(id = request.user.id).username, f'Installed CRUD : "{table}"')
         messages.success(request, f'CRUD : "{table}" has been installed successfully')
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(), "gen" : gen_data()})
@@ -642,6 +680,7 @@ def drop_table(request, table):
         df.loc[df['Table'] == table, ['Updated_at']] = str(datetime.datetime.now().isoformat(' ', 'seconds'))
         df.to_csv('CRUD.csv', index = False)
 
+        update_log(User.objects.get(id = request.user.id).username, f'Uninstalled CRUD : "{table}"')
         messages.success(request, f'CRUD : "{table}" has been uninstalled successfully')
         
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(), "gen" : gen_data()})
@@ -659,6 +698,7 @@ def delete_crud(request, table):
 
         with open('CRUD.csv', 'a', newline='') as response:
             writer = csv.writer(response)
+            update_log(User.objects.get(id = request.user.id).username, f'Deleted CRUD : "{table}"')
             messages.success(request, f'CRUD : "{table}" has been deleted successfully')
             
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(), "gen" : gen_data()})
@@ -719,6 +759,7 @@ def delete_all(request, table):
         conn.commit()
         conn.close()
         df.to_csv('CRUD.csv', index = False)
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted all the data from CRUD : "{table}"')
         messages.success(request, f'All the data has been deleted from CRUD : "{table}" successfully')
         
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table, "gen" : gen_data()})
@@ -744,6 +785,7 @@ def delete_row(request, table, row_id):
         conn.close()
         df.to_csv('CRUD.csv', index = False)
 
+    update_log(User.objects.get(id = request.user.id).username, f'Deleted Row No. {row_id} from CRUD : "{table}"')
     messages.success(request, f'Row No. {row_id} has been deleted from CRUD : "{table}" successfully')
 
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table, "gen" : gen_data()})
@@ -781,10 +823,12 @@ def insert_record(request, table):
         conn.close()
         df.to_csv('CRUD.csv', index = False)
 
+        update_log(User.objects.get(id = request.user.id).username, f'Record inserted into CRUD : "{table}"')
         messages.success(request, f'Record inserted into CRUD : "{table}" successfully')
 
     else:
         if not table.startswith('{'):
+            update_log(User.objects.get(id = request.user.id).username, f'Opened and viewed Insert Record in CRUD : "{table}"')
             return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : insert_data(table), 'edit' : None, "gen" : gen_data(), 'title' : " | Insert Record"})
 
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table, "gen" : gen_data()})
@@ -823,10 +867,12 @@ def edit_record(request, table, row_id):
         conn.close()
         df.to_csv('CRUD.csv', index = False)
 
+        update_log(User.objects.get(id = request.user.id).username, f'Updated Row No. {row_id} in CRUD : "{table}"')
         messages.success(request, f'Row No. {row_id} has been updated successfully')
 
     else:
         if not table.startswith('{'):
+            update_log(User.objects.get(id = request.user.id).username, f'Opened and viewed Edit Record in CRUD : "{table}"')
             return render(request, "admin_dashboard/CRUD/CRUD_Insert.html", {'tables' : installed_tables(), 'tname' : table, 'table' : edit_data(table, row_id), 'edit' : True, 'row_id' : row_id, 'title' : " | Edit Record", "gen" : gen_data()})
     
     return render(request, "admin_dashboard/CRUD/crud1.html", {'tables' : installed_tables(), 'rows' : rows, 'columns' : columns, 'tname' : table, "gen" : gen_data()})
@@ -871,6 +917,7 @@ def edit_crud(request, table):
 
         df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
         data = json.loads(df.reset_index().to_json(orient = 'records'))
+        update_log(User.objects.get(id = request.user.id).username, f'Opened and viewed Edit CRUD : "{table}"')
         
     return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, "gen" : gen_data()})
             
@@ -879,24 +926,6 @@ def save_changes(request, table):
         df = pd.read_csv('CRUD.csv')
         columns = list(df.loc[(df["Table"] == table), 'name'])
         f_type = list(df.loc[(df["Table"] == table), 'f_type'])
-        
-        if check_status(table) == [1]:
-            df = pd.read_csv('CRUD.csv')
-            columns = list(df.loc[(df["Table"] == table), 'name'])
-            f_type = list(df.loc[(df["Table"] == table), 'f_type'])
-
-            conn = sqlite3.connect('CRUD.db')
-            c = conn.cursor()
-            
-            # checking errors 
-            if "check_box" in data_dict:
-                for del_column in data_dict['check_box']:
-                    if del_column not in data_dict['name']:
-                        df = pd.DataFrame(list(zip(columns, f_type)), columns = ['name', 'f_type'])
-                        data = json.loads(df.reset_index().to_json(orient = 'records'))
-
-                        messages.error(request, "You cannot delete and rename a column at the same time")
-                        return render(request, "admin_dashboard/CRUD/CRUD_Editor.html", {'tables' : installed_tables(), 'tname' : table, 'table' : data, "gen" : gen_data()})
         
         data_dict = dict(request.POST.lists())
         data_dict['Table'] = [name.strip() for name in data_dict['Table']]
@@ -1046,6 +1075,7 @@ def save_changes(request, table):
             df.loc[df['Table'] == table, ['Table']] = str(data_dict["Table"][0])
             df.to_csv('CRUD.csv', index = False)  
         
+        update_log(User.objects.get(id = request.user.id).username, f'Updated CRUD : "{data_dict["Table"][0]}"')
         messages.success(request, f'CRUD : "{data_dict["Table"][0]}" has been updated successfully')
 
     return render(request, "admin_dashboard/CRUD/crud_part_3.html", {'tables' : installed_tables(), "gen" : gen_data()})
@@ -1067,4 +1097,27 @@ def gen_data():
         gen = general_setting.objects.all()[0]
 
     return gen
+
+def log(request):
+    data = None
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Log File")
+
+    if Path("Project Log.csv").exists():
+        usernames = list(pd.read_csv('Project Log.csv', error_bad_lines=False)['Username'])
+        actions = list(pd.read_csv('Project Log.csv', error_bad_lines=False)['Action'])
+        time = list(pd.read_csv('Project Log.csv', error_bad_lines=False)['Time'])
+        df = pd.DataFrame(list(zip(usernames, actions, time)), columns = ['user_name', 'action', 'time'])
+        data = json.loads(df.reset_index().to_json(orient = 'records'))
+
+    return render(request, "admin_dashboard/pages/log.html", {'tables' : installed_tables(), "gen" : gen_data(), 'log' : data})
+
+def update_log(user_name, activity):
+    with open('Project Log.csv', 'a', newline='') as response:
+        writer = csv.writer(response)
+
+        with open('Project Log.csv', 'r') as read_obj:
+            if not read_obj.read(1):
+                writer.writerow(['Username', 'Action', 'Time'])
+
+            writer.writerow([user_name, activity, str(datetime.datetime.now().isoformat(' ', 'seconds'))])
 

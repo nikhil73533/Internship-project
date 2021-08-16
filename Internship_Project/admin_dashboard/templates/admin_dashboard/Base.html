@@ -237,7 +237,7 @@
               <li class="nav-item">
                 <a href="{% url 'module_setting'%}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Module Setting</p>
+                  <p>Module Settings</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -249,7 +249,7 @@
               <li class="nav-item">
                 <a href="{% url 'admin_roles_and_permission'%}" class="nav-link {%block menu_items_add_new_role%}{%endblock%}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add new roles</p>
+                  <p>Add new role</p>
                 </a>
               </li>
             </ul>
@@ -558,6 +558,16 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="{% url 'log' %}" class="nav-link {%block menu_open_log %}{%endblock%}">
+              <i class="nav-icon fas fa-clipboard-list"></i>
+              <p>
+                Log File
+              </p>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="pages/gallery.html" class="nav-link">
               <i class="nav-icon far fa-image"></i>
@@ -738,9 +748,7 @@
             </ul>
           </li>
 
-
-          <li class="nav-item has-treeview 
-{%block menu_open_crud%}{%endblock%}">
+          <li class="nav-item has-treeview {%block menu_open_crud%}{%endblock%}">
             <a href="#" class="nav-link {%block menu_items_crud%}{%endblock%}">
               <i class="nav-icon fas fa-folder"></i>
               <p>
