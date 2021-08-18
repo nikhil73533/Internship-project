@@ -95,3 +95,10 @@ class email_settings(models.Model):
     def __str__(self):
         return f'{self.email_from} {self.smtp_host} {self.smtp_port} {self.smtp_user} {self.smtp_pass}'
 
+# <---------------------  recaptcha_settings  Model ------------------------>
+
+class recaptcha_settings(models.Model):
+    recaptcha_site_key = models.CharField(max_length=100)
+    recaptcha_secret_key = models.CharField(max_length=100)
+    recaptcha_lang = models.CharField(max_length=100)
+

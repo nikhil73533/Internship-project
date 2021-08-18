@@ -5,7 +5,7 @@ from django import forms
 from django.http import request
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
-from .models import Module,general_setting, email_settings
+from .models import Module,general_setting, email_settings, recaptcha_settings
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
 from django.core.mail.backends.smtp import EmailBackend
@@ -497,7 +497,26 @@ def EmailSettings(request):
 @login_required(login_url='/') 
 def reCAPTCHA(request):
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Google reCAPTCHA Settings')
+
+    if(request.method == 'POST'):
+        recaptcha_site_key = request.POST['recaptcha_site_key'].strip()
+        recaptcha_secret_key = request.POST['recaptcha_secret_key'].strip()
+        recaptcha_lang = request.POST['recaptcha_lang'].strip()
+
+        if(recaptcha_settings.objects.exists()):    
+            recaptcha_settings.objects.all().delete()    
+
+        rep = recaptcha_settings()
+        rep.recaptcha_site_key = recaptcha_site_key
+        rep.recaptcha_secret_key = recaptcha_secret_key
+        rep.recaptcha_lang = recaptcha_lang
+        rep.save()
+
+        update_log(User.objects.get(id = request.user.id).username, 'Updated reCAPTCHA Settings')
+        messages.success(request, "reCAPTCHA Settings updated successfully")
+
     return render(request,"settings/google_recaptcha.html", {"gen" : gen_data(), 'tables' : installed_tables()})
+
 
 # <------------------------------Admin List functions ---------------------------------->
 @login_required(login_url='/') 
