@@ -1120,21 +1120,21 @@ def gen_data():
 def log(request):
     data = None
     update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Log File")
-
-    if Path("Project Log.csv").exists():
-        usernames = list(pd.read_csv('Project Log.csv', error_bad_lines=False)['Username'])
-        actions = list(pd.read_csv('Project Log.csv', error_bad_lines=False)['Action'])
-        time = list(pd.read_csv('Project Log.csv', error_bad_lines=False)['Time'])
+    
+    if Path(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv').exists():
+        usernames = list(pd.read_csv(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv', error_bad_lines=False)['Username'])
+        actions = list(pd.read_csv(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv', error_bad_lines=False)['Action'])
+        time = list(pd.read_csv(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv', error_bad_lines=False)['Time'])
         df = pd.DataFrame(list(zip(usernames, actions, time)), columns = ['user_name', 'action', 'time'])
         data = json.loads(df.reset_index().to_json(orient = 'records'))
 
     return render(request, "admin_dashboard/pages/log.html", {'tables' : installed_tables(), "gen" : gen_data(), 'log' : data})
 
 def update_log(user_name, activity):
-    with open('Project Log.csv', 'a', newline='') as response:
+    with open(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv', 'a', newline='') as response:
         writer = csv.writer(response)
 
-        with open('Project Log.csv', 'r') as read_obj:
+        with open(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv', 'r') as read_obj:
             if not read_obj.read(1):
                 writer.writerow(['Username', 'Action', 'Time'])
 
