@@ -6,7 +6,7 @@ from django import forms
 from django.http import request
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User,auth
-from .models import Module,general_setting, email_settings, recaptcha_settings
+from .models import Module, general_setting, email_settings, recaptcha_settings
 from django.contrib import messages
 from django.core.mail import EmailMessage, message
 from django.core.mail.backends.smtp import EmailBackend
@@ -619,23 +619,28 @@ def add_new_role(request):
     if(request.method == "POST"):
         admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
-        module = Module(module_name = admin_title)
+
+        module = Module(module_name = admin_title, status = status)
         module.save()
+
         update_log(User.objects.get(id = request.user.id).username, f'Created new Admin Role : "{admin_title}"')
         messages.success(request,"New Admin Role created successfully!!!!")
         return redirect("admin_roles_and_permission")
 
     return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables(), "gen" : gen_data()})
 
-def edit_new_role(request,module_id):
+def edit_new_role(request, module_id):
     module = Module.objects.get(id = module_id)
     count = -1
 
     if(request.method =="POST"):
         admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
+
         module.module_name = admin_title
+        module.status = status
         module.save()
+
         update_log(User.objects.get(id = request.user.id).username, f'Updated Admin Role to "{admin_title}"')
         messages.success(request,"Admin role updated!!")
         return redirect("admin_roles_and_permission")
@@ -652,7 +657,8 @@ def delete_role(request,module_id):
 
         return redirect("admin_roles_and_permission")
 
- # <--------------------------roles and permission settings------------------------------>
+# <--------------------------roles and permission settings------------------------------>
+
 @login_required(login_url='/') 
 def module_setting(request):
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Module Settings')
@@ -664,11 +670,13 @@ def admin_roles_and_permission(request):
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Add new Role')
     return render(request, "roles_and_permission/admin_roles_and_permission.html", {"modules" : module, 'tables' : installed_tables(), "gen" : gen_data()})
 
-def RolePermission(request):
+def RolePermission(request, module_id):
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Roles & Permissions')
-    return render(request, "roles_and_permission/role_and_permissions.html", {'tables' : installed_tables(), "gen" : gen_data()})
+    module = Module.objects.get(id = module_id)
+    role_name = Module.objects.get(id = module_id).module_name
+    return render(request, "roles_and_permission/role_and_permissions.html", {'tables' : installed_tables(), "gen" : gen_data(), "module" : module, "role" : role_name})
 
-    #< --------------------------end------------------------------------->
+#< --------------------------end------------------------------------->
 
 # <---------------------Crud section ------------------------------------->
 
@@ -1160,4 +1168,36 @@ def update_log(user_name, activity):
                 writer.writerow(['Username', 'Action', 'Time'])
 
             writer.writerow([user_name, activity, str(datetime.datetime.now().isoformat(' ', 'seconds'))])
+
+def save_permissions(request, module_id):
+    module = Module.objects.get(id = module_id)
+    role_name = module.module_name
+
+    if(request.method =="POST"):
+        data_dict = dict(request.POST.lists())
+
+        if "profile" in data_dict:
+            module.profile = [1 if val == 'on' else 0 for val in data_dict['profile']][0]
+
+        if "admin" in data_dict:
+            module.admin = [1 if val == 'on' else 0 for val in data_dict['admin']][0]
+
+        if "rlp" in data_dict:
+            module.roles_permissions = [1 if val == 'on' else 0 for val in data_dict['rlp']][0]
+
+        if "log" in data_dict: 
+            module.log = [1 if val == 'on' else 0 for val in data_dict['log']][0]
+
+        if "settings" in data_dict:
+            module.settings = [1 if val == 'on' else 0 for val in data_dict['settings']][0]
+
+        if "crud" in data_dict:
+            module.crud = [1 if val == 'on' else 0 for val in data_dict['crud']][0]
+
+        module.save()
+
+        update_log(User.objects.get(id = request.user.id).username, f'Updated Permissions of "{module.module_name}"')
+        messages.success(request, "Permissions updated")
+
+    return render(request, "roles_and_permission/role_and_permissions.html", {'tables' : installed_tables(), "gen" : gen_data(), "module" : module, "role" : role_name})
 

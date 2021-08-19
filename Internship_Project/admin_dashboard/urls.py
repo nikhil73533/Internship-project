@@ -24,7 +24,7 @@ urlpatterns = [
   path('DashboardThree', views.DashBoardThree, name = "DashBoardThree"),
 
   #<======= rolesandpermission  page url =========>
-  path('RolePermission', views.RolePermission, name = "RolePermission"),
+  path('RolePermission/<int:module_id>', views.RolePermission, name = "RolePermission"),
 
   #<======= Edit new role page url =========>
   path('edit_new_role/<int:module_id>/', views.edit_new_role, name = "edit_new_role"),
@@ -120,6 +120,8 @@ urlpatterns = [
   path('save_changes/<str:table>', views.save_changes, name = "save_changes"),
 
   path('log', views.log, name = "log"),
+
+  path('save_permissions/<int:module_id>', views.save_permissions, name = "save_permissions")
 
 ]
 

@@ -68,11 +68,20 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 # <-----------------------end of code------------------>
 
 # <-----------------Module Settings ------------------>
+
 class Module(models.Model):
-    module_name = models.CharField(max_length=1000,)
+    module_name = models.CharField(max_length=1000)
     controlller_name = models.CharField(max_length=1000)
     fa_icon = models.CharField(max_length=500)
-    operations = models.CharField(max_length=1000)
+    
+    profile = models.BooleanField(default = True)
+    admin = models.BooleanField(default = False)
+    roles_permissions = models.BooleanField(default = False)
+    log = models.BooleanField(default = False)
+    settings = models.BooleanField(default = False)
+    crud = models.BooleanField(default = False)
+    status = models.BooleanField(default = False)
+
 # <-----------------------end of code------------------>
     
 # <--------------------- Settings Model ------------------------>
@@ -101,4 +110,6 @@ class recaptcha_settings(models.Model):
     recaptcha_site_key = models.CharField(max_length=100)
     recaptcha_secret_key = models.CharField(max_length=100)
     recaptcha_lang = models.CharField(max_length=100)
+
+# <------------------- ENd of Code ------------------>
 
