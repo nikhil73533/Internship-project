@@ -73,20 +73,19 @@ def GetCookie(request):
 
 # Login view for login page
 def Login(request):
-    print("ok")
     if(request.method=='POST'):
         Password = request.POST['password']
         Username = request.POST['username'].strip()
-        remember_me = request.POST.get('rmemeber_me')
+        remember_me = request.POST.get('chk')
         user = auth.authenticate(username=Username, password=Password)
         
         if(user is not None and user.is_active):
             auth.login(request, user)
-            print("outside rememeber")
+            print("ok1")
             print(remember_me)
+            print("ok2")
+
             if(remember_me): 
-                print("inside remember")
-                print("ok")
                 print(remember_me)
                 user = User.objects.get(id = request.user.id)
                 count =  User.objects.all().count()
@@ -101,16 +100,9 @@ def Login(request):
         else:
             messages.error(request,'Login Failed! ')
             return render(request,'accounts/login.html',{"gen" : gen_data(), 'tables' : installed_tables()})
-    print("ok2")
-    if(request.COOKIES):
-        print("ok4")
-        if(request.COOKIES.get('uid')):
-            print("ok3")
-            print(request.COOKIES['uid'])
-            return render(request,'accounts/login.html',{'uid':request.COOKIES['uid'],'pass':request.COOKIES['pass'],"gen" : gen_data(), 'tables' : installed_tables()})
-        else:
-             return render(request,'accounts/login.html',{"gen" : gen_data(), 'tables' : installed_tables()})
-
+        
+    if(request.COOKIES.get('uid')):
+        return render(request,'accounts/login.html',{'uid':request.COOKIES['uid'],'pass':request.COOKIES['pass'],"gen" : gen_data(), 'tables' : installed_tables()})
     else:
         return render(request, 'accounts/login.html', {"gen" : gen_data(), 'tables' : installed_tables()})
 
