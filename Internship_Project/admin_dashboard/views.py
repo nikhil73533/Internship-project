@@ -1,6 +1,7 @@
 import datetime
 from django.contrib.auth import models, get_user_model
 from django.forms import fields
+from django.template.loader import render_to_string
 from django import forms
 from django.http import request
 from django.shortcuts import render,redirect,HttpResponse
@@ -64,30 +65,52 @@ def LogOut(request):
     auth.logout(request)
     return redirect('/')
 
+
+# Get Cookie
+def GetCookie(request):
+    a= request.COOKIES['uid']
+    return HttpResponse("a " + a)
+
 # Login view for login page
 def Login(request):
+    print("ok")
     if(request.method=='POST'):
         Password = request.POST['password']
         Username = request.POST['username'].strip()
+        remember_me = request.POST.get('rmemeber_me')
         user = auth.authenticate(username=Username, password=Password)
         
         if(user is not None and user.is_active):
             auth.login(request, user)
+            print("outside rememeber")
+            print(remember_me)
+            if(remember_me): 
+                print("inside remember")
+                print("ok")
+                print(remember_me)
+                user = User.objects.get(id = request.user.id)
+                count =  User.objects.all().count()
+                res= render_to_string('admin_dashboard/DashBoard_3.html',{'user' : user, 'tables' : installed_tables(), "gen" : gen_data()})
+                response = HttpResponse(res)
+                response.set_cookie('uid',Username)
+                response.set_cookie('pass',Password)
+                return response
             update_log(User.objects.get(id = request.user.id).username, "Logged In")
-            # if(request.POST.get('chk')):
-            #     response = HttpResponse('DashBoard')
-            #     response.set_cookie('cid',Username)
-            #     response.set_cookie('cid1',Password)
-            #     return response
-            
-            # if(request.COOKIES.get('cid')):
-            #     return render(request,'accounts/login.html',{'cookie1':request.COOKIES.get('cid'),'cookie2':request.COOKIES.get('cid1')})
-            # else:
             return redirect('DashBoard')
 
         else:
             messages.error(request,'Login Failed! ')
-            return render(request,'accounts/login.html')
+            return render(request,'accounts/login.html',{"gen" : gen_data(), 'tables' : installed_tables()})
+    print("ok2")
+    if(request.COOKIES):
+        print("ok4")
+        if(request.COOKIES.get('uid')):
+            print("ok3")
+            print(request.COOKIES['uid'])
+            return render(request,'accounts/login.html',{'uid':request.COOKIES['uid'],'pass':request.COOKIES['pass'],"gen" : gen_data(), 'tables' : installed_tables()})
+        else:
+             return render(request,'accounts/login.html',{"gen" : gen_data(), 'tables' : installed_tables()})
+
     else:
         return render(request, 'accounts/login.html', {"gen" : gen_data(), 'tables' : installed_tables()})
 
@@ -557,11 +580,17 @@ def EditAdminList(request,user_id):
 @login_required(login_url='/') 
 def EditAdminListValue(request):
     if(request.method == 'POST'):
+        First_name = request.POST.get('first')
+        Last_name = request.POST.get('last')
         userid = request.POST.get('user').strip()
         user = User.objects.get(id  = userid)
         Email = request.POST.get('email_address').strip()
         Role = request.POST['role'].strip()
         Status = request.POST.get('status')
+        if(First_name):
+            user.first_name = First_name
+        if(Last_name):
+            user.last_name = Last_name
         user.email = Email
         user.role = Role
         user.status = False

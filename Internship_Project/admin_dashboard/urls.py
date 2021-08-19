@@ -91,7 +91,7 @@ urlpatterns = [
 
   #<=========Register page Urls============>
   path('Register', views.Register, name = "Register"),
-  
+
   #<=========Password Reset Urls============>
   path('reset_password/',PasswordResetView.as_view(template_name = "reset_password/forgot_pass.html"),name = 'reset_password'),
   path('reset_password_sent/',PasswordResetDoneView.as_view(template_name = "reset_password/alert_message.html"), name = "password_reset_done"),

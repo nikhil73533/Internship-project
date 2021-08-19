@@ -53,7 +53,7 @@
       
       color: white;
     }
-    .name{
+    .naame{
       border-top: none;
       border-left: none;
       border-right: none;
@@ -137,7 +137,12 @@
                                   {% endfor %}
                                 </datalist>
                               </td>
-                              <td><input list="browsers1"  class="form-control" placeholder="All Status" name="allstatus[]">
+                              <td>
+                                <input list="browsers1"  class="form-control" placeholder="All Status" name="allstatus[]">
+                                <datalist class="add_admin" id="browsers1">
+                                  <option value="Active"></option>
+                                  <option value="Unactive"></option>
+                                </datalist>
                                 <br>
                                 <input type="submit" class="btn btn-success" style="float: right; ">
                               </td>
@@ -167,7 +172,8 @@
         
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td>  <input class = "name" type="text" value="{{user.first_name}}" placeholder="first_name" name="first_name"> &emsp; <input class = "name" type="text" value="{{user.last_name}}" placeholder="last_name" name="last_name">
+                <form action="{% url 'EditAdminListValue' %}" method="POST">{% csrf_token %}
+                <td>  <input class = "naame" type="text" value="{{user.first_name}}" placeholder="first_name" name="first"> &emsp; <input class = "naame" type="text" value="{{user.last_name}}" placeholder="last_name" name="last">
                     <br>
                                         {%if user.role%}
                                         <p  style="font-size: 15px;">&emsp;&emsp;{{user.role}}</p>
@@ -175,7 +181,7 @@
                                         <p  style="font-size: 15px;">&emsp;&emsp;Admin</p>
                                         {%endif%}
                 </td>
-                <form action="{% url 'EditAdminListValue' %}" method="POST">{% csrf_token %}
+               
                     
                   <td>{{user.username}}<input type="text" value = "{{user.id}}" name = "user" hidden ></td>
                   <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
