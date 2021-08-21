@@ -129,7 +129,7 @@
                   <th>ID</th>
                   <th>Admin Role</th>
                   <th>Status</th>
-                  <th>Permission</th>
+                  <th>Modify Permissions</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -139,7 +139,7 @@
                   <td>Super Admin</td>
                   <td>
                     <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitches-1" checked>
+                      <input type="checkbox" class="custom-control-input" id="customSwitches-1" disabled checked>
                       <label class="custom-control-label" for="customSwitches-1"></label>
                     </div>
                   </td>
@@ -155,14 +155,23 @@
                
                   <td>{{forloop.counter}}</td>
                   <td>{{module.module_name}}</td>
+
                   <td>
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitches-2" checked>
-                      <label class="custom-control-label" for="customSwitches-2"></label>
-                    </div>
+                    {% if module.status == 0 %}
+                      <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitches-2" disabled>
+                        <label class="custom-control-label" for="customSwitches-2"></label>
+                      </div>
+                    {% else %}
+                      <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitches-2" disabled checked>
+                        <label class="custom-control-label" for="customSwitches-2"></label>
+                      </div>
+                    {% endif %}
                   </td>
+
                   <td>
-                    <a  href="#"  class="btn btn-info btn-lg mr5">
+                    <a href="{% url 'RolePermission' module.id %}" class="btn btn-info btn-lg mr5">
                       <i class="fa fa-sliders"></i>
                     </a>
                   </td>
@@ -170,7 +179,7 @@
                     <a  href="{%url 'edit_new_role' module.id %}"  class="btn btn-warning btn-lg mr5">
                       <i class="fa fa-edit"></i>
                     </a>
-                    <a  href="{%url 'delete_role' module.id %}"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger btn-lg">
+                    <a  href="{%url 'delete_role' module.id %}"  onclick="return confirm('Are you sure you want to delete?')"  class="btn btn-danger btn-lg">
                         <i class="fa fa-remove"></i>
                     </a>
                   </td>

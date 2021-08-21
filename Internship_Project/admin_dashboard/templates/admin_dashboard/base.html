@@ -225,35 +225,38 @@
               </li>
             </ul>
           </li>
+
           <li class="nav-item has-treeview {%block menu_open_rlap%}{%endblock%}">
-            <a href="{% url 'module_setting' %}" class="nav-link {%block menu_items_rlap%}{%endblock%}" >
+            <a href="#" class="nav-link {%block menu_items_rlap%}{%endblock%}" >
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Roles and permission
+                Roles and Permissions
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'module_setting'%}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Module Settings</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'RolePermission'%}" class="nav-link {%block menu_items_rlp%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Roles & Permissions</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'admin_roles_and_permission'%}" class="nav-link {%block menu_items_add_new_role%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add new role</p>
-                </a>
-              </li>
-            </ul>
+
+            {% if permissions %}
+              {% if permissions.roles_permissions == 1 %}
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'module_setting'%}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Module Settings</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="{% url 'admin_roles_and_permission'%}" class="nav-link {%block menu_items_add_new_role%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Modify Roles</p>
+                    </a>
+                  </li>
+                </ul>
+              {% endif %}
+            {% endif %}
+
           </li>
+
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -469,6 +472,7 @@
               </li>
             </ul>
           </li>
+
           <li class="nav-item has-treeview {%block menu_open_setting%}{%endblock%}">
             <a href="#" class="nav-link {%block menu_items_setting%}{%endblock%}">
               <i class="nav-icon fas fa-cogs"></i>
@@ -477,31 +481,37 @@
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview ">
-              <li class="nav-item">
-                <a href="{% url 'general_settings'%}" class="nav-link {%block menu_items_settings%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>General Settings</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="{% url 'EmailSettings'%}" class="nav-link {%block menu_items_email_settings%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Email Settings</p>
-                </a>
-              </li>
+            {% if permissions %}
+              {% if permissions.settings == 1 %}
+                <ul class="nav nav-treeview ">
+                  <li class="nav-item">
+                    <a href="{% url 'general_settings'%}" class="nav-link {%block menu_items_settings%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>General Settings</p>
+                    </a>
+                  </li>
 
-              <li class="nav-item">
-                <a href="{% url 'reCAPTCHA'%}" class="nav-link {%block menu_items_recaptcha_settings%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Google  reCAPTCHA</p>
-                </a>
-              </li>
-            </ul>
+                  <li class="nav-item">
+                    <a href="{% url 'EmailSettings'%}" class="nav-link {%block menu_items_email_settings%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Email Settings</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="{% url 'reCAPTCHA'%}" class="nav-link {%block menu_items_recaptcha_settings%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Google  reCAPTCHA</p>
+                    </a>
+                  </li>
+                </ul>
+              {% endif %}
+            {% endif %}
+
           </li>
-          <li class="nav-item has-treeview 
-{%block menu_open_profile%}{%endblock%}">
+
+          <li class="nav-item has-treeview {%block menu_open_profile%}{%endblock%}">
             <a href="#" class="nav-link {%block menu_items_profile%}{%endblock%}">
               <i class="nav-icon fas fa-user-circle"></i>
               <p>
@@ -509,23 +519,30 @@
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'view_profile'%}" class="nav-link  {%block menu_items_module_view_profile%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View Profile</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/password" class="nav-link {%block menu_items_module_changepassword%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Change Password</p>
-                </a>
-              </li>
-            </ul>
+
+            {% if permissions %}
+              {% if permissions.profile == 1 %}
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'view_profile'%}" class="nav-link  {%block menu_items_module_view_profile%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>View Profile</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="/password" class="nav-link {%block menu_items_module_changepassword%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Change Password</p>
+                    </a>
+                  </li>
+                </ul>
+              {% endif %}
+            {% endif %}
+
           </li>
-          <li class="nav-item has-treeview 
-{%block menu_open_admin%}{%endblock%}">
+
+          <li class="nav-item has-treeview {%block menu_open_admin%}{%endblock%}">
             <a href="#" class="nav-link {%block menu_items_admin%}{%endblock%}">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -533,21 +550,29 @@
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'Addadmin'%}" class="nav-link {%block menu_items_addadmin%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Admin</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'admintest'%}"  class="nav-link {%block menu_items_adminlist%}{%endblock%}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Admin List</p>
-                </a>
-              </li>
-            </ul>
+
+            {% if permissions %}
+              {% if permissions.admin == 1 %}
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'Addadmin'%}" class="nav-link {%block menu_items_addadmin%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add Admin</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="{% url 'admintest' %}"  class="nav-link {%block menu_items_adminlist%}{%endblock%}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Admin List</p>
+                    </a>
+                  </li>
+                </ul>
+              {% endif %}
+            {% endif %}
+
           </li>
+
           <li class="nav-header">EXAMPLES</li>
           <li class="nav-item">
             <a href="{% url 'calendar'%}" class="nav-link {%block menu_items_module_calander%}{%endblock%}">
@@ -559,14 +584,18 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="{% url 'log' %}" class="nav-link {%block menu_open_log %}{%endblock%}">
-              <i class="nav-icon fas fa-clipboard-list"></i>
-              <p>
-                Activity Log
-              </p>
-            </a>
-          </li>
+          {% if permissions %}
+            {% if permissions.log == 1 %}
+              <li class="nav-item">
+                <a href="{% url 'log' %}" class="nav-link {%block menu_open_log %}{%endblock%}">
+                  <i class="nav-icon fas fa-clipboard-list"></i>
+                  <p>
+                    Activity Log
+                  </p>
+                </a>
+              </li>
+            {% endif %}
+          {% endif %}
 
           <li class="nav-item">
             <a href="pages/gallery.html" class="nav-link">
@@ -756,20 +785,28 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'CrudGenerator'%}" class="nav-link {%block menu_items_crud_2%}{%endblock%}">
-                  <i class="nav-icon fas fa-folder-plus"></i>
-                  <p>Genrate CRUD</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'CrudExtension'%}" class="nav-link {%block menu_items_crud_3%}{%endblock%}">
-                  <i class="nav-icon fas fa-folder-open"></i>
-                  <p>Crud Extension</p>
-                </a>
-              </li>
-            </ul>
+
+            {% if permissions %}
+              {% if permissions.crud == 1 %}
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'CrudGenerator'%}" class="nav-link {%block menu_items_crud_2%}{%endblock%}">
+                      <i class="nav-icon fas fa-folder-plus"></i>
+                      <p>Genrate CRUD</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="{% url 'CrudExtension'%}" class="nav-link {%block menu_items_crud_3%}{%endblock%}">
+                      <i class="nav-icon fas fa-folder-open"></i>
+                      <p>Crud Extension</p>
+                    </a>
+                  </li>
+
+                </ul>
+              {% endif %}
+            {% endif %}
+
           </li>
 
           <p></p>
@@ -782,23 +819,27 @@
               </p>
             </a>
 
-            {% if tables %}
-              {% for table in tables %}
-                {% if table.status == "Active" %}
+            {% if permissions %}
+              {% if permissions.crud == 1 %}
+                {% if tables %}
+                  {% for table in tables %}
+                    {% if table.status == "Active" %}
 
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{% url 'CrudList' table.name %}" class="nav-link">
-                      <i class="nav-icon fas fa-file"></i>
-                      <p> {{table.name}} </p>
-                    </a>
-                  </li>
-                </ul>
+                      <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                          <a href="{% url 'CrudList' table.name %}" class="nav-link">
+                            <i class="nav-icon fas fa-file"></i>
+                            <p> {{table.name}} </p>
+                          </a>
+                        </li>
+                      </ul>
 
+                    {% endif %}
+                  {% endfor %}
                 {% endif %}
-              {% endfor %}
+              {% endif %}
             {% endif %}
-            
+
           </li>
 
           <li class="nav-header">MULTI LEVEL EXAMPLE</li>

@@ -1,19 +1,31 @@
-.dash{
-  display: flex;
+form .button{
+  height: 50px;
+  margin: 45px;
 }
-.user{
-  display: flex;
+form .button input{
+height: 65%;
+width: 150%;
+font-size: 18px;
+font-weight: 500;
+border-radius: 21px;
+letter-spacing: 1px;
+outline: none;
+color: #fff;
+border: none;
+background: rgb(5, 219, 59);
 }
-.user1{
-  display: flex;
+form .button input:hover{
+  background: #377caa;
 }
-.prof{
-  display: flex;
-}
-.loc{
-  display: flex;
-}
-.container{
-  color: rgb(10, 10, 10);
-  border:3px solid grey;
+.button{ 
+  height: 90%;
+  width: 13%;
+  float: right;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  outline: none;
+  color: #fff;
+  border: none;
 }

@@ -225,9 +225,9 @@
                 <td>{{user.username}}</td>
                 <td>{{user.email}}</td>
                 {% if user.role %}
-                <td><button type="button" onClick="document.location='{% url 'RolePermission'  %}'";   class="btn btn-success">{{user.role}}</button></td>
+                <td><button type="button" class="btn btn-success">{{user.role}}</button></td>
                 {% else %}
-                                <td><button type="button" onClick="document.location='{% url 'RolePermission' %}'" class="btn btn-success">Admin</button></td>
+                <td><button type="button" class="btn btn-success">Admin</button></td>
                 {% endif %}
                 <td><div class="custom-control custom-switch">
                   <input type="checkbox"  value= "on" class="custom-control-input" name = "status" {% if request.user.is_active %}checked{% endif %} id="customSwitches">
@@ -239,7 +239,7 @@
                     <i class="fa fa-edit"></i>
                   </button>
                   
-                <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('are you sure to delete?')"  class="btn btn-danger ">
+                <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('Are you sure you want to delete?')"  class="btn btn-danger ">
                         <i class="fa fa-remove"></i>
                     </a>
                   
