@@ -546,7 +546,7 @@ def admintest(request):
     count = -1
 
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Admin List')
-    return render(request, "admin/admin_test.html", {'users' : user, "count" : count, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+    return render(request, "admin/admin_test.html", {'users' : user, "count" : count, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "cur_role" : User.objects.get(id = request.user.id).role})
 
 def filterAdminList(request):
     module = Module.objects.all()
@@ -565,14 +565,14 @@ def filterAdminList(request):
         if(admin_status):
             user = User.objects.filter(role = admin_status)
 
-    return render(request, "admin/admin_test.html", {'users' : user, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+    return render(request, "admin/admin_test.html", {'users' : user, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "cur_role" : User.objects.get(id = request.user.id).role})
 
 def EditAdminList(request,user_id):
         module = Module.objects.all()
         user = User.objects.all()
         count = User.objects.get(id = user_id)
 
-        return render(request, "admin/admin_test.html", {'users' : user, "count" : count, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+        return render(request, "admin/admin_test.html", {'users' : user, "count" : count, "modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "cur_role" : User.objects.get(id = request.user.id).role})
 
 @login_required(login_url='/') 
 def EditAdminListValue(request):
@@ -602,11 +602,13 @@ def EditAdminListValue(request):
 
 
 def delete_admin(request,user_id):  
-    Admin = User.objects.filter(id = user_id)
+    Admin = User.objects.get(id = user_id)
+
     if(request.method == "GET"):
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{Admin.username}"')
         Admin.delete()    
-        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{Admin}"')
         messages.success(request,"Admin Deleted Successfully!!!")
+        
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
@@ -658,7 +660,7 @@ def delete_role(request,module_id):
     
         for name in rows:
             data = User.objects.get(username = name)
-            data.role = ""
+            data.role = "No Role"
             data.save()
         
         update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin Role')
@@ -678,7 +680,7 @@ def module_setting(request):
 def admin_roles_and_permission(request):
     module = Module.objects.all()
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Modify Roles')
-    return render(request, "roles_and_permission/admin_roles_and_permission.html", {"modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+    return render(request, "roles_and_permission/admin_roles_and_permission.html", {"modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "cur_role" : User.objects.get(id = request.user.id).role})
 
 def RolePermission(request, module_id):
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Roles & Permissions')
@@ -1227,8 +1229,7 @@ def permissions(role):
     permissions = None
 
     if role != "No Role":
-        permissions = Module.objects.all()
-        if(len(permissions)>0):
-            permissions = Module.objects.get(module_name = role)
+        permissions = Module.objects.get(module_name = role)
+            
     return permissions
 
