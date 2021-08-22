@@ -197,7 +197,7 @@
                with font-awesome or any other icon font library -->
                <!-- menu-open -->
           <li class="nav-item has-treeview {%block menu_open_dashboard%}{%endblock%}">
-            <a href="{% url 'DashBoard'%}" class="nav-link {%block menu_items_dashboard%}{%endblock%}">
+            <a href="{% url 'DashBoard' %}" class="nav-link {%block menu_items_dashboard%}{%endblock%}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -239,7 +239,7 @@
               {% if permissions.roles_permissions == 1 %}
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{% url 'module_setting'%}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
+                    <a href="{% url 'module_setting' %}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Module Settings</p>
                     </a>

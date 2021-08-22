@@ -10,3 +10,10 @@ def is_equal(users,user_id):
                 return True
     
     return False
+
+@register.filter(name="is_activate")
+def is_activate(users,user_id):
+    admin = User.objects.get(id = user_id)
+    if(admin.is_active):
+            return True
+    return False

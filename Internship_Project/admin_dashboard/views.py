@@ -129,9 +129,14 @@ def Register(request):
                     user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
                     user.is_active = False
                     user.save()
-
-                    data = str(email_settings.objects.get())
-                    eml = data.split()
+                    data_1 = email_settings.objects.all()
+                    if(len(data_1)>0):
+                        data = str(email_settings.objects.get())
+                        eml = data.split()
+                    else:
+                        eml = ["django.core.mail.backends.smtp.EmailBackend","smtp.gmail.com",587,"gusteaus.restaurent@gmail.com","iswxjxdoyhjtmymf"]
+                    
+                   
                     
                     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
                     domain = get_current_site(request).domain
@@ -585,25 +590,23 @@ def EditAdminListValue(request):
             user.last_name = Last_name
         user.email = Email
         user.role = Role
-        user.status = False
 
         if(Status == None):
-            user.is_activate = True
-
+            user.is_active= False
+        else:
+            user.is_active = True
         user.save()
         update_log(User.objects.get(id = request.user.id).username, f'Updated Admin Details : "{user}"')
         messages.success(request,"Admin Updated successfully!!!")
-
     return redirect('admintest')
 
-def delete_admin(request,user_id):
-    user = User.objects.get(id=  user_id)
 
-    if(request.method =='GET'):
-        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{user}"')
-        user.delete()
-        messages.success(request,"Admin deleted successfully")
-
+def delete_admin(request,user_id):  
+    Admin = User.objects.filter(id = user_id)
+    if(request.method == "GET"):
+        Admin.delete()    
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{Admin}"')
+        messages.success(request,"Admin Deleted Successfully!!!")
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
 def calendar(request):
@@ -1223,8 +1226,9 @@ def save_permissions(request, module_id):
 def permissions(role):
     permissions = None
 
-    if role != "":
-        permissions = Module.objects.get(module_name = role)
-
+    if role != "No Role":
+        permissions = Module.objects.all()
+        if(len(permissions)>0):
+            permissions = Module.objects.get(module_name = role)
     return permissions
 

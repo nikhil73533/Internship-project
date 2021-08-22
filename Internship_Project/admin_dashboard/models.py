@@ -70,7 +70,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 # <-----------------Module Settings ------------------>
 
 class Module(models.Model):
-    module_name = models.CharField(max_length=1000)
+    module_name = models.CharField(max_length=1000,default = "No Role")
     controlller_name = models.CharField(max_length=1000)
     fa_icon = models.CharField(max_length=500)
     
