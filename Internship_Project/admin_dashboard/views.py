@@ -605,9 +605,15 @@ def delete_admin(request,user_id):
     Admin = User.objects.get(id = user_id)
 
     if(request.method == "GET"):
-        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{Admin.username}"')
-        Admin.delete()    
-        messages.success(request,"Admin Deleted Successfully!!!")
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin : "{Admin.username}"')    
+
+        if request.user.id == user_id:
+            messages.success(request, "Account Deleted Successfully")
+            Admin.delete()
+            return render(request,'accounts/login.html')
+
+        messages.success(request, f'Admin "{Admin.username}" Deleted Successfully')
+        Admin.delete()
         
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
@@ -624,6 +630,11 @@ def add_new_role(request):
     if(request.method == "POST"):
         admin_title = request.POST["admin_role_title"].strip()
         status = request.POST["admin_role_status"]
+
+        for role in set(Module.objects.values_list('module_name', flat = True)):
+            if admin_title.lower() == role.lower():
+                messages.error(request, f'Role : "{admin_title}" has already been defined')
+                return redirect("admin_roles_and_permission")
 
         module = Module(module_name = admin_title, status = status)
         module.save()
