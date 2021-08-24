@@ -81,15 +81,12 @@ def Login(request):
         
         if(user is not None and user.is_active):
             auth.login(request, user)
-            print("ok1")
-            print(remember_me)
-            print("ok2")
 
             if(remember_me): 
                 print(remember_me)
                 user = User.objects.get(id = request.user.id)
                 count =  User.objects.all().count()
-                res= render_to_string('admin_dashboard/DashBoard_3.html',{'user' : user, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+                res= render_to_string('admin_dashboard/DashBoard_1.html',{'user' : user, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
                 response = HttpResponse(res)
                 response.set_cookie('uid',Username)
                 response.set_cookie('pass',Password)
@@ -104,7 +101,7 @@ def Login(request):
     if(request.COOKIES.get('uid')):
         return render(request,'accounts/login.html',{'uid' : request.COOKIES['uid'], 'pass' : request.COOKIES['pass']})
     else:
-        return render(request, 'accounts/login.html')
+        return render(request, 'accounts/login.html', {"gen" : gen_data()})
 
 # Register view  for register page
 def Register(request):
@@ -165,7 +162,7 @@ def Register(request):
             return redirect('Register')
     else:
         # return templage to dom using render function
-        return render(request,"accounts/Register.html")
+        return render(request,"accounts/Register.html", {"gen" : gen_data()})
 
 # static function for password validitation
 def password_validate(request,password):
@@ -643,7 +640,7 @@ def add_new_role(request):
         messages.success(request,"New Admin Role created successfully!!!!")
         return redirect("admin_roles_and_permission")
 
-    return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+    return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "title" : "Add New Role"})
 
 def edit_new_role(request, module_id):
     module = Module.objects.get(id = module_id)
@@ -661,7 +658,7 @@ def edit_new_role(request, module_id):
         messages.success(request,"Admin role updated!!")
         return redirect("admin_roles_and_permission")
 
-    return render(request, "roles_and_permission/add_new_role.html", {"count" : count, "module" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+    return render(request, "roles_and_permission/add_new_role.html", {"count" : count, "module" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "title" : "Edit Role"})
 
 def delete_role(request,module_id):
     module = Module.objects.get(id = module_id)
