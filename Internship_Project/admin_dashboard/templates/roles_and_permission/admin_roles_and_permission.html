@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{% block title %}{{gen.Application_Name}} | Admin Roles & Permissions{% endblock %}</title>
+    <title>{% block title %}{{gen.Application_Name}} | Modify Roles {% endblock %}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Font Awesome -->
@@ -102,7 +102,7 @@
           <div class="card-header">
             <div class="d-inline-block">
               <h3 class="card-title">
-                <i class="fa fa-list"></i>&nbsp; Admin Roles &amp; Permissions
+                <i class="fa fa-list"></i>&nbsp; Modify Roles
               </h3>
               
             </div>
@@ -127,29 +127,13 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Admin Role</th>
+                  <th>Role</th>
                   <th>Status</th>
                   <th>Modify Permissions</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>0</td>
-                  <td>Super Admin</td>
-                  <td>
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="customSwitches-1" disabled checked>
-                      <label class="custom-control-label" for="customSwitches-1"></label>
-                    </div>
-                  </td>
-                  <td>
-                    <a href="#"  class="btn btn-info btn-lg mr5">
-                      <i class="fa fa-sliders"></i>
-                    </a>
-                  </td>
-                  <td></td>
-                </tr>
                  {% for module in modules %}
                 <tr>
                
@@ -171,17 +155,31 @@
                   </td>
 
                   <td>
-                    <a href="{% url 'RolePermission' module.id %}" class="btn btn-info btn-lg mr5">
-                      <i class="fa fa-sliders"></i>
-                    </a>
+
+                    {% if module.module_name == "Super Admin" and cur_role != "Super Admin" %}
+                      <a href="#" class="btn btn-info btn-lg mr5"><i class="fa fa-sliders"></i></a>
+                    {% else %}
+                      <a href="{% url 'RolePermission' module.id %}" class="btn btn-info btn-lg mr5">
+                        <i class="fa fa-sliders"></i>
+                      </a>
+                    {% endif %}
+
                   </td>
+
                   <td>
-                    <a  href="{%url 'edit_new_role' module.id %}"  class="btn btn-warning btn-lg mr5">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a  href="{%url 'delete_role' module.id %}"  onclick="return confirm('Are you sure you want to delete?')"  class="btn btn-danger btn-lg">
+
+                    {% if module.module_name == "Super Admin" and cur_role != "Super Admin" %}
+                      <a  href="#"  class="btn btn-warning btn-lg mr5"><i class="fa fa-edit"></i></a>
+                      <a  href="#"  class="btn btn-danger btn-lg"><i class="fa fa-remove"></i></a>
+                    {% else %}
+                      <a  href="{%url 'edit_new_role' module.id %}"  class="btn btn-warning btn-lg mr5">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                      <a  href="{%url 'delete_role' module.id %}"  onclick="return confirm('Are you sure you want to delete?')"  class="btn btn-danger btn-lg">
                         <i class="fa fa-remove"></i>
-                    </a>
+                      </a>
+                    {% endif %}
+
                   </td>
                  
                 </tr>

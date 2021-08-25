@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {% block title %}{{gen.Application_Name}} | AdminList{% endblock %}</title>
+    <title> {% block title %}{{gen.Application_Name}} | Admin List{% endblock %}</title>
       <!-- Font Awesome -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -131,7 +131,7 @@
                       {% csrf_token %}
                         <table class="table" id="myTable">
                           <tbody>
-                            <tr id="template" style="">
+                            <tr id="template">
                               <td>
                               <input  list="browsers" class="form-control" placeholder="Add Admin Types" name="addadmintypes[]">
                                 <datalist class="add_admin" id="browsers">
@@ -192,12 +192,24 @@
                   <td><input  class = "edit" type="email" value="{{user.email}}"name = "email_address" ></td>
                   <td>
                   <select type="text" class = "edit"  id="exampleFormControlSelect1"  name="role" placeholder="Role" value="{{user.role}}">
+                              
                               {% for module in modules %}
-                                <option>{{module.module_name}}</option>
-                                {% endfor%}
-                                <option>No Role</option>
+                              ` 
+                                {% if module.module_name != "Super Admin"%}
+                                  <option>{{module.module_name}}</option>
+                                
+                                {% else %}
+
+                                  {% if cur_role == "Super Admin" %}
+                                    <option>{{module.module_name}}</option>
+                                  {% endif %}
+
+                                {% endif %}
+                              {% endfor%}
+                                
+                              <option>No Role</option>
                                
-                            </select>
+                  </select>
                   </td>
                   <td><div class="custom-control custom-switch">
                     <input type="checkbox" name = "status" class="custom-control-input" {%  if user.is_active %}checked{% endif %} id="customSwitches-{{forloop.counter}}">
@@ -208,7 +220,7 @@
                       <i class="fa fa-edit"></i>
                     </button>
                   </form>
-                  <button  onClick="document.location='{% url 'admintest' %}'"  type="button" class="btn btn-danger">
+                  <button onClick="document.location='{% url 'admintest' %}'"  type="button" class="btn btn-danger">
 
                     <i class="fa fa-remove"></i>
                   </button>
@@ -239,14 +251,26 @@
                   <label class="custom-control-label" for="customSwitches1"></label>
                 </div></td>
                 <td>
-                  
-                <button  onClick="document.location='{% url 'EditAdminList' user.id %}'"  {% if request.user.status %}checked{% endif %} data-toggle="modal" type="button" class="btn btn-warning">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                  
-                <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('Are you sure you want to delete?')"  class="btn btn-danger ">
-                        <i class="fa fa-remove"></i>
+
+                  {% if user.role == "Super Admin" and cur_role != "Super Admin" %}
+                    <button type="button" class="btn btn-warning">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    
+                    <a  href="#" class="btn btn-danger ">
+                      <i class="fa fa-remove"></i>
                     </a>
+
+                  {% else %}
+                    <button  onClick="document.location='{% url 'EditAdminList' user.id %}'"  {% if request.user.status %}checked{% endif %} data-toggle="modal" type="button" class="btn btn-warning">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    
+                    <a  href="{%url 'delete_admin' user.id %}"  onclick="return confirm('Are you sure you want to delete?')"  class="btn btn-danger ">
+                      <i class="fa fa-remove"></i>
+                    </a>
+
+                  {% endif %}
                   
                 </td>
               </tr>

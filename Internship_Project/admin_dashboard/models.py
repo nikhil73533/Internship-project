@@ -45,7 +45,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(verbose_name = "last_name",max_length = 500)
     username = models.CharField(verbose_name = "username",unique = True,max_length = 50)
     email = models.EmailField(verbose_name = "email address",max_length = 60,unique = True,blank = True)
-    role = models.CharField(verbose_name = "role",max_length = 500)
+    role = models.CharField(verbose_name = "role",max_length = 500, default = "No Role")
     status = models.BooleanField(verbose_name = "status",default=False)
     last_login = models.DateTimeField(verbose_name = "last login",auto_now = True)
     is_admin = models.BooleanField(default = False)
@@ -70,8 +70,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 # <-----------------Module Settings ------------------>
 
 class Module(models.Model):
-    module_name = models.CharField(max_length=1000,default = "No Role")
-    controlller_name = models.CharField(max_length=1000)
+    module_name = models.CharField(max_length=1000)
+    controller_name = models.CharField(max_length=1000)
     fa_icon = models.CharField(max_length=500)
     
     profile = models.BooleanField(default = True)
