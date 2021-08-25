@@ -467,7 +467,7 @@ def general_settings(request):
         gen = general_setting.objects.all()
 
         if(len(gen)>1):
-                gen = general_setting.objects.all()[1]
+                gen = general_setting.objects.all()[0]
                 gen.delete()
 
         update_log(User.objects.get(id = request.user.id).username, 'Data inserted in General Settings')
