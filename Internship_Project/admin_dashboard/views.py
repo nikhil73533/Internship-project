@@ -417,6 +417,12 @@ class PasswordsChangesView(PasswordChangeView):
     form_class =passwordChangingForm
     success_url = reverse_lazy('login')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['permissions'] = permissions(User.objects.get(id = self.request.user.id).role)
+        context['tables'] = installed_tables()
+        context['gen'] = gen_data()
+        return context
 
 # <---------------------end ----------------------------------->
 
@@ -1241,3 +1247,21 @@ def permissions(role):
             
     return permissions
 
+def export(request):
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Export Database")
+
+    if(request.method =="POST"):
+        path = str(Path.home() / "Downloads")
+        conn = sqlite3.connect('CRUD.db')
+
+        with open(path + "\export.sql", 'a') as f :
+            for line in conn.iterdump():
+                f.write('%s\n' % line)
+
+        conn.commit()
+        conn.close()
+
+        update_log(User.objects.get(id = request.user.id).username, "Exported Database to Downloads Folder")
+        messages.success(request, "Exported Database to Downloads Folder")        
+
+    return render(request, "admin_dashboard/pages/export.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})

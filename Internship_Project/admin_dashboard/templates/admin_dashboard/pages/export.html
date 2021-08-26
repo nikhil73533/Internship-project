@@ -1,0 +1,86 @@
+{% extends 'admin_dashboard/base.html' %} 
+{% block body %} 
+{% load static %}
+{%block menu_export_database %}active{%endblock%}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{{gen.Application_Name}} | Export Database{% endblock %}</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+    <script>
+      
+      setTimeout(function() { 
+        $('.allert-error').fadeOut('slow'); 
+        $('.allert-success').fadeOut('slow');   }, 3500);
+  
+    </script>
+
+    <style>
+         
+    /* 
+    Alert messages 
+    */
+    
+    .allert-error {
+      padding: 12px;
+      background-color: #f44336;
+      color: white;
+     
+    }
+    /* 
+    
+        /* 
+    success message 
+    */
+    .allert-success {
+      padding: 12px;
+      background-color: #469412;
+      
+      color: white;
+    }
+    
+    .closebtn:hover {
+      color: black;
+    }
+     
+    </style>
+    
+  </head>
+
+  <body>
+    <form action = "{% url 'export'%}" method = "POST" >{%csrf_token%}
+      <div class="content-wrapper" style="min-height: 661px;">
+        <!-- Main content -->
+        <section class="content">
+          <div class="card card-default color-palette-bo">
+
+            {% for msg in messages %} 
+            <br> 
+            <div class="allert-{{msg.tags}}">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                {{msg}}
+            </div> <br>
+            {%endfor%}
+
+            <div class="card-header">
+              <div class="d-inline-block"> 
+                <input type="hidden" name="submit" value="submit">
+                <button type="submit" class="btn btn-primary pull-right" >Export CRUD Database</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </form>        
+
+{% endblock %}
+</body>
+</html>

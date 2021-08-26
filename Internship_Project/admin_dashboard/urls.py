@@ -101,6 +101,8 @@ urlpatterns = [
   #<=======  calander  page url =========>
   path('calander', views.calendar, name = "calendar"),
 
+  path('export_database', views.export, name = "export"),
+
   path('create_table/<str:table>', views.create_table, name = "create_table"),
 
   path('drop_table/<str:table>', views.drop_table, name = "drop_table"),
