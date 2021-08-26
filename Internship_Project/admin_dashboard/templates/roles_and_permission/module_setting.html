@@ -118,8 +118,7 @@
                         <th> Module Name</th>
                         <th>Controller Name</th>
                         <th>  Fa Icon</th>
-                        <th>Operations</th>
-                        <th>Sub Module</th>
+                       
                         <th>Action</th>
                         
                     </tr>
@@ -163,12 +162,8 @@
                         </td>
                         <td>controller name_1</td>
                         <td> fa icon_1</td>
-                        <td> jai maata di </td>
-                        <td> 
-                            <a href="#" class="btn btn-info btn-lg mr5">
-                                <i class="fas fa-sliders-h"></i>
-                            </a>
-                        </td>
+                        
+                        
                        
                         <td>
                           
@@ -236,29 +231,48 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
         </div>
         <div class="modal-body">
-            <form>
+            <form action ={%url "module_setting"%} method = 'POST'>{%csrf_token%}
+              
+
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Module Name</label>
-                    <input type="email" class="form-control" id="" placeholder="module Name">
-                </div>
+                    <select type="text"   id="exampleFormControlSelect1"  name="module" placeholder="name" >
+                      {% for module in modules %}
+                      ` 
+                        {% if module.module_name != "Super Admin"%}
+                          <option>{{module.module_name}}</option>
+                        
+                        {% else %}
+
+                          {% if cur_role == "Super Admin" %}
+                            <option>{{module.module_name}}</option>
+                          {% endif %}
+
+                        {% endif %}
+                      {% endfor%}
+                        
+                      <option>No Role</option>
+                       
+          </select>
+          </div>
+                              
+                     
+                       
+          
 
 
 
 
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Controller Name</label>
-                  <input type="email" class="form-control" id="" placeholder="Controller Name">
+                  <input type="text" class="form-control" id="" placeholder="Controller Name" name = "controller">
                   
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1">Fa Icon</label>
-                    <input type="text" class="form-control" id="" placeholder="Fa Icon">
+                    <input type="text" class="form-control" id="" placeholder="Fa Icon" name = "Fa">
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1">Operations</label>
-                    <input type="text" class="form-control" id="" placeholder="Operations">
-
-                </div>
+                
                 
                 
               </form> 

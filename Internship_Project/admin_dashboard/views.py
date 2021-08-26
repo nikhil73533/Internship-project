@@ -688,8 +688,26 @@ def delete_role(request,module_id):
 @login_required(login_url='/') 
 def module_setting(request):
     update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Module Settings')
+    if request.method == "POST":
+        module_name = request.POST.get("module")
+        controler = request.POST.get("controller")
+        Fa  = request.POST.get("Fa")
+
+        module = Module.objests.filter(module_name=module_name)
+        module.controler=controler
+        module.fa_icon=Fa
+        module.save()
+        
     user = User.objects.all()
-    return render(request, "roles_and_permission/module_setting.html", {"users" : user, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+    modules =Module.objects.all()
+    return render(request, "roles_and_permission/module_setting.html", {"users" : user, 'tables' : installed_tables(), "gen" : gen_data(), "modules" : modules, "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+
+def module_setting_edit(request):
+    pass
+
+
+def module_setting_delete(request):
+    pass
 
 def admin_roles_and_permission(request):
     module = Module.objects.all()
