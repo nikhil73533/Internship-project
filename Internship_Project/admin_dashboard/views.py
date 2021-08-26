@@ -1252,11 +1252,14 @@ def export(request):
 
     if(request.method =="POST"):
         path = str(Path.home() / "Downloads")
-        con = sqlite3.connect('CRUD.db')
+        conn = sqlite3.connect('CRUD.db')
 
-        with open(path+"\export.sql", 'a') as f :
-            for line in con.iterdump():
+        with open(path + "\export.sql", 'a') as f :
+            for line in conn.iterdump():
                 f.write('%s\n' % line)
+
+        conn.commit()
+        conn.close()
 
         update_log(User.objects.get(id = request.user.id).username, "Exported Database to Downloads Folder")
         messages.success(request, "Exported Database to Downloads Folder")        

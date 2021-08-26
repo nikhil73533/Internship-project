@@ -1,19 +1,27 @@
 {% extends 'admin_dashboard/base.html' %} 
 {% block body %} 
 {% load static %}
-{%block  menu_export_database %}active{%endblock%}
+{%block menu_export_database %}active{%endblock%}
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{% block title %}{{gen.Application_Name}} | Export Database{% endblock %}</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Font Awesome -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"/>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+    <script>
+      
+      setTimeout(function() { 
+        $('.allert-error').fadeOut('slow'); 
+        $('.allert-success').fadeOut('slow');   }, 3500);
+  
+    </script>
 
     <style>
          
@@ -38,61 +46,21 @@
       
       color: white;
     }
-    .name{
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      outline: none;
-      width:40%;
-      display:inline-block;
-    
-    }
-    
-    .closebtn {
-      margin-left: 15px;
-      color: white;
-      font-weight: bold;
-      float: right;
-      font-size: 22px;
-      line-height: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
     
     .closebtn:hover {
       color: black;
     }
-    
-    .edit{
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      outline: none;
-
-      
-    }
-    
-   
+     
     </style>
-
-    <script>
-      
-    setTimeout(function() { 
-        $('.allert-error').fadeOut('slow'); 
-        $('.allert-success').fadeOut('slow');   }, 3500);
-
-    </script>
     
   </head>
 
-
-
   <body>
-    
-    <div class="content-wrapper" style="min-height: 661px;">
-    <!-- Main content -->
-    <section class="content">
-        <div class="card card-default color-palette-bo">
+    <form action = "{% url 'export'%}" method = "POST" >{%csrf_token%}
+      <div class="content-wrapper" style="min-height: 661px;">
+        <!-- Main content -->
+        <section class="content">
+          <div class="card card-default color-palette-bo">
 
             {% for msg in messages %} 
             <br> 
@@ -102,17 +70,17 @@
             </div> <br>
             {%endfor%}
 
-            <form action = "{% url 'export'%}" method = "POST" >{%csrf_token%}
-                <div class="card-header">
-                    <div class="d-inline-block"> 
-                        <input type="hidden" name="submit" value="submit">
-                        <button type="submit" class="btn btn-primary pull-right" >Export CRUD Database</button>
-                    </div>
-                </div>
-            </form>
-        </div>   
-    </section>     
+            <div class="card-header">
+              <div class="d-inline-block"> 
+                <input type="hidden" name="submit" value="submit">
+                <button type="submit" class="btn btn-primary pull-right" >Export CRUD Database</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </form>        
 
-    {% endblock %}
+{% endblock %}
 </body>
 </html>

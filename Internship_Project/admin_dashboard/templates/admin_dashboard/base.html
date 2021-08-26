@@ -584,14 +584,14 @@
             </a>
           </li>
 
-        <li class="nav-item">
-          <a href="{% url 'export'%}" class="nav-link {%block menu_export_database %}{%endblock%}">
-            <i class="nav-icon fas fa-download"></i>
-            <p>
-              Export Database 
-            </p>
-          </a>
-        </li>
+          <li class="nav-item">
+            <a href="{% url 'export'%}" class="nav-link {%block menu_export_database %}{%endblock%}">
+              <i class="nav-icon fas fa-download"></i>
+              <p>
+                Export Database 
+              </p>
+            </a>
+          </li>
 
           {% if permissions %}
             {% if permissions.log == 1 %}
