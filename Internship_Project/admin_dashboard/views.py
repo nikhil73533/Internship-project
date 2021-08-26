@@ -417,6 +417,12 @@ class PasswordsChangesView(PasswordChangeView):
     form_class =passwordChangingForm
     success_url = reverse_lazy('login')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['permissions'] = permissions(User.objects.get(id = self.request.user.id).role)
+        context['tables'] = installed_tables()
+        context['gen'] = gen_data()
+        return context
 
 # <---------------------end ----------------------------------->
 
