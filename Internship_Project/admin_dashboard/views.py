@@ -1247,3 +1247,18 @@ def permissions(role):
             
     return permissions
 
+def export(request):
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Export Database")
+
+    if(request.method =="POST"):
+        path = str(Path.home() / "Downloads")
+        con = sqlite3.connect('CRUD.db')
+
+        with open(path+"\export.sql", 'a') as f :
+            for line in con.iterdump():
+                f.write('%s\n' % line)
+
+        update_log(User.objects.get(id = request.user.id).username, "Exported Database to Downloads Folder")
+        messages.success(request, "Exported Database to Downloads Folder")        
+
+    return render(request, "admin_dashboard/pages/export.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
