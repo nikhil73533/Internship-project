@@ -65,9 +65,6 @@ urlpatterns = [
   #<======= View Profile page url =========>
   path('view_profile', views.view_profile, name = "view_profile"),
 
-  #<======= Module Settings page url =========>
-  path('module_setting', views.module_setting, name = "module_setting"),
-
   #<======= General Settings page url =========>
   path('general_settings', views.general_settings, name = "general_settings"),
 

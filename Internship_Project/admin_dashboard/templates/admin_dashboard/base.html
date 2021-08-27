@@ -226,36 +226,18 @@
             </ul>
           </li>
 
-          <li class="nav-item has-treeview {%block menu_open_rlap%}{%endblock%}">
-            <a href="#" class="nav-link {%block menu_items_rlap%}{%endblock%}" >
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Roles and Permissions
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-
             {% if permissions %}
               {% if permissions.roles_permissions == 1 %}
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{% url 'module_setting' %}" class="nav-link {%block menu_items_module_settings%}{%endblock%}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Module Settings</p>
-                    </a>
-                  </li>
 
-                  <li class="nav-item">
-                    <a href="{% url 'admin_roles_and_permission'%}" class="nav-link {%block menu_items_add_new_role%}{%endblock%}">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Modify Roles</p>
-                    </a>
-                  </li>
-                </ul>
+                <li class="nav-item">
+                  <a href="{% url 'admin_roles_and_permission'%}" class="nav-link {%block menu_items_add_new_role%}{%endblock%}">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p> Roles and Permissions </p>
+                  </a>
+                </li>
+                  
               {% endif %}
             {% endif %}
-
-          </li>
 
           <li class="nav-item">
             <a href="pages/widgets.html" class="nav-link">
@@ -584,14 +566,20 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="{% url 'export'%}" class="nav-link {%block menu_export_database %}{%endblock%}">
-              <i class="nav-icon fas fa-download"></i>
-              <p>
-                Export Database 
-              </p>
-            </a>
-          </li>
+          {% if permissions %}
+            {% if permissions.export == 1 %}
+
+              <li class="nav-item">
+                <a href="{% url 'export' %}" class="nav-link {%block menu_export_database %}{%endblock%}">
+                  <i class="nav-icon fas fa-download"></i>
+                  <p>
+                    Export Database 
+                  </p>
+                </a>
+              </li>
+
+            {% endif %}
+          {% endif %}
 
           {% if permissions %}
             {% if permissions.log == 1 %}

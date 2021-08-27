@@ -71,8 +71,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
 class Module(models.Model):
     module_name = models.CharField(max_length=1000)
-    controller_name = models.CharField(max_length=1000)
-    fa_icon = models.CharField(max_length=500)
     
     profile = models.BooleanField(default = True)
     admin = models.BooleanField(default = False)
@@ -81,6 +79,7 @@ class Module(models.Model):
     settings = models.BooleanField(default = False)
     crud = models.BooleanField(default = False)
     status = models.BooleanField(default = False)
+    export = models.BooleanField(default = False)
 
 # <-----------------------end of code------------------>
     

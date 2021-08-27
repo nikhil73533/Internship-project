@@ -1,9 +1,6 @@
 {% extends 'admin_dashboard/base.html' %}
 {% block body %}
 {% load static %}
-{%block menu_items_rlp%}active{%endblock%}
-{%block menu_items_rlap%}active {%endblock%}
-{%block menu_open_rlap%}menu-open{%endblock%}
 {%block menu_items_add_new_role%}active{%endblock%}
 <!DOCTYPE html>
 <html lang="en">
@@ -209,6 +206,23 @@
           {% endif %}
 
           <label class="custom-control-label" for="customSwitches-6"></label>
+        </div>
+      </div>
+    
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <!-- Export Database -->
+      <div class= "user">
+        <span style="margin-right: 12%;"><b>Export Database</b></span>
+        <div class="custom-control custom-switch" style="display: inline;margin-right: 10%;">
+
+          {% if module.export == 1 %}
+            <input type="checkbox" class="custom-control-input" id="customSwitches-7" name="export" checked>
+          {% else %}
+            <input type="checkbox" class="custom-control-input" id="customSwitches-7" name="export">
+          {% endif %}
+
+          <label class="custom-control-label" for="customSwitches-7"></label>
         </div>
       </div>
     

@@ -422,6 +422,9 @@ class PasswordsChangesView(PasswordChangeView):
         context['permissions'] = permissions(User.objects.get(id = self.request.user.id).role)
         context['tables'] = installed_tables()
         context['gen'] = gen_data()
+
+        update_log(User.objects.get(id = self.request.user.id).username, 'Opened and viewed Change Password')
+
         return context
 
 # <---------------------end ----------------------------------->
@@ -488,7 +491,7 @@ def EmailSettings(request):
     if(request.method == 'POST'):
         email_from = request.POST['email_from'].strip()
         smtp_host = request.POST['smtp_host'].strip()
-        smtp_port = request.POST['smtp_port'].strip()
+        smtp_port = request.POST['smtp_port']
         smtp_user = request.POST['smtp_user'].strip()
         smtp_pass = request.POST['smtp_pass'].strip()
 
@@ -580,9 +583,9 @@ def EditAdminList(request,user_id):
 @login_required(login_url='/') 
 def EditAdminListValue(request):
     if(request.method == 'POST'):
-        First_name = request.POST.get('first')
-        Last_name = request.POST.get('last')
-        userid = request.POST.get('user').strip()
+        First_name = request.POST.get('first').strip()
+        Last_name = request.POST.get('last').strip()
+        userid = request.POST.get('user')
         user = User.objects.get(id  = userid)
         Email = request.POST.get('email_address').strip()
         Role = request.POST['role'].strip()
@@ -642,8 +645,8 @@ def add_new_role(request):
         module = Module(module_name = admin_title, status = status)
         module.save()
 
-        update_log(User.objects.get(id = request.user.id).username, f'Created new Admin Role : "{admin_title}"')
-        messages.success(request,"New Admin Role created successfully!!!!")
+        update_log(User.objects.get(id = request.user.id).username, f'Created new Role : "{admin_title}"')
+        messages.success(request,"New Role created successfully!!!!")
         return redirect("admin_roles_and_permission")
 
     return render(request, "roles_and_permission/add_new_role.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "title" : "Add New Role"})
@@ -660,8 +663,8 @@ def edit_new_role(request, module_id):
         module.status = status
         module.save()
 
-        update_log(User.objects.get(id = request.user.id).username, f'Updated Admin Role to "{admin_title}"')
-        messages.success(request,"Admin role updated!!")
+        update_log(User.objects.get(id = request.user.id).username, f'Updated Role to "{admin_title}"')
+        messages.success(request,"Role updated successfully!!")
         return redirect("admin_roles_and_permission")
 
     return render(request, "roles_and_permission/add_new_role.html", {"count" : count, "module" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "title" : "Edit Role"})
@@ -677,7 +680,7 @@ def delete_role(request,module_id):
             data.role = "No Role"
             data.save()
         
-        update_log(User.objects.get(id = request.user.id).username, f'Deleted Admin Role')
+        update_log(User.objects.get(id = request.user.id).username, f'Deleted Role')
         module.delete()
         messages.success(request,"Role deleted successfully!!!")
 
@@ -685,37 +688,13 @@ def delete_role(request,module_id):
 
 # <--------------------------roles and permission settings------------------------------>
 
-@login_required(login_url='/') 
-def module_setting(request):
-    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Module Settings')
-    if request.method == "POST":
-        module_name = request.POST.get("module")
-        controler = request.POST.get("controller")
-        Fa  = request.POST.get("Fa")
-
-        module = Module.objests.filter(module_name=module_name)
-        module.controler=controler
-        module.fa_icon=Fa
-        module.save()
-        
-    user = User.objects.all()
-    modules =Module.objects.all()
-    return render(request, "roles_and_permission/module_setting.html", {"users" : user, 'tables' : installed_tables(), "gen" : gen_data(), "modules" : modules, "permissions" : permissions(User.objects.get(id = request.user.id).role)})
-
-def module_setting_edit(request):
-    pass
-
-
-def module_setting_delete(request):
-    pass
-
 def admin_roles_and_permission(request):
     module = Module.objects.all()
-    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Modify Roles')
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Roles & Permissions')
     return render(request, "roles_and_permission/admin_roles_and_permission.html", {"modules" : module, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role), "cur_role" : User.objects.get(id = request.user.id).role})
 
 def RolePermission(request, module_id):
-    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Roles & Permissions')
+    update_log(User.objects.get(id = request.user.id).username, 'Opened and viewed Access Permissions')
     module = Module.objects.get(id = module_id)
     role_name = Module.objects.get(id = module_id).module_name
     return render(request, "roles_and_permission/role_and_permissions.html", {'tables' : installed_tables(), "gen" : gen_data(), "module" : module, "role" : role_name, "permissions" : permissions(User.objects.get(id = request.user.id).role)})
@@ -1192,7 +1171,7 @@ def gen_data():
 
 def log(request):
     data = None
-    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Log File")
+    update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Activity Log")
     
     if Path(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv').exists():
         usernames = list(pd.read_csv(f'Log_{datetime.datetime.now().strftime("%B_%Y")}' + '.csv', error_bad_lines=False)['Username'])
@@ -1250,6 +1229,11 @@ def save_permissions(request, module_id):
         else:
             module.crud = 0
 
+        if "export" in data_dict:
+            module.export = [1 if val == 'on' else 0 for val in data_dict['export']][0]
+        else:
+            module.export = 0
+
         module.save()
 
         update_log(User.objects.get(id = request.user.id).username, f'Updated Permissions of "{module.module_name}"')
@@ -1283,3 +1267,4 @@ def export(request):
         messages.success(request, "Exported Database to Downloads Folder")        
 
     return render(request, "admin_dashboard/pages/export.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+
