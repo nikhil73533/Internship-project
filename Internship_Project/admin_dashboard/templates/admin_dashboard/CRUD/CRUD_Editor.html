@@ -98,10 +98,9 @@
                     <h1 class="m-0 text-dark">CRUD Editor : {{tname}}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{% url 'DashBoard'%}">Home</a></li>
-                    <li class="breadcrumb-item active">CRUD Editor</li>
-                    </ol>
+                    <div class="d-inline-block float-right" style="margin-right : 6ex;">
+                        <a href="#" onclick="window.history.go(-1); return false;" class="btn btn-info pull-right"><i class="fa fa-reply mr5"></i> Back</a>
+                    </div>
                 </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
