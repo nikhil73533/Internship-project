@@ -27,6 +27,7 @@ import pandas as pd
 from pathlib import Path
 import sqlite3
 import json
+import threading
 
 # User movel initialization 
 User = get_user_model()
@@ -65,7 +66,6 @@ def LogOut(request):
     auth.logout(request)
     return redirect('/')
 
-
 # Get Cookie
 def GetCookie(request):
     a= request.COOKIES['uid']
@@ -91,6 +91,7 @@ def Login(request):
                 response.set_cookie('uid',Username)
                 response.set_cookie('pass',Password)
                 return response
+
             update_log(User.objects.get(id = request.user.id).username, "Logged In")
             return redirect('DashBoard')
 
@@ -116,25 +117,24 @@ def Register(request):
         if(password==confirm_password):
             if(User.objects.filter(email=email).exists()):
                 messages.error(request,'Email Taken')
-                return render(request,'accounts/Register.html')
+                return render(request, 'accounts/Register.html', {"gen" : gen_data()})
 
             elif(User.objects.filter(username=Username).exists()):
                 messages.error(request,'Username Taken')
-                return render(request,'accounts/Register.html')
+                return render(request, 'accounts/Register.html', {"gen" : gen_data()})
             else:
                 if(password_validate(request,password)):
                     user = User.objects.create_user(first_name = First_Name,last_name = Last_Name, username = Username, email = email, password = password)
                     user.is_active = False
                     user.save()
                     data_1 = email_settings.objects.all()
+
                     if(len(data_1)>0):
                         data = str(email_settings.objects.get())
                         eml = data.split()
                     else:
                         eml = ["django.core.mail.backends.smtp.EmailBackend","smtp.gmail.com",587,"gusteaus.restaurent@gmail.com","iswxjxdoyhjtmymf"]
-                    
-                   
-                    
+    
                     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
                     domain = get_current_site(request).domain
                     link = reverse('activate', kwargs = {'uidb64' : uidb64, 'token' : token_generator.make_token(user)})
@@ -150,13 +150,13 @@ def Register(request):
                         connection = backend,
                     )
 
-                    email.send()
+                    EmailThread(email).start()
 
                     messages.success(request,'Account activation mail has been sent')
-                    return render(request,"accounts/Register.html")
+                    return render(request, "accounts/Register.html", {"gen" : gen_data()})
                 else:
                      # return templage to dom using render function
-                    return render(request,"accounts/Register.html")
+                    return render(request, "accounts/Register.html", {"gen" : gen_data()})
         else:
             messages.error(request,'Password Does Not Match')
             return redirect('Register')
@@ -355,7 +355,7 @@ def Addadmin(request):
                         connection = backend,
                     )
 
-                    email.send()
+                    EmailThread(email).start()
 
                     messages.success(request,'Account activation mail has been sent')
                     return render(request, "admin/add_admin.html", {"gen" : gen_data(), 'tables' : installed_tables(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
@@ -369,11 +369,7 @@ def Addadmin(request):
         # return templage to dom using render function
         return render(request, "admin/add_admin.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
 
-     
-    
-#<-------------AdminList view----------------------------->
 #<-----------------------AdminList View------------------------->   
-
 
 def view_profile(request):
     user = User.objects.get(id = request.user.id)
@@ -400,7 +396,6 @@ def view_profile(request):
  
     return render(request, "profile/view_profile.html", {'user': user, 'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
 
-
 # <---- class based views --------------------------------->
 
 class passwordChangingForm(PasswordChangeForm):
@@ -411,7 +406,6 @@ class passwordChangingForm(PasswordChangeForm):
     class Meta:
         model = User
         fields = ('old_password','new_password1','new_password2')    
-
 
 class PasswordsChangesView(PasswordChangeView):
     form_class =passwordChangingForm
@@ -430,6 +424,7 @@ class PasswordsChangesView(PasswordChangeView):
 # <---------------------end ----------------------------------->
 
 # <---------------------General Settings  ----------------------------------->
+
 triger = True
 @login_required(login_url='/') 
 def general_settings(request):
@@ -481,7 +476,6 @@ def general_settings(request):
         return redirect("general_settings")
         
     return render(request, "settings/general_settings.html", {'tables' : installed_tables(), "gen" : gen, "permissions" : permissions(User.objects.get(id = request.user.id).role)})
-
 
 # Email Settings
 @login_required(login_url='/') 
@@ -543,8 +537,8 @@ def reCAPTCHA(request):
 
     return render(request,"settings/google_recaptcha.html", {"gen" : gen_data(), 'tables' : installed_tables(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
 
-
 # <------------------------------Admin List functions ---------------------------------->
+
 @login_required(login_url='/') 
 def admintest(request):
     user = User.objects.all()
@@ -590,10 +584,12 @@ def EditAdminListValue(request):
         Email = request.POST.get('email_address').strip()
         Role = request.POST['role'].strip()
         Status = request.POST.get('status')
+
         if(First_name):
             user.first_name = First_name
         if(Last_name):
             user.last_name = Last_name
+
         user.email = Email
         user.role = Role
 
@@ -601,11 +597,13 @@ def EditAdminListValue(request):
             user.is_active= False
         else:
             user.is_active = True
+
         user.save()
+
         update_log(User.objects.get(id = request.user.id).username, f'Updated Admin Details : "{user}"')
         messages.success(request,"Admin Updated successfully!!!")
-    return redirect('admintest')
 
+    return redirect('admintest')
 
 def delete_admin(request,user_id):  
     Admin = User.objects.get(id = user_id)
@@ -623,6 +621,7 @@ def delete_admin(request,user_id):
         
         return redirect("admintest")
 # <---------------------------------end of code---------------------------------------->
+
 def calendar(request):
     update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Calendar")
     return render(request, "admin_dashboard/pages/calendar.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
@@ -630,6 +629,7 @@ def calendar(request):
 # <------------------end of code------------------------------------------->
 
 # <---------------------Admin role view -------------------------------------->
+
 def add_new_role(request):
     update_log(User.objects.get(id = request.user.id).username, "Opened and viewed Add new Role")
 
@@ -1267,4 +1267,13 @@ def export(request):
         messages.success(request, "Exported Database to Downloads Folder")        
 
     return render(request, "admin_dashboard/pages/export.html", {'tables' : installed_tables(), "gen" : gen_data(), "permissions" : permissions(User.objects.get(id = request.user.id).role)})
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email):
+        self.email = email 
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email.send(fail_silently=False)
 
